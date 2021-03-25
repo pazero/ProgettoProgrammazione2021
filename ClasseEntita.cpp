@@ -139,7 +139,7 @@ int main() {
         nemico.show();
         om.colpito();
 
-// rutine:
+// routine:
 // aggiorno le posizioni dei nemici 
 // aggiotno le posizioni dei proiettili 
 // mostro tutti i nemici e i proiettili 
