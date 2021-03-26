@@ -4,6 +4,11 @@
 #include <ctime>
 using namespace std;
 
+struct position{
+    int x;
+    int y;
+};
+
 class Map {
     protected:
     WINDOW *mappa;
