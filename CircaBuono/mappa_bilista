@@ -1,6 +1,7 @@
 #include <string.h>
 #include <iostream>
 #include <ncurses.h>
+#include <ctime>
 using namespace std;
 
 class Map {
@@ -23,6 +24,7 @@ class Map {
     int finex_rect;
     int inizioy_rect;
     int finey_rect;
+
     public:
     Map(int rect_lines, int rect_cols, bool first = false) {
         this->first = first;
@@ -50,9 +52,51 @@ class Map {
 
         mappa = newpad(rect_lines, rect_cols);
         refresh();
-        mvprintw(inizioy_rect-1, finex_rect, "!");
-        mvprintw(inizioy_rect-1, iniziox_rect, "!");
     }
+    void add_plat(int type, int length, int y, int x) {
+        if(type==0) {
+            mvwprintw(mappa,y,x,"++++++++++");
+        }
+        if(type==1) {
+            mvwprintw(mappa,y-2,x+5,     "++++++++++");
+            mvwprintw(mappa,y,x,    "++++++++++");
+        }
+        if(type==2) {
+            mvwprintw(mappa,y-4,x-1,"++++++++++");
+            mvwprintw(mappa,y-2,x+7,        "++++++++++");
+            mvwprintw(mappa,y,x,     "++++++++++");
+        }
+        if(type==3) {
+            mvwprintw(mappa,y-4,x+4,       "++++++++++");
+            mvwprintw(mappa,y-2,x-3,"++++++++++");
+            mvwprintw(mappa,y,x,       "++++++++++");
+        }
+        if(type==4) {
+            mvwprintw(mappa,y-6,x,"++++++++++");
+            mvwprintw(mappa,y-4,x,"++++++++++");
+            mvwprintw(mappa,y-2,x,"++++++++++");
+            mvwprintw(mappa,y,x,  "++++++++++");
+        }
+        if(type==5){
+            mvwprintw(mappa,y-6,x-2, "++++++++++");
+            mvwprintw(mappa,y-4,x+7,        "++++++++++");
+            mvwprintw(mappa,y-2,x,     "++++++++++");
+            mvwprintw(mappa,y,x,       "++++++++++");
+        }
+    }
+    void platform() {
+        int c;
+        int stop = 0;
+        srand(time(0));
+        int length = 10;
+        while(stop<rect_cols-15) {
+            c = rand()%6;
+            add_plat(c,length,rect_lines -4,stop);
+            if(c>3) c/=2;
+            stop+=length*(c+1);
+        }
+    }
+    
     void build(){
         for(int i=0; i<rect_cols; i++) {
             if(i%10==0) {
@@ -64,6 +108,8 @@ class Map {
                 mvwaddch(mappa,rect_lines-1,i,'-');
             }
         }
+        if(!first)
+            platform();
         if(first) {
             mvwaddstr(mappa,0,0,"          ");
             mvwaddstr(mappa,rect_lines-1,0,"          ");
@@ -80,7 +126,9 @@ class Map {
                 mvwaddch(mappa, (rect_lines-length)/2+i, 6, start[i]);
             }
         }
+        
     }
+    
     void pad_refresh(int pad_x,int sx,int ex) {
         prefresh(mappa, pad_y, pad_x, sy, sx, ey, ex);
     }
@@ -161,6 +209,14 @@ class Map {
     int how_much() {
         return ex - sx;
     }
+
+    bool is_plat(int y, int x) {
+        return mvwinch(mappa, y+1 ,x) == '+';
+    }
+    //provvisoria
+    int ret_rect_lines() {
+        return rect_lines;
+    }
 };
 
 typedef Map *ptMap;
@@ -225,9 +281,9 @@ class BigMap {
                 }
             }
     }
-    void slideMappona(int ch) {
+    bool slideMappona(int ch) {
         update();
-        mvprintw(LINES/2,0,   "Current node: %d", head->n);
+        mvprintw(LINES/2,0,   "Current node: %d  ", head->n);
         if(ch == KEY_LEFT){
             head->piece->lslide();
             if(head->next!=NULL) {
@@ -247,23 +303,11 @@ class BigMap {
             if(head->prev!=NULL)
                 head->prev->piece->rslide();
         }
+        if(ch == KEY_F(1)) return false;
+        return true;
+    }
+    //da modificare
+    bool is_platform(int y, int x) {
+        return head->piece->is_plat(y, x);
     }
 };
-
-int main() {
-    initscr();
-    noecho();
-    keypad(stdscr, TRUE);
-    curs_set(0);
-
-    int rect_lines = 19;
-    int rect_cols = 80;
-    
-    BigMap infinita = BigMap(rect_lines, rect_cols);
-    int ch;
-    while((ch = getch()) != KEY_F(1)) {
-        infinita.slideMappona(ch);
-    }
-    endwin();
-    return 0;
-}
