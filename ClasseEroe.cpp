@@ -15,7 +15,7 @@ class Eroe {
     int life;
     
     public:
-    entity(position pos, int life ){
+    Eroe(position pos, int life ){
         this->pos = pos;
         this->life = life;
     }
