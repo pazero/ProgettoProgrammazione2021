@@ -213,10 +213,6 @@ class Map {
     bool is_plat(int y, int x) {
         return mvwinch(mappa, y+1 ,x) == '+';
     }
-    //provvisoria
-    int ret_rect_lines() {
-        return rect_lines;
-    }
 };
 
 typedef Map *ptMap;
