@@ -8,10 +8,8 @@ struct position{
     int y;
 };
 
-
 class Enemy {
-    protected:
-    
+    protected: 
     WINDOW *pad;
     int plines;
     int pcols;
@@ -20,14 +18,12 @@ class Enemy {
     position start; 
     int endy;
     int endx;
-
     int n;
     int life;
     const char *name = "K";
     Enemy *next;
 
     public:
-
     Enemy(int plines=1, int pcols=1,int sx=0,int sy=0, int pminrow = 0, int pmincol= 0){
         
         this->start.y = sy;
@@ -55,7 +51,6 @@ class Enemy {
         mvwaddstr(pad, 0, 0, name);
     }
 
-  
     void Move(int Move){    
             if(Move == KEY_LEFT && empty(start.y,start.x-1)){
                 mvprintw(start.y, start.x, " ");//cleen old
@@ -68,7 +63,6 @@ class Enemy {
                 endx++;
             }            
     }
-
     position getPos(){
         return (start);
     }
@@ -78,9 +72,10 @@ class Enemy {
         for(int i=0;i<n;i++){
             Enemy *tmp = new Enemy;
             mvwaddstr(tmp->pad, 0, 0, name);
-            tmp->start = p;
+            tmp->start.y = p.y+i;
+            tmp->start.x = p.x;
             tmp->endx = p.x;
-            tmp->endy = p.y;
+            tmp->endy = p.y+i;
             tmp->next = next;
             next = tmp ;
             if(tmp->next == NULL){
@@ -88,10 +83,7 @@ class Enemy {
             }else tmp->n =tmp->next->n + 1;
         }
     }
-
-
-
-
+    
     void delEnemy(){  // da campbiare , prende in imput il numero del nodo, lo cerca e lo elimina 
         if (next !=NULL){
             Enemy *tmp = next;
@@ -113,53 +105,33 @@ class Enemy {
 
 };
 
-
-
-
-
-
 int main() {
     initscr();
     noecho();
     curs_set(0);
     keypad(stdscr, TRUE);
 
-
     position p ;
-
     Enemy nemici = Enemy();
     nemici.build();
     
     int ch;
     bool flag=true;
-
-    while(ch!=KEY_RIGHT) {
-            mvprintw(0,0,"spingi il tasto destro per proseguire");
-            timeout(500);
+while(flag) {
+           
+            timeout(400);
             ch = getch();
-
-            p.y = rand() % 26 ;
-            p.x = rand() % 110 ;
-            nemici.addEnemy(p,1);
-
             
+            p.y = rand() % 30 ;
+            p.x = rand() % 110 ;
+            nemici.addEnemy(p,5);// agiungi nemici alla lista (cordinate, numero di nemici );
 
-//      if (ch == KEY_F(1)) flag= false ;  
-
-           // getch();    
-    }
-    clear();
-    while(flag) {
-        //timeout(500);
-        ch = getch();
         nemici.show();
       if (ch == KEY_F(1)) flag= false ;          
     }
-
-   
-    
     endwin();
     return 0;
 }
+
 
 
