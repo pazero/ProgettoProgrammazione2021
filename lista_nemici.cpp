@@ -68,14 +68,16 @@ class Enemy {
     }
 
     void addEnemy(position p, int n){
-    
+
         for(int i=0;i<n;i++){
+                int j= rand()%30;
+                int z= rand()%100;
             Enemy *tmp = new Enemy;
             mvwaddstr(tmp->pad, 0, 0, name);
-            tmp->start.y = p.y+i;
-            tmp->start.x = p.x;
-            tmp->endx = p.x;
-            tmp->endy = p.y+i;
+            tmp->start.y = p.y+j;
+            tmp->start.x = p.x+z;
+            tmp->endx = p.x+z;
+            tmp->endy = p.y+j;
             tmp->next = next;
             next = tmp ;
             if(tmp->next == NULL){
@@ -110,23 +112,25 @@ int main() {
     noecho();
     curs_set(0);
     keypad(stdscr, TRUE);
+     mvprintw(0,0,   "premi il tasto verso UP");
 
     position p ;
+            p.y = 0;
+            p.x = 0;
     Enemy nemici = Enemy();
     nemici.build();
-    
+     
     int ch;
     bool flag=true;
 while(flag) {
            
             timeout(400);
             ch = getch();
-            
-            p.y = rand() % 30 ;
-            p.x = rand() % 110 ;
-            nemici.addEnemy(p,5);// agiungi nemici alla lista (cordinate, numero di nemici );
-
-        nemici.show();
+            if(ch==KEY_UP){
+                nemici.addEnemy(p,10);// agiungi nemici alla lista (cordinate, numero di nemici );
+                nemici.show();
+            }
+        
       if (ch == KEY_F(1)) flag= false ;          
     }
     endwin();
