@@ -51,6 +51,7 @@ void BigMap::update() {
         }
 }
 void BigMap::slideMap(int ch) {
+    this->count++;
     update();
     mvprintw(LINES/2,0,   "Current node: %d  ", head->n);
     if(ch == KEY_LEFT){
@@ -88,7 +89,10 @@ void BigMap::slideMap(int ch) {
             Mario->go_up();
     }
     if(ch == 'e') {
-        Mario->add_bullet(Mario->getPos());
+        if(this->count /2 >1) {
+            Mario->add_bullet(Mario->getPos());
+            this->count=0;
+        }
     }
     /*
     if(ch == KEY_DOWN) {
