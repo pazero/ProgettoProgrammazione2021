@@ -3,8 +3,6 @@
 Eroe::Eroe(position pos, int life):Oggetto(pos){
     this->life = life;
     this->gun = NULL;
-    //commenta la prossima riga
-    this->nbullet = 0;
 }
 
 void Eroe::go_up(){
