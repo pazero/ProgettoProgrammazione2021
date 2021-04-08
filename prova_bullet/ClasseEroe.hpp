@@ -11,8 +11,6 @@ class Eroe:public Oggetto {
     int life;
     char name = 'Y';
     colpi gun;
-    //commenta la prossima riga
-    int nbullet;
 
     public:
     Eroe(position pos, int life);
