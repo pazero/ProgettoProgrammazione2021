@@ -14,11 +14,11 @@ class BigMap {
         MapList head = new MapNode;
         int rect_lines;
         int rect_cols;
-
         int nodi;
 
         int stacco = 30;
         Eroe *Mario;
+        int count = 0;
     public:
     BigMap(int rect_lines, int rect_cols);
     void addMap();
