@@ -1,29 +1,35 @@
-main: main.o ClasseMap.o ClasseOggetto.o ClasseEroe.o ClasseBigMap.o Comandi.o ClasseBullet.o ClasseMotore.o
-	g++ -lncurses -o main main.o ClasseMap.o ClasseOggetto.o ClasseEroe.o ClasseBigMap.o Comandi.o ClasseBullet.o ClasseMotore.o -g
+CC = g++ -lncurses -g
+CFLAGS = -c -Wall
+SRC_DIR = ./src
+BIN := main.o ClasseMap.o ClasseOggetto.o ClasseEroe.o ClasseBigMap.o Comandi.o ClasseBullet.o ClasseMotore.o
 
-main.o: main.cpp ClasseMap.hpp ClasseOggetto.hpp ClasseEroe.hpp ClasseBigMap.hpp Comandi.hpp ClasseBullet.hpp ClasseMotore.hpp
-	g++ -c -lncurses main.cpp -g
+main: $(BIN)
+	$(CC) -o main $(BIN)
 
-ClasseMap.o: ClasseMap.cpp ClasseMap.hpp
-	g++ -c -lncurses ClasseMap.cpp -g
+main.o: $(SRC_DIR)/main.cpp $(SRC_DIR)/*.hpp
+	$(CC) $(CFLAGS) $(SRC_DIR)/main.cpp
 
-ClasseOggetto.o: ClasseOggetto.cpp ClasseOggetto.hpp
-	g++ -c -lncurses ClasseOggetto.cpp -g
+ClasseMap.o: $(SRC_DIR)/ClasseMap.?pp
+	$(CC) $(CFLAGS) $(SRC_DIR)/ClasseMap.cpp 
 
-ClasseEroe.o: ClasseEroe.cpp ClasseEroe.hpp
-	g++ -c -lncurses ClasseEroe.cpp -g
+ClasseOggetto.o: $(SRC_DIR)/ClasseOggetto.?pp
+	$(CC) $(CFLAGS) $(SRC_DIR)/ClasseOggetto.cpp
 
-ClasseBigMap.o: ClasseBigMap.cpp ClasseBigMap.hpp
-	g++ -c -lncurses ClasseBigMap.cpp -g
+ClasseEroe.o: $(SRC_DIR)/ClasseEroe.?pp
+	$(CC) $(CFLAGS) $(SRC_DIR)/ClasseEroe.cpp
 
-Comandi.o: Comandi.cpp Comandi.hpp
-	g++ -c -lncurses Comandi.cpp -g
+ClasseBigMap.o: $(SRC_DIR)/ClasseBigMap.?pp
+	$(CC) $(CFLAGS) $(SRC_DIR)/ClasseBigMap.cpp
 
-ClasseBullet.o: ClasseBullet.cpp ClasseBullet.hpp
-	g++ -c -lncurses ClasseBullet.cpp -g
+Comandi.o: $(SRC_DIR)/Comandi.?pp
+	$(CC) $(CFLAGS) $(SRC_DIR)/Comandi.cpp
 
-ClasseMotore.o: ClasseMotore.cpp ClasseMotore.hpp
-	g++ -c -lncurses ClasseMotore.cpp -g
+ClasseBullet.o: $(SRC_DIR)/ClasseBullet.?pp
+	$(CC) $(CFLAGS) $(SRC_DIR)/ClasseBullet.cpp
+
+ClasseMotore.o: $(SRC_DIR)/ClasseMotore.?pp
+	$(CC) $(CFLAGS) $(SRC_DIR)/ClasseMotore.cpp
+
 love:
 	./main
 
