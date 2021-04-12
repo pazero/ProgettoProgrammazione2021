@@ -1,9 +1,11 @@
 #include "ClasseMotore.hpp"
+#include "Comandi.hpp"
 using namespace std;
 
+#define RECT_LINES 19
+#define RECT_COLS 100
 int main() {
-    int rect_lines = 19;
-    int rect_cols = 100;
-    Motore(rect_lines, rect_cols);
+    Comandi();
+    Motore(RECT_LINES, RECT_COLS);
     return 0;
 }

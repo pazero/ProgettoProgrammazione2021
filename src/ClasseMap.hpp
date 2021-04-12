@@ -40,5 +40,6 @@ class Map {
     void pad_refresh(int pad_x,int sx,int ex);
     bool is_plat(int y, int x, int how_prev, bool is_prec);
     bool is_wall(int y, int x, int how_prev, bool is_prec, bool is_dx);
+    bool is_freeup(int y, int x, int how_prev, bool is_prec);
     int player_pos();
 };

@@ -1,16 +1,13 @@
 #include "ClasseMotore.hpp"
-#include "Comandi.hpp"
 
 Motore::Motore(int rect_lines, int rect_cols) {
     this->rect_lines = rect_lines;
     this->rect_cols = rect_cols;
-    Comandi();
     this->infinita = BigMap(rect_lines, rect_cols);
     go_game();
 }
 
 void Motore::move_all() {
-    infinita.inc_count();
     infinita.update();
     
     if(ch == KEY_LEFT){

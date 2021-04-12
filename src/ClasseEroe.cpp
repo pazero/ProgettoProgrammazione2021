@@ -62,10 +62,10 @@ void Eroe::update_shoot(int player_x, int limit_dx){
         }
         prec = aux;
         if(aux!=NULL)
-        aux = aux->next;
+            aux = aux->next;
     }
 }
-
+/*
 void Eroe::count_bullet(){
     colpi aux = gun;
     int i=0;
@@ -74,22 +74,4 @@ void Eroe::count_bullet(){
         i++;
     }
     mvprintw(0,COLS/2,"nbullet: %d ", i);
-}
-
-/*
-if(prec == NULL){
-                    if(aux->next==NULL) {
-                        tmp = aux;
-                        gun = NULL;
-                        delete(tmp);
-                        tmp = NULL;
-                    }
-                    else{
-                        tmp = aux;
-                        aux = aux->next;
-                        delete(tmp);
-                        tmp = NULL;
-                        gun = aux;
-                    }
-                }
-                */
+}*/

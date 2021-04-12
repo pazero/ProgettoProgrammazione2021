@@ -18,5 +18,5 @@ class Eroe:public Oggetto {
     void go_down();
     void add_bullet(position pos);
     void update_shoot(int stacco,int rect_cols);
-    void count_bullet();
+    //void count_bullet();
 };

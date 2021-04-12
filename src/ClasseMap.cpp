@@ -62,7 +62,7 @@ void Map::build(){
 void Map::add_plat(int type, int length, int y, int x) {
     if(type==0) {
         mvwprintw(mappa,y,x,"+++++ +++++");
-        mvwprintw(mappa,y+1,x+4,"|");
+        mvwprintw(mappa,y+1,x+3,"|");
     }
     if(type==1) {
         mvwprintw(mappa,y-2,x+5,     "++++++++++");
@@ -220,5 +220,14 @@ bool Map::is_wall(int y, int x, int how_prev, bool is_prec, bool is_dx) {
         else {
             return mvwinch(mappa, y, how_prev-1) == '|';
         }
+    }
+}
+
+bool Map::is_freeup(int y, int x, int how_prev, bool is_prec) {
+    if(is_prec) {
+        return mvwinch(mappa, y-2,x+(rect_cols-how_prev)) == ' ';
+    }
+    else {
+        return mvwinch(mappa, y-2, how_prev) == ' ';
     }
 }

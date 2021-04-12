@@ -38,6 +38,7 @@ void BigMap::addMap() {
     mvprintw(LINES/2 +1,0,"Aggiunta nodo numero: %d", nodi);
 }
 void BigMap::update() {
+    count++;
     if(head->next==NULL) {
         addMap();
     }
@@ -61,10 +62,8 @@ void BigMap::go_left(){
             if(head->piece->previous())
                 head->prev->piece->lslide();
         }
-        while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_platform(Mario.getPosy() - (LINES-rect_lines)/2 + 2))
-        {
-            Mario.go_down();
-        }
+        while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2 + 2))
+            Mario.go_down();  
         Mario.update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1);
     }
 }
@@ -79,14 +78,14 @@ void BigMap::go_right(){
         if(head->prev!=NULL)
             head->prev->piece->rslide();
 
-        while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_platform(Mario.getPosy() - (LINES-rect_lines)/2 + 2)){
+        while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2 + 2)){
             Mario.go_down();
         }
     }
 }
 
 void BigMap::go_up(){
-    if(is_platform(Mario.getPosy() - (LINES-rect_lines)/2))
+    if(is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2))
         Mario.go_up();
     //aggiungere controllo che sopra sia libero
 }
@@ -101,18 +100,18 @@ void BigMap::shoot(){
 void BigMap::routine_fineciclo() {
     Mario.update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1);
     Mario.show();
-    Mario.count_bullet();
 }
-bool BigMap::is_platform(int y_on_pad) {
+
+bool BigMap::is_freeplatform(int y_on_pad) {
     if(head->prev!=NULL) {
-        if(head->prev->piece->how_much()>30)
-            return head->prev->piece->is_plat(y_on_pad,stacco,head->prev->piece->how_much()+1,true);
+        if(head->prev->piece->how_much()>stacco)
+            return head->prev->piece->is_plat(y_on_pad,stacco,head->prev->piece->how_much()+1,true) && head->prev->piece->is_freeup(y_on_pad,stacco,head->prev->piece->how_much()+1,true);
         else {
             if (head->prev->piece->how_much()>-1) {
-                return head->piece->is_plat(y_on_pad,stacco,head->piece->how_much() - rect_cols + stacco+1, false);
+                return head->piece->is_plat(y_on_pad,stacco,head->piece->how_much() - rect_cols + stacco+1, false) && head->piece->is_freeup(y_on_pad,stacco,head->piece->how_much() - rect_cols + stacco+1, false);
             }
             else {
-                return head->piece->is_plat(y_on_pad,stacco,rect_cols - head->piece->how_much() + stacco-1,false);
+                return head->piece->is_plat(y_on_pad,stacco,rect_cols - head->piece->how_much() + stacco-1,false) && head->piece->is_freeup(y_on_pad,stacco,rect_cols - head->piece->how_much() + stacco-1,false);
             }
         }
     }
@@ -121,7 +120,7 @@ bool BigMap::is_platform(int y_on_pad) {
 bool BigMap::ostacolo(int y_on_pad, bool dx) {
     if(dx) {
         if(head->prev!=NULL) {
-            if(head->prev->piece->how_much()>30)
+            if(head->prev->piece->how_much()>stacco)
                 return head->prev->piece->is_wall(y_on_pad,stacco,head->prev->piece->how_much()+1,true, true);
             else {
                 if (head->prev->piece->how_much()>-1) {
@@ -135,7 +134,7 @@ bool BigMap::ostacolo(int y_on_pad, bool dx) {
     }
     else {
         if(head->prev!=NULL) {
-            if(head->prev->piece->how_much()>30)
+            if(head->prev->piece->how_much()>stacco)
                 return head->prev->piece->is_wall(y_on_pad,stacco,head->prev->piece->how_much()+1,true, false);
             else {
                 if (head->prev->piece->how_much()>-1) {
@@ -148,12 +147,8 @@ bool BigMap::ostacolo(int y_on_pad, bool dx) {
         }
     }
 }
-
-void BigMap::inc_count() {
-    count++;
-}
     /*
     if(ch == KEY_DOWN) {
-        if(Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_platform(Mario.getPosy() - (LINES-rect_lines)/2 + 2))
+        if(Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2 + 2))
             Mario.go_down();
     }*/

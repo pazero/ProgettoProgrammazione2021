@@ -31,7 +31,6 @@ class BigMap {
     void go_up();
     void shoot();
     void routine_fineciclo();
-    bool is_platform(int y_on_pad);
+    bool is_freeplatform(int y_on_pad);
     bool ostacolo(int y_on_pad, bool dx);
-    void inc_count();
 };
