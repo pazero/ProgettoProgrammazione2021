@@ -1,14 +1,4 @@
 #include "Eroe.hpp"
-// struttura per la lista bidirezionale
-/*struct MapNode
-{
-    Map *piece; // "pezzo di mappa": puntatore di tipo Map che crea dei nodi 
-                // con le caratteristiche definite dalla classe Map 
-    int n;
-    MapNode *next;
-    MapNode *prev;
-};
-typedef MapNode *MapList;*/
 // questa classe crea una lista bidirezionale i cui nodi sono finestre costruite dalla classe Map
 // contiene metodi per:
 // 1) aggiungere un nodo alla lista(pezzo di mappa)
