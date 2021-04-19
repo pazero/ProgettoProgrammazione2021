@@ -239,16 +239,16 @@ bool BigMap::empty_for_bullet(position pos) {
 
     if(head->prev!=NULL) {
         if(head->prev->piece->how_much() > x_on_rect)
-            return head->prev->piece->is_empty(y_on_pad,x_on_rect + rect_cols - head->prev->piece->how_much()-1,0, true);
+            return head->prev->piece->is_empty(y_on_pad,x_on_rect + rect_cols - head->prev->piece->how_much()-1 ,0, true);
         else{
             if (head->prev->piece->how_much()>-1) {
-                return head->piece->is_empty(y_on_pad,head->piece->how_much() - rect_cols + x_on_rect+1,1, true);
+                return head->piece->is_empty(y_on_pad,head->piece->how_much() - rect_cols + x_on_rect+1 ,1, true);
             }
             else {
                 if(x_on_rect >= head->piece->how_much())
                     return head->next->piece->is_empty(y_on_pad, x_on_rect - head->piece->how_much()-1 ,2,true);
                 else
-                    return head->piece->is_empty(y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1,1, true);
+                    return head->piece->is_empty(y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1 ,1, true);
             }
         }
     }
@@ -256,7 +256,7 @@ bool BigMap::empty_for_bullet(position pos) {
         if(x_on_rect >= head->piece->how_much())
             return head->next->piece->is_empty(y_on_pad, x_on_rect - head->piece->how_much()-1 ,2,true);
         else
-            //return head->piece->is_empty(y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1,1, true);
+            //return head->piece->is_empty(y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1 ,1, true);
             return true;
     }
 }
