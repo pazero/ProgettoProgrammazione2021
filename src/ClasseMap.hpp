@@ -37,9 +37,8 @@ class Map {
     void show();
     int how_much();
     void pad_refresh(int pad_x,int sx,int ex);
-    bool is_plat(int y, int x, int how_prev, bool is_prec);
-    bool is_wall(int y, int x, int how_prev, bool is_prec, bool dx);
-    bool is_freeup(int y, int x, int how_prev, bool is_prec);
+    bool is_wall(int y, int how_prev, bool is_prec, bool dx);
+    bool can_go_up(int y, int how_prev, bool is_prec);
     bool is_empty(int y, int how_prev, int pad, bool dx);
     int player_pos();
 };

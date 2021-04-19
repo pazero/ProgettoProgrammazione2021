@@ -106,13 +106,13 @@ void BigMap::routine_fineciclo() {
 bool BigMap::is_freeplatform(int y_on_pad) {
     if(head->prev!=NULL) {
         if(head->prev->piece->how_much()>stacco)
-            return head->prev->piece->is_plat(y_on_pad,stacco,head->prev->piece->how_much()+1,true) && head->prev->piece->is_freeup(y_on_pad,stacco,head->prev->piece->how_much()+1,true);
+            return head->prev->piece->can_go_up(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1,true);
         else {
             if (head->prev->piece->how_much()>-1) {
-                return head->piece->is_plat(y_on_pad,stacco,head->piece->how_much() - rect_cols + stacco+1, false) && head->piece->is_freeup(y_on_pad,stacco,head->piece->how_much() - rect_cols + stacco+1, false);
+                return head->piece->can_go_up(y_on_pad,head->piece->how_much() - rect_cols + stacco+1, false);
             }
             else {
-                return head->piece->is_plat(y_on_pad,stacco,rect_cols - head->piece->how_much() + stacco-1,false) && head->piece->is_freeup(y_on_pad,stacco,rect_cols - head->piece->how_much() + stacco-1,false);
+                return head->piece->can_go_up(y_on_pad,rect_cols - head->piece->how_much() + stacco-1,false);
             }
         }
     }
@@ -121,13 +121,13 @@ bool BigMap::ostacolo(int y_on_pad, bool dx) {
     if(dx) {
         if(head->prev!=NULL) {
             if(head->prev->piece->how_much()>stacco)
-                return head->prev->piece->is_wall(y_on_pad,stacco,head->prev->piece->how_much()+1,true, true);
+                return head->prev->piece->is_wall(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1,true, true);
             else {
                 if (head->prev->piece->how_much()>-1) {
-                    return head->piece->is_wall(y_on_pad,stacco,head->piece->how_much() - rect_cols + stacco+1, false, true);
+                    return head->piece->is_wall(y_on_pad,head->piece->how_much() - rect_cols + stacco+1, false, true);
                 }
                 else {
-                    return head->piece->is_wall(y_on_pad,stacco,rect_cols - head->piece->how_much() + stacco-1,false, true);
+                    return head->piece->is_wall(y_on_pad,rect_cols - head->piece->how_much() + stacco-1,false, true);
                 }
             }
         }
@@ -135,13 +135,13 @@ bool BigMap::ostacolo(int y_on_pad, bool dx) {
     else {
         if(head->prev!=NULL) {
             if(head->prev->piece->how_much()>stacco)
-                return head->prev->piece->is_wall(y_on_pad,stacco,head->prev->piece->how_much()+1,true, false);
+                return head->prev->piece->is_wall(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1,true, false);
             else {
                 if (head->prev->piece->how_much()>-1) {
-                    return head->piece->is_wall(y_on_pad,stacco,head->piece->how_much() - rect_cols + stacco+1, false, false);
+                    return head->piece->is_wall(y_on_pad,head->piece->how_much() - rect_cols + stacco+1, false, false);
                 }
                 else {
-                    return head->piece->is_wall(y_on_pad,stacco,rect_cols - head->piece->how_much() + stacco-1,false, false);
+                    return head->piece->is_wall(y_on_pad,rect_cols - head->piece->how_much() + stacco-1,false, false);
                 }
             }
         }

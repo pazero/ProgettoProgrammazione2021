@@ -17,7 +17,6 @@ Map::Map(int rect_lines, int rect_cols, bool first) {
     this->ex = finex_rect;
     this->sy = inizioy_rect;
     this->ey = finey_rect;
-    
 
     this->rect_lines = rect_lines;
     this->rect_cols = rect_cols;
@@ -195,42 +194,35 @@ void Map::pad_refresh(int pad_x,int sx,int ex) {
     prefresh(mappa, pad_y, pad_x, sy, sx, ey, ex);
 }
 
-bool Map::is_plat(int y, int x, int how_prev, bool is_prec) {
+bool Map::can_go_up(int y, int how_prev, bool is_prec) {
     if(is_prec) {
-        return mvwinch(mappa, y-1,x+(rect_cols-how_prev)) == '+';
+        return (mvwinch(mappa, y-2,how_prev) == ' ') && (mvwinch(mappa, y-1,how_prev) == '+');
     }
     else {
-        return mvwinch(mappa, y-1, how_prev) == '+';
+        return (mvwinch(mappa, y-2, how_prev) == ' ') && (mvwinch(mappa, y-1, how_prev) == '+');
     }
 }
 
-bool Map::is_wall(int y, int x, int how_prev, bool is_prec, bool dx) {
+bool Map::is_wall(int y, int how_prev, bool is_prec, bool dx) {
     if(dx) {
         if(is_prec) {
-            return mvwinch(mappa, y,x+(rect_cols-how_prev)+1) == '|';
+            return mvwinch(mappa, y, how_prev +1) == '|';
         }
         else {
-            return mvwinch(mappa, y, how_prev+1) == '|';
+            return mvwinch(mappa, y, how_prev +1) == '|';
         }
     }
     else {
         if(is_prec) {
-            return mvwinch(mappa, y,x+(rect_cols-how_prev)-1) == '|';
+            return mvwinch(mappa, y, how_prev -1) == '|';
         }
         else {
-            return mvwinch(mappa, y, how_prev-1) == '|';
+            return mvwinch(mappa, y, how_prev -1) == '|';
         }
     }
 }
 
-bool Map::is_freeup(int y, int x, int how_prev, bool is_prec) {
-    if(is_prec) {
-        return mvwinch(mappa, y-2,x+(rect_cols-how_prev)) == ' ';
-    }
-    else {
-        return mvwinch(mappa, y-2, how_prev) == ' ';
-    }
-}
+
 
 bool Map::is_empty(int y, int padx, int pad_type, bool dx) {
     //prec
