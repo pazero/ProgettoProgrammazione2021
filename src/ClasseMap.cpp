@@ -61,7 +61,7 @@ void Map::build(){
 void Map::add_plat(int type, int length, int y, int x) {
     if(type==0) {
         mvwprintw(mappa,y,x,"+++++ +++++");
-        mvwprintw(mappa,y+1,x+3,"||");
+        mvwprintw(mappa,y+1,x+2,"||");
     }
     if(type==1) {
         mvwprintw(mappa,y-2,x+5,     "++++++++++");
