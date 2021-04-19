@@ -1,6 +1,13 @@
 #include "ClasseMap.hpp"
-#include "ClasseEroe.hpp"
+#include "ClasseBullet.hpp"
 #include <ncurses.h>
+
+struct colpo {
+    Bullet curr{};
+    colpo *next;
+};
+typedef colpo* colpi;
+
 struct MapNode {
         Map *piece;
         int n;
@@ -20,7 +27,10 @@ class BigMap {
         Eroe Mario{};
 
         int count=0;
+        
+        colpi gun;
 
+    
     public:
     BigMap();
     BigMap(int rect_lines, int rect_cols);
@@ -33,4 +43,9 @@ class BigMap {
     void routine_fineciclo();
     bool is_freeplatform(int y_on_pad);
     bool ostacolo(int y_on_pad, bool dx);
+
+    void add_bullet(position pos);
+    void update_shoot(int stacco,int rect_cols);
+    bool empty_for_bullet(position pos);
+    void set_count(int n);
 };

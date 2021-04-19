@@ -24,7 +24,6 @@ class Map {
     int inizioy_rect;
     int finey_rect;
 
-    int pl_pos;
 
     public:
     Map(int rect_lines, int rect_cols, bool first = false);
@@ -39,7 +38,8 @@ class Map {
     int how_much();
     void pad_refresh(int pad_x,int sx,int ex);
     bool is_plat(int y, int x, int how_prev, bool is_prec);
-    bool is_wall(int y, int x, int how_prev, bool is_prec, bool is_dx);
+    bool is_wall(int y, int x, int how_prev, bool is_prec, bool dx);
     bool is_freeup(int y, int x, int how_prev, bool is_prec);
+    bool is_empty(int y, int how_prev, int pad, bool dx);
     int player_pos();
 };

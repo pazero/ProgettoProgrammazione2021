@@ -204,8 +204,8 @@ bool Map::is_plat(int y, int x, int how_prev, bool is_prec) {
     }
 }
 
-bool Map::is_wall(int y, int x, int how_prev, bool is_prec, bool is_dx) {
-    if(is_dx) {
+bool Map::is_wall(int y, int x, int how_prev, bool is_prec, bool dx) {
+    if(dx) {
         if(is_prec) {
             return mvwinch(mappa, y,x+(rect_cols-how_prev)+1) == '|';
         }
@@ -229,5 +229,29 @@ bool Map::is_freeup(int y, int x, int how_prev, bool is_prec) {
     }
     else {
         return mvwinch(mappa, y-2, how_prev) == ' ';
+    }
+}
+
+bool Map::is_empty(int y, int padx, int pad_type, bool dx) {
+    //prec
+    if(pad_type==0) {
+        if(dx)
+            return (mvwinch(mappa, y, padx +1) == ' ');
+        else
+            return (mvwinch(mappa, y, padx -1) == ' ');
+    }
+    //curr
+    if(pad_type==1) {
+        if(dx)
+            return (mvwinch(mappa, y, padx +1) == ' ');
+        else
+            return (mvwinch(mappa, y, padx -1) == ' ');
+    }
+    //next
+    if(pad_type==2) {
+        if(dx)
+            return (mvwinch(mappa, y, padx +1) == ' ');
+        else
+            return (mvwinch(mappa, y, padx -1) == ' ');
     }
 }

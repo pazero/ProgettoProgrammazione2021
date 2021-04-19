@@ -1,5 +1,5 @@
-#include "ClasseOggetto.hpp"
 #include <ncurses.h>
+#include "ClasseEroe.hpp"
 class Bullet{
     protected:
     position pos;
@@ -15,4 +15,5 @@ class Bullet{
     void go_dx();
     void go_sx();
     int getPosx();
+    position getPos();
 };

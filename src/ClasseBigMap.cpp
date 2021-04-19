@@ -16,6 +16,7 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
     int life = 100;
     this->Mario = Eroe(pos, life);
     this->Mario.show();
+    this->gun = NULL;
 }
 void BigMap::addMap() {
     nodi++;
@@ -63,8 +64,9 @@ void BigMap::go_left(){
                 head->prev->piece->lslide();
         }
         while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2 + 2))
-            Mario.go_down();  
-        Mario.update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1);
+            Mario.go_down();
+            
+        update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1);
     }
 }
 
@@ -87,18 +89,17 @@ void BigMap::go_right(){
 void BigMap::go_up(){
     if(is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2))
         Mario.go_up();
-    //aggiungere controllo che sopra sia libero
 }
 
 void BigMap::shoot(){
-    if(this->count/2 >0) {
-        Mario.add_bullet(Mario.getPos());
-        this->count=0;
+    if(count/3 > 0) {
+        add_bullet(Mario.getPos());
+        count=0;
     }
 }
 
 void BigMap::routine_fineciclo() {
-    Mario.update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1);
+    update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1);
     Mario.show();
 }
 
@@ -116,7 +117,6 @@ bool BigMap::is_freeplatform(int y_on_pad) {
         }
     }
 }
-
 bool BigMap::ostacolo(int y_on_pad, bool dx) {
     if(dx) {
         if(head->prev!=NULL) {
@@ -147,8 +147,120 @@ bool BigMap::ostacolo(int y_on_pad, bool dx) {
         }
     }
 }
-    /*
-    if(ch == KEY_DOWN) {
-        if(Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2 + 2))
-            Mario.go_down();
-    }*/
+void BigMap::add_bullet(position pos) {
+    colpi tmp = new colpo;
+    tmp->curr = Bullet(pos);
+    tmp->next = gun;
+    gun = tmp;
+}
+
+void BigMap::update_shoot(int limit_sx, int limit_dx){
+    colpi aux = gun;
+    colpi prec = NULL;
+    while(aux!=NULL) {
+        if(aux->curr.getPosx()==limit_sx) {
+            if(empty_for_bullet(aux->curr.getPos())) {
+                aux->curr.go_dx();
+            }
+            else{
+                //aggiungere verifica di COSA colpisce
+                colpi tmp;
+                if(prec == NULL){
+                    tmp = aux;
+                    aux = aux->next;
+                    delete(tmp);
+                    tmp = NULL;
+                    gun = aux;
+                }
+                else{
+                    tmp = aux;
+                    aux = aux->next;
+                    prec->next = aux;
+                    delete (tmp);
+                    tmp = NULL;
+                }
+            }
+        }
+        else {
+            if(aux->curr.getPosx()<limit_dx-1) {
+                if(empty_for_bullet(aux->curr.getPos())) {
+                    aux->curr.destroy_win();
+                    aux->curr.go_dx();
+                }
+                else{
+                    //aggiungere verifica di COSA colpisce
+                    aux->curr.destroy_win();
+                    colpi tmp;
+                    if(prec == NULL){
+                        tmp = aux;
+                        aux = aux->next;
+                        delete(tmp);
+                        tmp = NULL;
+                        gun = aux;
+                    }
+                    else{
+                        tmp = aux;
+                        aux = aux->next;
+                        prec->next = aux;
+                        delete (tmp);
+                        tmp = NULL;
+                    }
+                }
+            }
+            // caso aux->curr.getPosx()==limit_dx
+            else {
+                aux->curr.destroy_win();
+                colpi tmp;
+                if(prec == NULL){
+                    tmp = aux;
+                    aux = aux->next;
+                    delete(tmp);
+                    tmp = NULL;
+                    gun = aux;
+                }
+                else{
+                    tmp = aux;
+                    aux = aux->next;
+                    prec->next = aux;
+                    delete (tmp);
+                    tmp = NULL;
+                }
+            }
+        }
+        prec = aux;
+        if(aux!=NULL)
+            aux = aux->next;
+    }
+}
+
+bool BigMap::empty_for_bullet(position pos) {
+    int y_on_pad = pos.y - (LINES-rect_lines)/2;
+    int x_on_rect = pos.x - (COLS-rect_cols)/2;
+
+    if(head->prev!=NULL) {
+        if(head->prev->piece->how_much() > x_on_rect)
+            return head->prev->piece->is_empty(y_on_pad,x_on_rect + rect_cols - head->prev->piece->how_much()-1,0, true);
+        else{
+            if (head->prev->piece->how_much()>-1) {
+                return head->piece->is_empty(y_on_pad,head->piece->how_much() - rect_cols + x_on_rect+1,1, true);
+            }
+            else {
+                if(x_on_rect >= head->piece->how_much())
+                    return head->next->piece->is_empty(y_on_pad, x_on_rect - head->piece->how_much()-1 ,2,true);
+                else
+                    return head->piece->is_empty(y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1,1, true);
+            }
+        }
+    }
+    else {
+        if(x_on_rect >= head->piece->how_much())
+            return head->next->piece->is_empty(y_on_pad, x_on_rect - head->piece->how_much()-1 ,2,true);
+        else
+            //return head->piece->is_empty(y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1,1, true);
+            return true;
+    }
+}
+
+void BigMap::set_count(int n) {
+    count = n;
+}

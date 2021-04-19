@@ -27,11 +27,14 @@ void Motore::move_all() {
 }
 
 void Motore::go_game(){
+    infinita.set_count(3);
     while(!pause) {
         ch = getch();
+        refresh();
         move_all();
         if(ch==KEY_F(1)) pause = true;
         timeout(50);
+        
     }
     endwin();
 }
