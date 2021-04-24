@@ -15,6 +15,7 @@ void Motore::move_all() {
     }
     if(ch == KEY_RIGHT){
         infinita.go_right();
+        right = true;
     }
     if(ch == KEY_UP) {
         infinita.go_up();
@@ -22,8 +23,10 @@ void Motore::move_all() {
     if(ch == 'e') {
         infinita.shoot();
     }
-    infinita.routine_fineciclo();
+    infinita.routine_fineciclo(right);
     refresh();
+    mvprintw(0,COLS/2,"%d", right);
+    right = false;
 }
 
 void Motore::go_game(){

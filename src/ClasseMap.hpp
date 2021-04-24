@@ -39,6 +39,6 @@ class Map {
     void pad_refresh(int pad_x,int sx,int ex);
     bool is_wall(int y, int how_prev, bool is_prec, bool dx);
     bool can_go_up(int y, int how_prev, bool is_prec);
-    bool is_empty(int y, int how_prev, int pad, bool dx);
+    bool there_is_this(char object, int y, int how_prev, bool dx, bool shoot);
     int player_pos();
 };

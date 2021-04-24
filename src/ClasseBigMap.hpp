@@ -40,12 +40,12 @@ class BigMap {
     void go_right();
     void go_up();
     void shoot();
-    void routine_fineciclo();
+    void routine_fineciclo(bool right);
     bool is_freeplatform(int y_on_pad);
     bool ostacolo(int y_on_pad, bool dx);
 
     void add_bullet(position pos);
-    void update_shoot(int stacco,int rect_cols);
-    bool empty_for_bullet(position pos);
+    void update_shoot(int stacco,int rect_cols, bool right);
+    bool empty_for_bullet(position pos, bool right);
     void set_count(int n);
 };

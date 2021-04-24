@@ -61,7 +61,7 @@ void Map::build(){
 void Map::add_plat(int type, int length, int y, int x) {
     if(type==0) {
         mvwprintw(mappa,y,x,"+++++ +++++");
-        mvwprintw(mappa,y+1,x+2,"||");
+        mvwprintw(mappa,y+1,x+2,"|");
     }
     if(type==1) {
         mvwprintw(mappa,y-2,x+5,     "++++++++++");
@@ -88,7 +88,7 @@ void Map::add_plat(int type, int length, int y, int x) {
         mvwprintw(mappa,y-4,x+3,      "++++++++++");
         mvwprintw(mappa,y-2,x-2, "++++++++");
         mvwprintw(mappa,y,x,       "++++++++++");
-        mvwprintw(mappa,y-1,x+3, "||");
+        mvwprintw(mappa,y-1,x+3, "|");
     }
     if(type==6){
         mvwprintw(mappa,y-8,x-2,     "+++++++++++++");
@@ -224,26 +224,17 @@ bool Map::is_wall(int y, int how_prev, bool is_prec, bool dx) {
 
 
 
-bool Map::is_empty(int y, int padx, int pad_type, bool dx) {
-    //prec
-    if(pad_type==0) {
+bool Map::there_is_this(char object,int y, int padx, bool dx, bool shoot) {
+    if(shoot) {
         if(dx)
-            return (mvwinch(mappa, y, padx +1) == ' ');
+            return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx+1) == object);
         else
-            return (mvwinch(mappa, y, padx -1) == ' ');
+            return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx-1) == object);
     }
-    //curr
-    if(pad_type==1) {
+    else {
         if(dx)
-            return (mvwinch(mappa, y, padx +1) == ' ');
+            return (mvwinch(mappa, y, padx +1) == object);
         else
-            return (mvwinch(mappa, y, padx -1) == ' ');
-    }
-    //next
-    if(pad_type==2) {
-        if(dx)
-            return (mvwinch(mappa, y, padx +1) == ' ');
-        else
-            return (mvwinch(mappa, y, padx -1) == ' ');
+            return (mvwinch(mappa, y, padx -1) == object);
     }
 }

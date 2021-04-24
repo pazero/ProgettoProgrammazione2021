@@ -8,7 +8,8 @@ class Motore{
     BigMap infinita{};
     int ch;
     bool pause=false;
-
+    bool right;
+    
     public:
     Motore(int rect_lines, int rect_cols);
     void move_all();

@@ -66,7 +66,7 @@ void BigMap::go_left(){
         while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2 + 2))
             Mario.go_down();
             
-        update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1);
+        update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, false);
     }
 }
 
@@ -98,8 +98,8 @@ void BigMap::shoot(){
     }
 }
 
-void BigMap::routine_fineciclo() {
-    update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1);
+void BigMap::routine_fineciclo(bool right) {
+    update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, right);
     Mario.show();
 }
 
@@ -154,12 +154,12 @@ void BigMap::add_bullet(position pos) {
     gun = tmp;
 }
 
-void BigMap::update_shoot(int limit_sx, int limit_dx){
+void BigMap::update_shoot(int limit_sx, int limit_dx, bool right){
     colpi aux = gun;
     colpi prec = NULL;
     while(aux!=NULL) {
         if(aux->curr.getPosx()==limit_sx) {
-            if(empty_for_bullet(aux->curr.getPos())) {
+            if(empty_for_bullet(aux->curr.getPos(), right)) {
                 aux->curr.go_dx();
             }
             else{
@@ -183,13 +183,12 @@ void BigMap::update_shoot(int limit_sx, int limit_dx){
         }
         else {
             if(aux->curr.getPosx()<limit_dx-1) {
-                if(empty_for_bullet(aux->curr.getPos())) {
-                    aux->curr.destroy_win();
+                aux->curr.destroy_win();
+                if(empty_for_bullet(aux->curr.getPos(), right)) {
                     aux->curr.go_dx();
                 }
                 else{
                     //aggiungere verifica di COSA colpisce
-                    aux->curr.destroy_win();
                     colpi tmp;
                     if(prec == NULL){
                         tmp = aux;
@@ -233,30 +232,30 @@ void BigMap::update_shoot(int limit_sx, int limit_dx){
     }
 }
 
-bool BigMap::empty_for_bullet(position pos) {
+bool BigMap::empty_for_bullet(position pos, bool right) {
     int y_on_pad = pos.y - (LINES-rect_lines)/2;
     int x_on_rect = pos.x - (COLS-rect_cols)/2;
 
     if(head->prev!=NULL) {
         if(head->prev->piece->how_much() > x_on_rect)
-            return head->prev->piece->is_empty(y_on_pad,x_on_rect + rect_cols - head->prev->piece->how_much()-1 ,0, true);
+            return !(head->prev->piece->there_is_this('|', y_on_pad,x_on_rect + rect_cols - head->prev->piece->how_much()-1, true, right));
         else{
             if (head->prev->piece->how_much()>-1) {
-                return head->piece->is_empty(y_on_pad,head->piece->how_much() - rect_cols + x_on_rect+1 ,1, true);
+                return !(head->piece->there_is_this('|', y_on_pad,head->piece->how_much() - rect_cols + x_on_rect+1 ,true, right));
             }
             else {
                 if(x_on_rect >= head->piece->how_much())
-                    return head->next->piece->is_empty(y_on_pad, x_on_rect - head->piece->how_much()-1 ,2,true);
+                    return !(head->next->piece->there_is_this('|', y_on_pad, x_on_rect - head->piece->how_much()-1, true, right));
                 else
-                    return head->piece->is_empty(y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1 ,1, true);
+                    return !(head->piece->there_is_this('|', y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1, true, right));
             }
         }
     }
     else {
         if(x_on_rect >= head->piece->how_much())
-            return head->next->piece->is_empty(y_on_pad, x_on_rect - head->piece->how_much()-1 ,2,true);
+            return !(head->next->piece->there_is_this('|', y_on_pad, x_on_rect - head->piece->how_much()-1, true, right));
         else
-            //return head->piece->is_empty(y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1 ,1, true);
+            //return head->piece->there_is_this('|', y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1, true, right);
             return true;
     }
 }
