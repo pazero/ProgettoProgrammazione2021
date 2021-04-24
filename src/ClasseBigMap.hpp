@@ -43,6 +43,7 @@ class BigMap {
     void routine_fineciclo(bool right);
     bool is_freeplatform(int y_on_pad);
     bool ostacolo(int y_on_pad, bool dx);
+    void reshow_map();
 
     void add_bullet(position pos);
     void update_shoot(int stacco,int rect_cols, bool right);

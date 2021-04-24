@@ -99,8 +99,19 @@ void BigMap::shoot(){
 }
 
 void BigMap::routine_fineciclo(bool right) {
+    reshow_map();
     update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, right);
+    
     Mario.show();
+}
+void BigMap::reshow_map(){
+    if(head->prev!=NULL && head->prev->piece->how_much() > -1) {
+        head->prev->piece->show();
+    }
+    head->piece->show();
+    if(head->next!=NULL && head->next->piece->how_much() > -1) {
+        head->next->piece->show();
+    }
 }
 
 bool BigMap::is_freeplatform(int y_on_pad) {
