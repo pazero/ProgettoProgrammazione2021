@@ -3,7 +3,8 @@ BigMap::BigMap(){}
 BigMap::BigMap(int rect_lines, int rect_cols) {
     this->rect_lines = rect_lines;
     this->rect_cols = rect_cols;
-    this->nodi = 1;
+    nodi = 1;
+    count=3;
 
     head->piece = new Map(rect_lines, rect_cols, true);
     head->piece->build();
@@ -14,9 +15,9 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
 
     position pos = {(LINES+rect_lines)/2 -3, (COLS-rect_cols)/2 +stacco};
     int life = 100;
-    this->Mario = Eroe(pos, life);
-    this->Mario.show();
-    this->gun = NULL;
+    Mario = Eroe(pos, life);
+    Mario.show();
+    gun = NULL;
 }
 void BigMap::addMap() {
     nodi++;
@@ -36,10 +37,11 @@ void BigMap::addMap() {
     
     prec = NULL;
     delete(prec);
-    mvprintw(LINES/2 +1,0,"Aggiunta nodo numero: %d", nodi);
+    //mvprintw(LINES/2 +1,0,"Aggiunta nodo numero: %d", nodi);
 }
 void BigMap::update() {
     count++;
+    Mario.show();
     if(head->next==NULL) {
         addMap();
     }
@@ -51,10 +53,10 @@ void BigMap::update() {
                 head = head->prev;
             }
         }
-    mvprintw(LINES/2,0, "Current node: %d  ", head->n);
+    //mvprintw(LINES/2,0, "Current node: %d  ", head->n);
 }
 void BigMap::go_left(){
-    if(!ostacolo(Mario.getPosy() - (LINES-rect_lines)/2, false)) {
+    if(not_this('|', false, Mario.getPos(), false)) {
         head->piece->lslide();
         if(head->next!=NULL) {
             head->next->piece->lslide();
@@ -63,7 +65,7 @@ void BigMap::go_left(){
             if(head->piece->previous())
                 head->prev->piece->lslide();
         }
-        while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2 + 2))
+        while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && free_down(Mario.getPosy() - (LINES-rect_lines)/2))
             Mario.go_down();
             
         update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, false);
@@ -71,7 +73,7 @@ void BigMap::go_left(){
 }
 
 void BigMap::go_right(){
-    if(!ostacolo(Mario.getPosy() - (LINES-rect_lines)/2, true)) {
+    if(not_this('|', true, Mario.getPos(), true)) {
         head->piece->rslide();
         if(head->next!=NULL) {
             if(head->piece->nx())
@@ -80,15 +82,33 @@ void BigMap::go_right(){
         if(head->prev!=NULL)
             head->prev->piece->rslide();
 
-        while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && !is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2 + 2)){
+        while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && free_down(Mario.getPosy() - (LINES-rect_lines)/2)){
             Mario.go_down();
         }
     }
 }
 
 void BigMap::go_up(){
-    if(is_freeplatform(Mario.getPosy() - (LINES-rect_lines)/2))
-        Mario.go_up();
+    int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
+    if(head->prev!=NULL) {
+        if(head->prev->piece->how_much()>stacco) {
+            if(head->prev->piece->can_go_up(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1)){
+                Mario.go_up();
+            }
+        }
+        else {
+            if(head->prev->piece->how_much()>-1) {
+                if(head->piece->can_go_up(y_on_pad,head->piece->how_much() - rect_cols + stacco+1)){
+                    Mario.go_up();
+                }
+            }
+            else {
+                if(head->piece->can_go_up(y_on_pad,rect_cols - head->piece->how_much() + stacco-1)){
+                    Mario.go_up();
+                }
+            }
+        }
+    }
 }
 
 void BigMap::shoot(){
@@ -98,66 +118,21 @@ void BigMap::shoot(){
     }
 }
 
-void BigMap::routine_fineciclo(bool right) {
-    reshow_map();
-    update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, right);
-    
-    Mario.show();
-}
-void BigMap::reshow_map(){
-    if(head->prev!=NULL && head->prev->piece->how_much() > -1) {
-        head->prev->piece->show();
-    }
-    head->piece->show();
-    if(head->next!=NULL && head->next->piece->how_much() > -1) {
-        head->next->piece->show();
+bool BigMap::free_down(int y_on_pad) {
+    if(head->prev!=NULL) {
+        if(head->prev->piece->how_much()>stacco)
+            return head->prev->piece->can_go_down(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1);
+        else {
+            if (head->prev->piece->how_much()>-1) {
+                return head->piece->can_go_down(y_on_pad,head->piece->how_much() - rect_cols + stacco+1);
+            }
+            else {
+                return head->piece->can_go_down(y_on_pad,rect_cols - head->piece->how_much() + stacco-1);
+            }
+        }
     }
 }
 
-bool BigMap::is_freeplatform(int y_on_pad) {
-    if(head->prev!=NULL) {
-        if(head->prev->piece->how_much()>stacco)
-            return head->prev->piece->can_go_up(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1,true);
-        else {
-            if (head->prev->piece->how_much()>-1) {
-                return head->piece->can_go_up(y_on_pad,head->piece->how_much() - rect_cols + stacco+1, false);
-            }
-            else {
-                return head->piece->can_go_up(y_on_pad,rect_cols - head->piece->how_much() + stacco-1,false);
-            }
-        }
-    }
-}
-bool BigMap::ostacolo(int y_on_pad, bool dx) {
-    if(dx) {
-        if(head->prev!=NULL) {
-            if(head->prev->piece->how_much()>stacco)
-                return head->prev->piece->is_wall(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1,true, true);
-            else {
-                if (head->prev->piece->how_much()>-1) {
-                    return head->piece->is_wall(y_on_pad,head->piece->how_much() - rect_cols + stacco+1, false, true);
-                }
-                else {
-                    return head->piece->is_wall(y_on_pad,rect_cols - head->piece->how_much() + stacco-1,false, true);
-                }
-            }
-        }
-    }
-    else {
-        if(head->prev!=NULL) {
-            if(head->prev->piece->how_much()>stacco)
-                return head->prev->piece->is_wall(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1,true, false);
-            else {
-                if (head->prev->piece->how_much()>-1) {
-                    return head->piece->is_wall(y_on_pad,head->piece->how_much() - rect_cols + stacco+1, false, false);
-                }
-                else {
-                    return head->piece->is_wall(y_on_pad,rect_cols - head->piece->how_much() + stacco-1,false, false);
-                }
-            }
-        }
-    }
-}
 void BigMap::add_bullet(position pos) {
     colpi tmp = new colpo;
     tmp->curr = Bullet(pos);
@@ -165,12 +140,13 @@ void BigMap::add_bullet(position pos) {
     gun = tmp;
 }
 
-void BigMap::update_shoot(int limit_sx, int limit_dx, bool right){
+void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
     colpi aux = gun;
     colpi prec = NULL;
     while(aux!=NULL) {
+        Mario.show();
         if(aux->curr.getPosx()==limit_sx) {
-            if(empty_for_bullet(aux->curr.getPos(), right)) {
+            if(not_this('|', true, aux->curr.getPos(), going_right)) {
                 aux->curr.go_dx();
             }
             else{
@@ -195,7 +171,7 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool right){
         else {
             if(aux->curr.getPosx()<limit_dx-1) {
                 aux->curr.destroy_win();
-                if(empty_for_bullet(aux->curr.getPos(), right)) {
+                if(not_this('|', true, aux->curr.getPos(), going_right)) {
                     aux->curr.go_dx();
                 }
                 else{
@@ -243,34 +219,46 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool right){
     }
 }
 
-bool BigMap::empty_for_bullet(position pos, bool right) {
+bool BigMap::not_this(char object, bool dx, position pos, bool going_right) {
     int y_on_pad = pos.y - (LINES-rect_lines)/2;
     int x_on_rect = pos.x - (COLS-rect_cols)/2;
 
     if(head->prev!=NULL) {
         if(head->prev->piece->how_much() > x_on_rect)
-            return !(head->prev->piece->there_is_this('|', y_on_pad,x_on_rect + rect_cols - head->prev->piece->how_much()-1, true, right));
+            return !(head->prev->piece->there_is_this(object, y_on_pad,x_on_rect + rect_cols - head->prev->piece->how_much()-1, dx, going_right));
         else{
             if (head->prev->piece->how_much()>-1) {
-                return !(head->piece->there_is_this('|', y_on_pad,head->piece->how_much() - rect_cols + x_on_rect+1 ,true, right));
+                return !(head->piece->there_is_this(object, y_on_pad,head->piece->how_much() - rect_cols + x_on_rect+1 ,dx, going_right));
             }
             else {
                 if(x_on_rect >= head->piece->how_much())
-                    return !(head->next->piece->there_is_this('|', y_on_pad, x_on_rect - head->piece->how_much()-1, true, right));
+                    return !(head->next->piece->there_is_this(object, y_on_pad, x_on_rect - head->piece->how_much()-1, dx, going_right));
                 else
-                    return !(head->piece->there_is_this('|', y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1, true, right));
+                    return !(head->piece->there_is_this(object, y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1, dx, going_right));
             }
         }
     }
     else {
         if(x_on_rect >= head->piece->how_much())
-            return !(head->next->piece->there_is_this('|', y_on_pad, x_on_rect - head->piece->how_much()-1, true, right));
+            return !(head->next->piece->there_is_this(object, y_on_pad, x_on_rect - head->piece->how_much()-1, dx, going_right));
         else
-            //return head->piece->there_is_this('|', y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1, true, right);
+            //return head->piece->there_is_this(object, y_on_pad,rect_cols - head->piece->how_much() + x_on_rect-1, dx, going_right);
             return true;
     }
 }
 
-void BigMap::set_count(int n) {
-    count = n;
+void BigMap::routine_fineciclo(bool right) {
+    Mario.show();
+    reshow_map();
+    update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, right);
+    Mario.show();
+}
+void BigMap::reshow_map(){
+    if(head->prev!=NULL && head->prev->piece->how_much() > -1) {
+        head->prev->piece->show();
+    }
+    head->piece->show();
+    if(head->next!=NULL && head->next->piece->how_much() > -1) {
+        head->next->piece->show();
+    }
 }

@@ -30,7 +30,6 @@ void Motore::move_all() {
 }
 
 void Motore::go_game(){
-    infinita.set_count(3);
     while(!pause) {
         ch = getch();
         refresh();

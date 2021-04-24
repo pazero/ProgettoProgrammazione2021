@@ -30,15 +30,16 @@ class Map {
     void build();
     void add_plat(int type, int length, int y, int x);
     void rand_plat();
+
     void rslide();
     void lslide();
     bool nx();
     bool previous();
+    
     void show();
     int how_much();
-    void pad_refresh(int pad_x,int sx,int ex);
-    bool is_wall(int y, int how_prev, bool is_prec, bool dx);
-    bool can_go_up(int y, int how_prev, bool is_prec);
-    bool there_is_this(char object, int y, int how_prev, bool dx, bool shoot);
-    int player_pos();
+    
+    bool can_go_up(int y, int how_prev);
+    bool can_go_down(int y, int how_prev);
+    bool there_is_this(char object, int y, int how_prev, bool dx, bool going_right);
 };

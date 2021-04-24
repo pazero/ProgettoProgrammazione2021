@@ -140,7 +140,7 @@ void Map::rslide(){
             }
         }
     }
-    pad_refresh(pad_x, sx, ex);
+    prefresh(mappa, pad_y, pad_x, sy, sx, ey, ex);
 }
 void Map::lslide(){
     if(first) {
@@ -170,7 +170,7 @@ void Map::lslide(){
             }
         }
     }
-    pad_refresh(pad_x, sx, ex);
+    prefresh(mappa, pad_y, pad_x, sy, sx, ey, ex);
 }
 bool Map::nx() {
     if(ex<finex_rect) 
@@ -190,42 +190,17 @@ int Map::how_much() {
     return ex - sx;
 }
 
-void Map::pad_refresh(int pad_x,int sx,int ex) {
-    prefresh(mappa, pad_y, pad_x, sy, sx, ey, ex);
+bool Map::can_go_up(int y, int how_prev) {
+    return (mvwinch(mappa, y-2, how_prev) == ' ') && (mvwinch(mappa, y-1, how_prev) == '+');
 }
 
-bool Map::can_go_up(int y, int how_prev, bool is_prec) {
-    if(is_prec) {
-        return (mvwinch(mappa, y-2,how_prev) == ' ') && (mvwinch(mappa, y-1,how_prev) == '+');
-    }
-    else {
-        return (mvwinch(mappa, y-2, how_prev) == ' ') && (mvwinch(mappa, y-1, how_prev) == '+');
-    }
+bool Map::can_go_down(int y, int how_prev) {
+    if(mvwinch(mappa, y+1,how_prev) == '+') return false;
+    return true;
 }
 
-bool Map::is_wall(int y, int how_prev, bool is_prec, bool dx) {
-    if(dx) {
-        if(is_prec) {
-            return mvwinch(mappa, y, how_prev +1) == '|';
-        }
-        else {
-            return mvwinch(mappa, y, how_prev +1) == '|';
-        }
-    }
-    else {
-        if(is_prec) {
-            return mvwinch(mappa, y, how_prev -1) == '|';
-        }
-        else {
-            return mvwinch(mappa, y, how_prev -1) == '|';
-        }
-    }
-}
-
-
-
-bool Map::there_is_this(char object,int y, int padx, bool dx, bool shoot) {
-    if(shoot) {
+bool Map::there_is_this(char object,int y, int padx, bool dx, bool going_right) {
+    if(going_right) {
         if(dx)
             return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx+1) == object);
         else
