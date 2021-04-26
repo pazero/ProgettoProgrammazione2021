@@ -40,6 +40,7 @@ class BigMap {
     void go_left();
     void go_right();
     void go_up();
+    void go_down();
     void shoot();
 
     bool free_down(int y_on_pad);

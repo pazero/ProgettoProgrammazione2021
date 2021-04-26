@@ -4,12 +4,10 @@
 using namespace std;
 
 #include "ClasseBonus.hpp"
-class Enemy {
-    protected: 
-    position pos;
+class Enemy:public Oggetto{
+    protected:
     int n;
     int life;
-    char name = 'K';
 
     int rect_lines;
     int rect_cols;

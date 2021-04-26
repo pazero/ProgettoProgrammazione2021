@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "ClassEnemy.hpp"
+#include "ClasseEnemy.hpp"
 
 
 struct nemico {
@@ -43,7 +43,7 @@ class Map {
     public:
     Map(int rect_lines, int rect_cols, int n, bool first = false);
     void build();
-    void add_plat(int type, int length, int y, int x);
+    void add_plat(int type, int y, int x);
     void rand_plat();
     void spawn_bonus(int n);
     void spawn_enemy(int n);
@@ -58,6 +58,7 @@ class Map {
     
     bool can_go_up(int y, int how_prev);
     bool can_go_down(int y, int how_prev);
+    bool can_pass_through(int y, int how_prev);
     bool there_is_this(char object, int y, int how_prev, bool dx, bool going_right);
 
     void print_space(int y_on_pad, int x_on_pad);

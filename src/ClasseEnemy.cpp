@@ -1,8 +1,9 @@
-#include "ClassEnemy.hpp"
+#include "ClasseEnemy.hpp"
 
 Enemy::Enemy(){
     this->pos = {0,0};
-    this->n=0;
+    name = 'K';
+    //this->n=0;
 }
 
 Enemy::Enemy(int rect_lines, int rect_cols) {
@@ -10,6 +11,7 @@ Enemy::Enemy(int rect_lines, int rect_cols) {
     this->rect_cols = rect_cols;
 
     this->pos = {0,0};
+    name = 'K';
     //this->n=0;
 }
 void Enemy::update_pos(position pos) {

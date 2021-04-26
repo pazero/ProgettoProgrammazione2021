@@ -24,6 +24,9 @@ void Motore::move_all() {
     if(ch == KEY_UP) {
         infinita.go_up();
     }
+    if(ch == KEY_DOWN) {
+        infinita.go_down();
+    }
     if(ch == 'e') {
         infinita.shoot();
     }
@@ -81,9 +84,6 @@ void Motore::count_n_cicli(){
 }
 
 //prima casella cade omino :/
-//mettere piattaforme di Simo file modifica_per_piattaforme
-//go_up K e |
-
 
 //NEMICI:
 //movimento

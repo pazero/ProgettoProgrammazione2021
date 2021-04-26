@@ -42,7 +42,6 @@ void BigMap::addMap() {
 }
 void BigMap::update() {
     count_bullet++;
-    Mario.show();
     if(head->next==NULL) {
         addMap();
     }
@@ -55,6 +54,7 @@ void BigMap::update() {
             }
         }
     mvprintw(LINES/2,0, "Current node: %d  ", head->n);
+    Mario.show();
 }
 void BigMap::go_left(){
     if(not_this('|', false, Mario.getPos(), false)) {
@@ -93,30 +93,6 @@ void BigMap::go_right()
     }
 }
 
-void BigMap::get_bonus(){
-    position tmp = {Mario.getPosy(), Mario.getPosx() -1};
-    if (!not_this('#', true, tmp, false) || !not_this('*', true, tmp, false) )
-        {
-            int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
-            if (head->prev != NULL)
-            {
-                if (head->prev->piece->how_much() > stacco)
-                    head->prev->piece->print_space(y_on_pad, stacco + rect_cols - head->prev->piece->how_much() - 1);
-                else
-                {
-                    if (head->prev->piece->how_much() > -1)
-                    {
-                        head->piece->print_space(y_on_pad, head->piece->how_much() - rect_cols + stacco + 1);
-                    }
-                    else
-                    {
-                        head->piece->print_space(y_on_pad, rect_cols - head->piece->how_much() + stacco - 1);
-                    }
-                }
-            }
-        }
-}
-
 void BigMap::go_up(){
     int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
     if(head->prev!=NULL) {
@@ -140,13 +116,57 @@ void BigMap::go_up(){
     }
 }
 
+void BigMap::go_down() {
+    int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
+    if(head->prev!=NULL) {
+        if(head->prev->piece->how_much()>stacco) {
+            if(head->prev->piece->can_pass_through(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1)){
+                Mario.go_down();
+            }
+        }
+        else {
+            if(head->prev->piece->how_much()>-1) {
+                if(head->piece->can_pass_through(y_on_pad,head->piece->how_much() - rect_cols + stacco+1)){
+                    Mario.go_down();
+                }
+            }
+            else {
+                if(head->piece->can_pass_through(y_on_pad,rect_cols - head->piece->how_much() + stacco-1)){
+                    Mario.go_down();
+                }
+            }
+        }
+    }
+}
 void BigMap::shoot(){
     if(count_bullet/3 > 0) {
         add_bullet(Mario.getPos());
         count_bullet=0;
     }
 }
-
+void BigMap::get_bonus(){
+    position tmp = {Mario.getPosy(), Mario.getPosx() -1};
+    if (!not_this('#', true, tmp, false) || !not_this('*', true, tmp, false) )
+        {
+            int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
+            if (head->prev != NULL)
+            {
+                if (head->prev->piece->how_much() > stacco)
+                    head->prev->piece->print_space(y_on_pad, stacco + rect_cols - head->prev->piece->how_much() - 1);
+                else
+                {
+                    if (head->prev->piece->how_much() > -1)
+                    {
+                        head->piece->print_space(y_on_pad, head->piece->how_much() - rect_cols + stacco + 1);
+                    }
+                    else
+                    {
+                        head->piece->print_space(y_on_pad, rect_cols - head->piece->how_much() + stacco - 1);
+                    }
+                }
+            }
+        }
+}
 bool BigMap::free_down(int y_on_pad) {
     if(head->prev!=NULL) {
         if(head->prev->piece->how_much()>stacco)
