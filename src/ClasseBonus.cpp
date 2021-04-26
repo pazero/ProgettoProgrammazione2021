@@ -19,6 +19,6 @@ char Bonus::rand_name_bonus() {
 position Bonus::rand_pos_bonus(){
     position rand_pos;
     rand_pos.y = rand()%(rect_lines-3);
-    rand_pos.x = rand()%(rect_cols-1);
+    rand_pos.x = rand()%(rect_cols);
     return rand_pos;
 }

@@ -82,3 +82,10 @@ void Motore::count_n_cicli(){
 
 //prima casella cade omino :/
 //mettere piattaforme di Simo file modifica_per_piattaforme
+//go_up K e |
+
+
+//NEMICI:
+//movimento
+//spari
+//se colpiti spariscono

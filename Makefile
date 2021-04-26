@@ -1,7 +1,7 @@
 CC = g++ -lncurses -g
 CFLAGS = -c -Wall
 SRC_DIR = ./src
-BIN := main.o ClasseMap.o ClasseOggetto.o ClasseEroe.o ClasseBigMap.o Comandi.o ClasseBullet.o ClasseMotore.o ClasseBonus.o
+BIN := main.o ClasseMap.o ClasseOggetto.o ClasseEroe.o ClasseBigMap.o Comandi.o ClasseBullet.o ClasseMotore.o ClasseBonus.o ClassEnemy.o
 
 main: $(BIN)
 	$(CC) -o main $(BIN)
@@ -32,6 +32,9 @@ ClasseMotore.o: $(SRC_DIR)/ClasseMotore.?pp
 
 ClasseBonus.o: $(SRC_DIR)/ClasseBonus.?pp
 	$(CC) $(CFLAGS) $(SRC_DIR)/ClasseBonus.cpp
+
+ClassEnemy.o: $(SRC_DIR)/ClassEnemy.?pp
+	$(CC) $(CFLAGS) $(SRC_DIR)/ClassEnemy.cpp
 love:
 	./main
 

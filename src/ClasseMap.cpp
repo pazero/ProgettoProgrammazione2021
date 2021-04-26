@@ -1,12 +1,14 @@
 #include "ClasseMap.hpp"
 
-Map::Map(int rect_lines, int rect_cols, bool first) {
+Map::Map(int rect_lines, int rect_cols, int n, bool first) {
     this->first = first;
     
-    this->iniziox_rect = (COLS - rect_cols)/2;
-    this->finex_rect = (COLS + rect_cols)/2 - 1;
-    this->inizioy_rect = (LINES - rect_lines)/2;
-    this->finey_rect = (LINES + rect_lines)/2;
+    iniziox_rect = (COLS - rect_cols)/2;
+    finex_rect = (COLS + rect_cols)/2 - 1;
+    inizioy_rect = (LINES - rect_lines)/2;
+    finey_rect = (LINES + rect_lines)/2;
+    pad_y=0;
+    this->n = n;
     
     if(first) {
         this->sx = iniziox_rect;
@@ -27,6 +29,7 @@ Map::Map(int rect_lines, int rect_cols, bool first) {
     refresh();
 
     powerup = Bonus(rect_lines, rect_cols);
+    nemici = NULL;
 }
 
 void Map::build(){
@@ -58,9 +61,36 @@ void Map::build(){
     mvwaddch(mappa,rect_lines-1,rect_cols-1,'|');
     if(!first){
         rand_plat();
-        spawn_bonus(2);
+        spawn_bonus(1);
+        if(n<3) spawn_enemy(1);
+        else spawn_enemy(n/3 +1);
     }
 }
+void Map::spawn_enemy(int n){
+    position tmp_pos;
+    srand(time(0));
+    for(int i=0;i<n;i++){
+        tmp_pos.y = rand()%(rect_lines-3);
+        tmp_pos.x = rand()%rect_cols;
+        lista_nemici cattivo = new nemico;
+        cattivo->bad.update_pos(tmp_pos);
+
+        while(can_go_down(tmp_pos.y, tmp_pos.x) && tmp_pos.y < rect_lines-3) {
+                tmp_pos.y ++;
+            }
+        mvwprintw(mappa,tmp_pos.y, tmp_pos.x, "%c", cattivo->bad.get_name());
+
+        cattivo->next = nemici;
+        nemici = cattivo;
+        /*
+        if(tmp->next == NULL){
+            tmp->n=0;
+        }
+        else tmp->n =tmp->next->n + 1;
+        */
+    }
+}
+
 
 void Map::spawn_bonus(int n){
     char name;
@@ -75,6 +105,8 @@ void Map::spawn_bonus(int n){
             mvwprintw(mappa,tmp_pos.y, tmp_pos.x, "%c",name);
         }
 }
+
+
 void Map::add_plat(int type, int length, int y, int x) {
     if(type==0) {
         mvwprintw(mappa,y,x,"+++++ +++++");

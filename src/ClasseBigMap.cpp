@@ -7,7 +7,7 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
     count_bullet=3;
     stacco = 30;
 
-    head->piece = new Map(rect_lines, rect_cols, true);
+    head->piece = new Map(rect_lines, rect_cols, nodi, true);
     head->piece->build();
     head->piece->show();
     head->n = 1;
@@ -29,7 +29,7 @@ void BigMap::addMap() {
     }
     prec = aux;
     aux->next = new MapNode;
-    aux->next->piece = new Map(rect_lines, rect_cols);
+    aux->next->piece = new Map(rect_lines, rect_cols, nodi);
     aux->next->piece->build();
 
     aux->next->n = nodi;

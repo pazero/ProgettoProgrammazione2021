@@ -4,7 +4,16 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "ClasseBonus.hpp"
+#include "ClassEnemy.hpp"
+
+
+struct nemico {
+    Enemy bad;
+    nemico *next;
+};
+
+typedef nemico* lista_nemici;
+
 class Map {
     protected:
     WINDOW *mappa;
@@ -12,9 +21,10 @@ class Map {
 
     int rect_lines;
     int rect_cols;
+    int n;
 
     int pad_x;
-    int pad_y = 0;
+    int pad_y;
 
     int sy;
     int sx;
@@ -27,14 +37,16 @@ class Map {
     int finey_rect;
 
     Bonus powerup{};
+    lista_nemici nemici;
 
 
     public:
-    Map(int rect_lines, int rect_cols, bool first = false);
+    Map(int rect_lines, int rect_cols, int n, bool first = false);
     void build();
     void add_plat(int type, int length, int y, int x);
     void rand_plat();
     void spawn_bonus(int n);
+    void spawn_enemy(int n);
 
     void rslide();
     void lslide();
