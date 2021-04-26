@@ -1,0 +1,80 @@
+void Map::add_plat(int type, int length, int y, int x) {
+    if(type==0) {
+        mvwprintw(mappa,y-12,x, "          ");
+        mvwprintw(mappa,y-10,x, "++++++++++");
+        mvwprintw(mappa,y-8,x,  "          ");
+        mvwprintw(mappa,y-6,x,  "++++++++++");
+        mvwprintw(mappa,y-4,x,  "          ");
+        mvwprintw(mappa,y-2,x,  "++++++++++");
+        mvwprintw(mappa,y,x,    "++++++++++");
+    }
+    if(type==1) {
+        mvwprintw(mappa,y-12,x, "++++++++++");
+        mvwprintw(mappa,y-10,x, "     +++++");
+        mvwprintw(mappa,y-8,x,  "++++++    ");
+        mvwprintw(mappa,y-6,x,  "     +++++");
+        mvwprintw(mappa,y-4,x,  "++++++++++");
+        mvwprintw(mappa,y-2,x,  "++++++++++");
+        mvwprintw(mappa,y,x,    "++++++++++");
+    }
+    if(type==2) {
+        mvwprintw(mappa,y-12,x, "          ");
+        mvwprintw(mappa,y-10,x, "++++++++++");
+        mvwprintw(mappa,y-8,x,  "+++++     ");
+        mvwprintw(mappa,y-6,x,  "          ");
+        mvwprintw(mappa,y-4,x,  "++++++++++");
+        mvwprintw(mappa,y-2,x,  "          ");
+        mvwprintw(mappa,y,x,    "++++++++++");  
+
+    }
+    if(type==3) {
+        mvwprintw(mappa,y-12,x, "++++++++++");
+        mvwprintw(mappa,y-10,x, "          ");
+        mvwprintw(mappa,y-8,x,  "++++++++++");
+        mvwprintw(mappa,y-6,x,  "++++++++++");
+        mvwprintw(mappa,y-4,x,  "++++++++++");
+        mvwprintw(mappa,y-2,x,  "          ");
+        mvwprintw(mappa,y,x,    "          ");   
+
+    }
+    if(type==4) {
+        mvwprintw(mappa,y-12,x, "++++++++++");
+        mvwprintw(mappa,y-10,x, "          ");
+        mvwprintw(mappa,y-8,x,  "++++++++++");
+        mvwprintw(mappa,y-6,x,  "          ");
+        mvwprintw(mappa,y-4,x,  "++++++++++");
+        mvwprintw(mappa,y-2,x,  "++++++++++");
+        mvwprintw(mappa,y,x,    "          ");
+    }
+    if(type==5){
+        mvwprintw(mappa,y-12,x, "++++++++++");
+        mvwprintw(mappa,y-10,x, "++++++++++");
+        mvwprintw(mappa,y-8,x,  "          ");
+        mvwprintw(mappa,y-6,x,  "++++++++++");
+        mvwprintw(mappa,y-4,x,  "+++++     ");
+        mvwprintw(mappa,y-2,x,  "++++++++++");
+        mvwprintw(mappa,y,x,    "++++++++++");
+    }
+    if(type==6){
+        
+        mvwprintw(mappa,y-12,x, "++++++++++");
+        mvwprintw(mappa,y-10,x, "++++++++++");
+        mvwprintw(mappa,y-8,x,  "          ");
+        mvwprintw(mappa,y-6,x,  "          ");
+        mvwprintw(mappa,y-4,x,  "       +++");
+        mvwprintw(mappa,y-2,x,  "    ++++++");
+        mvwprintw(mappa,y,x,    "++++++++++");
+    }
+}
+void Map::rand_plat() {
+    int c;
+    int stop = 0;
+    srand(time(0));
+    int length = 10;
+    while(stop<rect_cols) {
+        c = rand()%7;
+        add_plat(c,length,rect_lines -4,stop);
+        
+        stop+=length;
+    }
+}
