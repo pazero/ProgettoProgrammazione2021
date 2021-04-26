@@ -75,7 +75,7 @@ void BigMap::go_left(){
 
 void BigMap::go_right()
 {
-    if (not_this('|', true, Mario.getPos(), true))
+    if (not_this('|', true, Mario.getPos(), false))
     {
         head->piece->rslide();
         if (head->next != NULL)
@@ -169,7 +169,7 @@ void BigMap::get_bonus(){
 }
 bool BigMap::free_down(int y_on_pad) {
     if(head->prev!=NULL) {
-        if(head->prev->piece->how_much()>stacco)
+        if(head->prev->piece->how_much()>=stacco)
             return head->prev->piece->can_go_down(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1);
         else {
             if (head->prev->piece->how_much()>-1) {
@@ -297,7 +297,7 @@ bool BigMap::not_this(char object, bool dx, position pos, bool going_right) {
 }
 
 void BigMap::routine_fineciclo(bool right) {
-    Mario.show();
+    //Mario.show();
     reshow_map();
     update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, right);
     Mario.show();
