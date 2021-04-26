@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 Eroe::Eroe():Oggetto(){}
+
 Eroe::Eroe(position pos, int life):Oggetto(pos){
     this->life = life;
     this->name = 'Y';

@@ -25,6 +25,8 @@ Map::Map(int rect_lines, int rect_cols, bool first) {
 
     mappa = newpad(rect_lines, rect_cols);
     refresh();
+
+    powerup = Bonus(rect_lines, rect_cols);
 }
 
 void Map::build(){
@@ -34,8 +36,6 @@ void Map::build(){
         mvwaddch(mappa,rect_lines-2,i,'=');
         mvwaddch(mappa,rect_lines-1,i,'=');
     }
-    if(!first)
-        rand_plat();
     if(first) {
         mvwaddstr(mappa,0,0,"          ");
         mvwaddstr(mappa,1,0,"          ");
@@ -56,8 +56,25 @@ void Map::build(){
     }
     mvwaddch(mappa,0,rect_cols-1,'|');
     mvwaddch(mappa,rect_lines-1,rect_cols-1,'|');
+    if(!first){
+        rand_plat();
+        spawn_bonus(2);
+    }
 }
 
+void Map::spawn_bonus(int n){
+    char name;
+    position tmp_pos;
+    srand(time(0));
+        for(int i=0; i<n; i++) {
+            name = powerup.rand_name_bonus();
+            tmp_pos = powerup.rand_pos_bonus();
+            while(can_go_down(tmp_pos.y, tmp_pos.x) && tmp_pos.y < rect_lines-3) {
+                tmp_pos.y ++;
+            }
+            mvwprintw(mappa,tmp_pos.y, tmp_pos.x, "%c",name);
+        }
+}
 void Map::add_plat(int type, int length, int y, int x) {
     if(type==0) {
         mvwprintw(mappa,y,x,"+++++ +++++");
@@ -191,7 +208,7 @@ int Map::how_much() {
 }
 
 bool Map::can_go_up(int y, int how_prev) {
-    return (mvwinch(mappa, y-2, how_prev) == ' ') && (mvwinch(mappa, y-1, how_prev) == '+');
+    return ((mvwinch(mappa, y-2, how_prev) != '|') || (mvwinch(mappa, y-2, how_prev) != 'K') ) && (mvwinch(mappa, y-1, how_prev) == '+');
 }
 
 bool Map::can_go_down(int y, int how_prev) {
@@ -212,4 +229,8 @@ bool Map::there_is_this(char object,int y, int padx, bool dx, bool going_right) 
         else
             return (mvwinch(mappa, y, padx -1) == object);
     }
+}
+
+void Map::print_space(int y_on_pad, int x_on_pad){
+    mvwprintw(mappa, y_on_pad, x_on_pad, " ");
 }

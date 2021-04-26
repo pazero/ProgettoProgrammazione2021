@@ -1,5 +1,5 @@
 #include "ClasseMap.hpp"
-#include "ClasseBullet.hpp"
+
 #include <ncurses.h>
 
 struct colpo {
@@ -23,10 +23,10 @@ class BigMap {
         int rect_cols;
         int nodi;
 
-        int stacco = 30;
+        int stacco;
         Eroe Mario{};
 
-        int count=0;
+        int count_bullet;
         
         colpi gun;
 
@@ -50,4 +50,8 @@ class BigMap {
 
     void routine_fineciclo(bool right);
     void reshow_map();
+
+    int n_map();
+    bool is_bonus();
+    void get_bonus();
 };
