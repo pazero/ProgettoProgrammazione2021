@@ -1,8 +1,8 @@
 #include "Bullet.hpp"
 
-Bullet::Bullet():Oggetto(){}
+Bullet::Bullet(){}
 
-Bullet::Bullet(position pos):Oggetto(pos) {
+Bullet::Bullet(position pos) {
     this->pos = pos;
 }
 
@@ -28,6 +28,11 @@ void Bullet::go_sx() {
     this->pos.x--;
     win = create_win();
 }
+
 int Bullet::getPosx() {
     return pos.x;
+}
+
+position Bullet::getPos(){
+    return pos;
 }

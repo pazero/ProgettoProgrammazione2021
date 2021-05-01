@@ -1,4 +1,5 @@
-#include "Oggetto.hpp"
+#include "ncurses.h"
+#include "Eroe.hpp"
 // questa classe crea una finestra 1x1 stampando ">" come proiettile
 class Bullet : public Oggetto{
     protected:
@@ -15,4 +16,5 @@ class Bullet : public Oggetto{
     void go_dx();
     void go_sx();
     int getPosx();
+    position getPos();
 };

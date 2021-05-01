@@ -1,13 +1,15 @@
 #include "Map.hpp"
 
-Map::Map(int rect_lines, int rect_cols, bool first)
+Map::Map(int rect_lines, int rect_cols, int n, bool first)
 {
     this->first = first;
 
-    this->iniziox_rect = (COLS - rect_cols) / 2;
-    this->finex_rect = (COLS + rect_cols) / 2 - 1;
-    this->inizioy_rect = (LINES - rect_lines) / 2;
-    this->finey_rect = (LINES + rect_lines) / 2;
+    iniziox_rect = (COLS - rect_cols) / 2;
+    finex_rect = (COLS + rect_cols) / 2 - 1;
+    inizioy_rect = (LINES - rect_lines) / 2;
+    finey_rect = (LINES + rect_lines) / 2;
+    pad_y = 0;
+    this->n = n;
 
     if (first)
     {
@@ -28,9 +30,11 @@ Map::Map(int rect_lines, int rect_cols, bool first)
 
     mappa = newpad(rect_lines, rect_cols);
     refresh();
+
+    powerup = Bonus(rect_lines, rect_cols);
+    nemici = NULL;
 }
-//crea un ciclo che stampa a schermo i bordi della mappa, la parte iniziale del mondo
-//e le piattaforme casuali
+
 void Map::build()
 {
     for (int i = 0; i < rect_cols; i++)
@@ -40,8 +44,6 @@ void Map::build()
         mvwaddch(mappa, rect_lines - 2, i, '=');
         mvwaddch(mappa, rect_lines - 1, i, '=');
     }
-    if (!first)
-        rand_plat();
     if (first)
     {
         mvwaddstr(mappa, 0, 0, "          ");
@@ -66,80 +68,163 @@ void Map::build()
     }
     mvwaddch(mappa, 0, rect_cols - 1, '|');
     mvwaddch(mappa, rect_lines - 1, rect_cols - 1, '|');
+    if (!first)
+    {
+        rand_plat();
+        spawn_bonus(1);
+        if (n < 3)
+            spawn_enemy(1);
+        else
+            spawn_enemy(n / 3 + 1);
+    }
 }
-// layout delle piattaforme
-void Map::add_plat(int type, int length, int y, int x)
+void Map::spawn_enemy(int n)
+{
+    position tmp_pos;
+    srand(time(0));
+    for (int i = 0; i < n; i++)
+    {
+        tmp_pos.y = rand() % (rect_lines - 3);
+        tmp_pos.x = rand() % rect_cols;
+        lista_nemici cattivo = new nemico;
+        cattivo->bad.update_pos(tmp_pos);
+
+        while (can_go_down(tmp_pos.y, tmp_pos.x) && tmp_pos.y < rect_lines - 3)
+        {
+            tmp_pos.y++;
+        }
+        mvwprintw(mappa, tmp_pos.y, tmp_pos.x, "%c", cattivo->bad.get_name());
+
+        cattivo->next = nemici;
+        nemici = cattivo;
+        /*
+        if(tmp->next == NULL){
+            tmp->n=0;
+        }
+        else tmp->n =tmp->next->n + 1;
+        */
+    }
+}
+
+void Map::spawn_bonus(int n)
+{
+    char name;
+    position tmp_pos;
+    srand(time(0));
+    for (int i = 0; i < n; i++)
+    {
+        name = powerup.rand_name_bonus();
+        tmp_pos = powerup.rand_pos_bonus();
+        while (can_go_down(tmp_pos.y, tmp_pos.x) && tmp_pos.y < rect_lines - 3)
+        {
+            tmp_pos.y++;
+        }
+        mvwprintw(mappa, tmp_pos.y, tmp_pos.x, "%c", name);
+    }
+}
+void Map::add_plat(int type, int y, int x)
 {
     if (type == 0)
     {
-        mvwprintw(mappa, y, x, "+++++ +++++");
-        mvwprintw(mappa, y + 1, x + 3, "|");
+        mvwprintw(mappa, y - 12, x, "          ");
+        mvwprintw(mappa, y - 10, x, " +++++++++");
+        mvwprintw(mappa, y - 8, x, "++++++    ");
+        mvwprintw(mappa, y - 6, x, "++++++++++");
+        mvwprintw(mappa, y - 4, x, "       +++");
+        mvwprintw(mappa, y - 2, x, "++++++++++");
+        mvwprintw(mappa, y, x, "  ++++++++");
     }
     if (type == 1)
     {
-        mvwprintw(mappa, y - 2, x + 5, "++++++++++");
+        mvwprintw(mappa, y - 13, x, "   |     ");
+        mvwprintw(mappa, y - 12, x, "++++++++++");
+        mvwprintw(mappa, y - 10, x, "     +++++");
+        mvwprintw(mappa, y - 8, x, "++++++    ");
+        mvwprintw(mappa, y - 6, x, "  ++++++++");
+        mvwprintw(mappa, y - 4, x, "++++++++++");
+        mvwprintw(mappa, y - 3, x, "        | ");
+        mvwprintw(mappa, y - 2, x, "  ++++++++");
         mvwprintw(mappa, y, x, "++++++++++");
     }
     if (type == 2)
     {
-        mvwprintw(mappa, y - 4, x - 1, "++++++++++");
-        mvwprintw(mappa, y - 2, x + 7, "++++++++");
-        mvwprintw(mappa, y, x, "+++++++++++");
+        mvwprintw(mappa, y - 12, x, "          ");
+        mvwprintw(mappa, y - 10, x, "++++++++++");
+        mvwprintw(mappa, y - 8, x, "+++++++   ");
+        mvwprintw(mappa, y - 6, x, "  ++++++++");
+        mvwprintw(mappa, y - 4, x, " +++++++++");
+        mvwprintw(mappa, y - 2, x, "++++++++++");
+        mvwprintw(mappa, y - 1, x, "|         ");
+        mvwprintw(mappa, y, x, "++++++++  ");
     }
     if (type == 3)
     {
-        mvwprintw(mappa, y - 4, x + 4, "++++++++++");
-        mvwprintw(mappa, y - 2, x - 3, "+++++++++++");
-        mvwprintw(mappa, y, x, "++++++++++");
+        mvwprintw(mappa, y - 12, x, " +++++++++");
+        mvwprintw(mappa, y - 10, x, "          ");
+        mvwprintw(mappa, y - 8, x, "+++++++++ ");
+        mvwprintw(mappa, y - 6, x, "   +++++++");
+        mvwprintw(mappa, y - 4, x, "++++++++++");
+        mvwprintw(mappa, y - 2, x, " +++++++++");
+        mvwprintw(mappa, y, x, "   +++++++");
+        mvwprintw(mappa, y + 1, x, "       |   ");
     }
     if (type == 4)
     {
-        mvwprintw(mappa, y - 6, x - 1, "+++++++");
-        mvwprintw(mappa, y - 4, x, "+++++++++++");
-        mvwprintw(mappa, y - 2, x + 1, "+++++++++");
-        mvwprintw(mappa, y, x, "++++++++++");
+        mvwprintw(mappa, y - 12, x, "++++++++++");
+        mvwprintw(mappa, y - 10, x, "+++++++   ");
+        mvwprintw(mappa, y - 9, x, "|         ");
+        mvwprintw(mappa, y - 8, x, "++++++++++");
+        mvwprintw(mappa, y - 6, x, "          ");
+        mvwprintw(mappa, y - 4, x, "++++++++++");
+        mvwprintw(mappa, y - 2, x, "++++++++  ");
+        mvwprintw(mappa, y, x, "          ");
     }
     if (type == 5)
     {
-        mvwprintw(mappa, y - 6, x, "++++++++");
-        mvwprintw(mappa, y - 4, x + 3, "++++++++++");
-        mvwprintw(mappa, y - 2, x - 2, "++++++++");
-        mvwprintw(mappa, y, x, "++++++++++");
-        mvwprintw(mappa, y - 1, x + 3, "|");
+        mvwprintw(mappa, y - 12, x, "++++++++++");
+        mvwprintw(mappa, y - 10, x, "++++++++++");
+        mvwprintw(mappa, y - 8, x, "   +++++++");
+        mvwprintw(mappa, y - 6, x, "++++++++++");
+        mvwprintw(mappa, y - 5, x, "   |      ");
+        mvwprintw(mappa, y - 4, x, "+++++     ");
+        mvwprintw(mappa, y - 2, x, "++++++++++");
+        mvwprintw(mappa, y, x, "    ++++++");
     }
     if (type == 6)
     {
-        mvwprintw(mappa, y - 8, x - 2, "+++++++++++++");
-        mvwprintw(mappa, y - 6, x - 4, "+++++++++++  +++");
-        mvwprintw(mappa, y - 4, x + 4, "++++++++++");
-        mvwprintw(mappa, y - 2, x - 2, "+++++++++");
-        mvwprintw(mappa, y, x, "++++++++");
+        mvwprintw(mappa, y - 12, x, "++++++++++");
+        mvwprintw(mappa, y - 11, x, "       |  ");
+        mvwprintw(mappa, y - 10, x, "++++++++++");
+        mvwprintw(mappa, y - 8, x, "          ");
+        mvwprintw(mappa, y - 6, x, "+++++++   ");
+        mvwprintw(mappa, y - 4, x, "     +++++");
+        mvwprintw(mappa, y - 2, x, "++++++++++");
+        mvwprintw(mappa, y - 1, x, "     |    ");
+        mvwprintw(mappa, y, x, "+++++++++");
     }
 }
-// prende un tipo di layout piattaforma a caso e lo stampa finchè non riempie
-// tutto il pad
 void Map::rand_plat()
 {
     int c;
-    int rand_space;
-    int stop = 5;
+    int stop = 0;
     srand(time(0));
     int length = 10;
-    while (stop < rect_cols - 15)
+    while (stop < rect_cols)
     {
         c = rand() % 7;
-        add_plat(c, length, rect_lines - 4, stop);
-        rand_space = rand() % 3;
-        stop += length * rand_space;
+        add_plat(c, rect_lines - 4, stop);
+        stop += length;
     }
 }
-// scorre il pad a destra
+
 void Map::rslide()
 {
     if (first)
     {
         if (pad_x < (rect_cols - rect_cols))
+        {
             pad_x += 1;
+        }
         else
         {
             if (pad_x < rect_cols - 1)
@@ -150,14 +235,18 @@ void Map::rslide()
             else
             {
                 if (ex == sx)
+                {
                     ex -= 1;
+                }
             }
         }
     }
     else
     {
         if (sx > iniziox_rect)
+        {
             sx--;
+        }
         else
         {
             if (ex > iniziox_rect - 1)
@@ -167,15 +256,16 @@ void Map::rslide()
             }
         }
     }
-    pad_refresh(pad_x, sx, ex);
+    prefresh(mappa, pad_y, pad_x, sy, sx, ey, ex);
 }
-// scorre il pad a sinistra
 void Map::lslide()
 {
     if (first)
     {
         if (ex < sx)
+        {
             ex += 1;
+        }
         else
         {
             if (ex < finex_rect)
@@ -186,7 +276,9 @@ void Map::lslide()
             else
             {
                 if (pad_x > 0)
+                {
                     pad_x -= 1;
+                }
             }
         }
     }
@@ -200,20 +292,20 @@ void Map::lslide()
         else
         {
             if (sx < finex_rect + 1)
+            {
                 sx++;
+            }
         }
     }
-    pad_refresh(pad_x, sx, ex);
+    prefresh(mappa, pad_y, pad_x, sy, sx, ey, ex);
 }
-// controlla se ci stiamo spostando nel prossimo pad
-bool Map::next()
+bool Map::nx()
 {
     if (ex < finex_rect)
         return true;
     else
         return false;
 }
-// controlla se ci stiamo spostando nel precedente pad
 bool Map::previous()
 {
     if (sx > iniziox_rect)
@@ -221,7 +313,6 @@ bool Map::previous()
     else
         return false;
 }
-// fa il refresh del pad
 void Map::show()
 {
     prefresh(mappa, pad_y, pad_x, sy, sx, ey, ex);
@@ -231,42 +322,42 @@ int Map::how_much()
 {
     return ex - sx;
 }
-// refresh mirato del pad, utilizzato solo dai metodi rslide() e lslide()
-void Map::pad_refresh(int pad_x, int sx, int ex)
+
+bool Map::can_go_up(int y, int how_prev)
 {
-    prefresh(mappa, pad_y, pad_x, sy, sx, ey, ex);
+    return (mvwinch(mappa, y - 2, how_prev) != '|') && (mvwinch(mappa, y - 2, how_prev) != 'K') && (mvwinch(mappa, y - 1, how_prev) == '+');
 }
 
-bool Map::is_plat(int y, int x, int how_prev, bool is_prec)
+bool Map::can_go_down(int y, int how_prev)
 {
-    if (is_prec)
-        return mvwinch(mappa, y - 1, x + (rect_cols - how_prev)) == '+';
-    else
-        return mvwinch(mappa, y - 1, how_prev) == '+';
+    if (mvwinch(mappa, y + 1, how_prev) == '+')
+        return false;
+    return true;
 }
 
-bool Map::is_wall(int y, int x, int how_prev, bool is_prec, bool is_dx)
+bool Map::can_pass_through(int y, int how_prev)
 {
-    if (is_dx)
+    return (mvwinch(mappa, y + 2, how_prev) != '|') && (mvwinch(mappa, y + 2, how_prev) != 'K') && ((mvwinch(mappa, y + 3, how_prev) == '+') || (mvwinch(mappa, y + 3, how_prev) == '='));
+}
+bool Map::there_is_this(char object, int y, int padx, bool dx, bool going_right)
+{
+    if (going_right)
     {
-        if (is_prec)
-            return mvwinch(mappa, y, x + (rect_cols - how_prev) + 1) == '|';
+        if (dx)
+            return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx + 1) == object);
         else
-            return mvwinch(mappa, y, how_prev + 1) == '|';
+            return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx - 1) == object);
     }
     else
     {
-        if (is_prec)
-            return mvwinch(mappa, y, x + (rect_cols - how_prev) - 1) == '|';
+        if (dx)
+            return (mvwinch(mappa, y, padx + 1) == object);
         else
-            return mvwinch(mappa, y, how_prev - 1) == '|';
+            return (mvwinch(mappa, y, padx - 1) == object);
     }
 }
 
-bool Map::is_freeup(int y, int x, int how_prev, bool is_prec)
+void Map::print_space(int y_on_pad, int x_on_pad)
 {
-    if (is_prec)
-        return mvwinch(mappa, y - 2, x + (rect_cols - how_prev)) == ' ';
-    else
-        return mvwinch(mappa, y - 2, how_prev) == ' ';
+    mvwprintw(mappa, y_on_pad, x_on_pad, " ");
 }

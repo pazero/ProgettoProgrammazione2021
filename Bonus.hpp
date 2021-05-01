@@ -1,12 +1,18 @@
-#include "ClasseOggetto.hpp"
-#include "ClasseWorldGen.hpp"
+#include <ctime>
+#include <iostream>
+#include "Bullet.hpp"
 
-class Bonus : public Oggetto {
+class Bonus{
+    protected:
+    char name1;
+    char name2;
+    int rect_lines;
+    int rect_cols;
+
+
     public:
-    Bonus(char name, position pos) {}
-
-    void bullet_bonus();
-    void invincible_bonus();
-    void rand_bonus();
-    void spawn_bonus();
-}
+    Bonus();
+    Bonus(int rect_lines, int rect_cols);
+    char rand_name_bonus();
+    position rand_pos_bonus();
+};

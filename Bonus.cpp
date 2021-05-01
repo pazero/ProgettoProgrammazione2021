@@ -1,24 +1,27 @@
 #include "Bonus.hpp"
 
-Bonus::Bonus(char name, position pos)
+Bonus::Bonus(){}
+
+Bonus::Bonus(int rect_lines, int rect_cols) {
+    this->rect_lines = rect_lines;
+    this->rect_cols = rect_cols;
+    name1 = '#';
+    name2 = '*';
+}
+
+char Bonus::rand_name_bonus()
 {
-    this->name = name;
-    this->pos = pos;
+    int choice;
+    choice = rand() % 2;
+    if (choice == 0)
+        return name1;
+    else
+        return name2;
 }
 
-Bonus::bullet_bonus(position pos)
-{
-    name = '%';
+position Bonus::rand_pos_bonus(){
+    position rand_pos;
+    rand_pos.y = rand()%(rect_lines-3);
+    rand_pos.x = rand()%(rect_cols);
+    return rand_pos;
 }
-
-Bonus::invincible_bonus(position pos)
-{
-    name = '*';
-}
-
-Bonus::rand_bonus() {
-    srand(time(0));
-    int rand = rand() % 2;
-    
-}
-
