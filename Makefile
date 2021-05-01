@@ -1,7 +1,7 @@
 CC = g++ -lncurses -g
 CFLAGS = -c -Wall
 SRC_DIR = ./src
-BIN := main.o Map.o Oggetto.o Eroe.o WorldGen.o Comandi.o Bullet.o Motore.o
+BIN := main.o Map.o Oggetto.o Eroe.o WorldGen.o Comandi.o Bullet.o Motore.o Bonus.o Enemy.o
 
 main: $(BIN)
 	$(CC) -o main $(BIN)
@@ -29,8 +29,13 @@ Bullet.o: $(SRC_DIR)/Bullet.?pp
 
 Motore.o: $(SRC_DIR)/Motore.?pp
 	$(CC) $(CFLAGS) $(SRC_DIR)/Motore.cpp
-	
 
+Bonus.o: $(SRC_DIR)/Bonus.?pp
+	$(CC) $(CFLAGS) $(SRC_DIR)/Bonus.cpp
+
+Enemy.o: $(SRC_DIR)/Enemy.?pp
+	$(CC) $(CFLAGS) $(SRC_DIR)/Enemy.cpp
+	
 love:
 	./main
 
