@@ -57,7 +57,7 @@ void BigMap::update() {
     Mario.show();
 }
 void BigMap::go_left(){
-    if(not_this('|', false, Mario.getPos(), false)) {
+    if(not_this('|', false, Mario.getPos(), false) && not_this('K', false, Mario.getPos(), false)) {
         head->piece->lslide();
         Mario.show();
         if(head->next!=NULL) {
@@ -78,7 +78,7 @@ void BigMap::go_left(){
 
 void BigMap::go_right()
 {
-    if (not_this('|', true, Mario.getPos(), false))
+    if (not_this('|', true, Mario.getPos(), false) && not_this('K', true, Mario.getPos(), false))
     {
         head->piece->rslide();
         Mario.show();
@@ -277,11 +277,19 @@ bool BigMap::not_this(char object, bool dx, position pos, bool going_right) {
     }
 }
 
-void BigMap::routine_fineciclo(bool right) {
+bool BigMap::routine_fineciclo(bool right) {
     Mario.show();
     reshow_map();
     update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, right);
+    if(!not_this('K', true, Mario.getPos(), false) || !not_this('K', false, Mario.getPos(), false)) {
+        Mario.damage(15);
+        if(Mario.getlife() < 0)
+            Mario.setlife(0);
+    }
+    mvprintw(14,0,"Life: %d  ", Mario.getlife());
+    if(Mario.getlife() == 0) return false;
     Mario.show();
+    return true;
 }
 
 void BigMap::reshow_map(){
@@ -304,14 +312,14 @@ int BigMap::n_map() {
 bool BigMap::is_bonus(){
     position tmp = {Mario.getPosy(), Mario.getPosx()-1};
     if(!not_this('#', true, tmp, false)) {
-        mvprintw(0,10,"bonus#");
+        
         get_bonus();
         Mario.show();
         return true;
     }
     if(!not_this('*', true, tmp, false)) {
-        mvprintw(1,10,"bonus*");
         get_bonus();
+        Mario.bonus_life();
         Mario.show();
         return true;
     }

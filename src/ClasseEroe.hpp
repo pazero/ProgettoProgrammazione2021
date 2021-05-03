@@ -9,4 +9,9 @@ class Eroe:public Oggetto {
     Eroe(position pos, int life);
     void go_up();
     void go_down();
+    int getlife();
+
+    void damage(int danno);
+    void bonus_life();
+    void setlife(int n);
 };

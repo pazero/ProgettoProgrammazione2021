@@ -19,3 +19,21 @@ void Eroe::go_down(){
     pos.y +=2;
     show();
 }
+
+int Eroe::getlife(){
+    return life;
+}
+
+void Eroe::damage(int danno)
+{
+    life -= danno;
+}
+
+void Eroe::bonus_life()
+{
+    life += 50;    
+}
+
+void Eroe::setlife(int n){
+    life = n;
+}

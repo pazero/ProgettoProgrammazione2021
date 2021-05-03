@@ -16,9 +16,10 @@ class Motore{
     
     public:
     Motore(int rect_lines, int rect_cols);
-    void move_all();
+    bool move_all();
     void go_game();
     void update_time();
     bool check_bonus();
     void count_n_cicli(int n);
+    void death_menu();
 };

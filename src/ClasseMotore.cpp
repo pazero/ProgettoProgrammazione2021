@@ -11,7 +11,7 @@ Motore::Motore(int rect_lines, int rect_cols) {
     go_game();
 }
 
-void Motore::move_all() {
+bool Motore::move_all() {
     infinita.update();
     if(ch == KEY_LEFT){
         infinita.go_left();
@@ -29,10 +29,14 @@ void Motore::move_all() {
     if(ch == 'e') {
         infinita.shoot();
     }
-    infinita.routine_fineciclo(right);
-    refresh();
-    check_bonus();
-    right = false;
+    if(infinita.routine_fineciclo(right)){
+        refresh();
+        check_bonus();
+        right = false;
+        return true;
+    }
+    else
+        return false;
 }
 
 void Motore::go_game(){
@@ -44,11 +48,15 @@ void Motore::go_game(){
         refresh();
         ch = getch();
         
-        move_all();
+        if(!move_all()) {
+            pause = true;
+        }
         if(ch==KEY_F(1)) pause = true;
         timeout(time + bonus);
         update_time();
     }
+
+    death_menu();
     endwin();
 }
 
@@ -78,6 +86,29 @@ void Motore::count_n_cicli(int n){
             cicli_for_bonus = -1;
             bonus = 0;
         }
+    }
+}
+
+void Motore::death_menu()
+{
+    clear();
+    WINDOW *box_win;
+
+    int altezza = 20;
+    int larghezza = 20;
+    int starty = (LINES - altezza) / 2;
+    int startx = (COLS - larghezza) / 2;
+    box_win = newwin(altezza,larghezza, starty, startx);
+    refresh();
+    box(box_win,0,0);
+    mvwprintw(box_win,1,(larghezza-3)/2, "RIP");
+    mvwprintw(box_win,3,(larghezza-6)/2, "ciccio");
+    mvwprintw(box_win, (altezza-9) / 2, (larghezza-9) / 2, "SEI MORTO");
+    wrefresh(box_win);
+    bool fine;
+    while(!fine) {
+        ch = getch();
+        if(ch == 27) fine = true;
     }
 }
 

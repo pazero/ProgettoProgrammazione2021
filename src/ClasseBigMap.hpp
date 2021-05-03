@@ -51,7 +51,7 @@ class BigMap {
     void remove_bullet(colpi &prec, colpi &aux);
     void update_shoot(int stacco,int rect_cols, bool right);
 
-    void routine_fineciclo(bool right);
+    bool routine_fineciclo(bool right);
     void reshow_map();
 
     int n_map();
