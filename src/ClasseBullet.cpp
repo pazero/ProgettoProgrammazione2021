@@ -4,6 +4,7 @@ Bullet::Bullet(){}
 
 Bullet::Bullet(position pos) {
     this->pos = pos;
+    name = '>';
 }
 
 WINDOW* Bullet::create_win(){
@@ -27,12 +28,4 @@ void Bullet::go_dx() {
 void Bullet::go_sx() {
     this->pos.x--;
     win = create_win();
-}
-
-int Bullet::getPosx() {
-    return pos.x;
-}
-
-position Bullet::getPos(){
-    return pos;
 }

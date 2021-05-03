@@ -150,28 +150,25 @@ void BigMap::shoot(){
         count_bullet=0;
     }
 }
-void BigMap::get_bonus(){
-    position tmp = {Mario.getPosy(), Mario.getPosx() -1};
-    if (!not_this('#', true, tmp, false) || !not_this('*', true, tmp, false) )
+void BigMap::delete_bonus(){
+    int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
+    if (head->prev != NULL)
+    {
+        if (head->prev->piece->how_much() >= stacco)
+            head->prev->piece->print_space(y_on_pad, stacco + rect_cols - head->prev->piece->how_much() - 1);
+        else
         {
-            int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
-            if (head->prev != NULL)
+            if (head->prev->piece->how_much() > -1)
             {
-                if (head->prev->piece->how_much() >= stacco)
-                    head->prev->piece->print_space(y_on_pad, stacco + rect_cols - head->prev->piece->how_much() - 1);
-                else
-                {
-                    if (head->prev->piece->how_much() > -1)
-                    {
-                        head->piece->print_space(y_on_pad, head->piece->how_much() - rect_cols + stacco + 1);
-                    }
-                    else
-                    {
-                        head->piece->print_space(y_on_pad, rect_cols - head->piece->how_much() + stacco - 1);
-                    }
-                }
+                head->piece->print_space(y_on_pad, head->piece->how_much() - rect_cols + stacco + 1);
+            }
+            else
+            {
+                head->piece->print_space(y_on_pad, rect_cols - head->piece->how_much() + stacco - 1);
             }
         }
+    }
+        //}
 }
 bool BigMap::free_down(int y_on_pad) {
     if(head->prev!=NULL) {
@@ -219,7 +216,12 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
         Mario.show();
         if(aux->curr.getPosx()==limit_sx) {
             if(not_this('|', true, aux->curr.getPos(), going_right)) {
-                aux->curr.go_dx();
+                if(not_this('K', true, aux->curr.getPos(), going_right))
+                    aux->curr.go_dx();
+                else {
+                    //delete_char(aux->curr.getPosy(), aux->curr.getPosx()-1);
+                    remove_bullet(prec,aux);
+                }
             }
             else{
                 //aggiungere verifica di COSA colpisce
@@ -230,7 +232,12 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
             if(aux->curr.getPosx()<limit_dx-1) {
                 aux->curr.destroy_win();
                 if(not_this('|', true, aux->curr.getPos(), going_right)) {
-                    aux->curr.go_dx();
+                    if(not_this('K', true, aux->curr.getPos(), going_right))
+                        aux->curr.go_dx();
+                    else {
+                        //delete_char(aux->curr.getPosy(), aux->curr.getPosx()-1);
+                        remove_bullet(prec,aux);
+                    }
                 }
                 else{
                     //aggiungere verifica di COSA colpisce
@@ -313,12 +320,11 @@ bool BigMap::is_bonus(){
     position tmp = {Mario.getPosy(), Mario.getPosx()-1};
     if(!not_this('#', true, tmp, false)) {
         
-        get_bonus();
+        delete_bonus();
         Mario.show();
-        return true;
     }
     if(!not_this('*', true, tmp, false)) {
-        get_bonus();
+        delete_bonus();
         Mario.bonus_life();
         Mario.show();
         return true;
