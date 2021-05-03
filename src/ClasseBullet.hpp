@@ -7,6 +7,7 @@ class Bullet:public Oggetto{
     public:
     Bullet();
     Bullet(position pos);
+    void set_name(char name);
     WINDOW* create_win();
     void destroy_win();
     void go_dx();

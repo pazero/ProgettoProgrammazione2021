@@ -29,6 +29,9 @@ bool Motore::move_all() {
     if(ch == 'e') {
         infinita.shoot();
     }
+    if(ch == 'w') {
+        infinita.back_shoot();
+    }
     if(infinita.routine_fineciclo(right)){
         refresh();
         check_bonus();

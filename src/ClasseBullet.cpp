@@ -4,12 +4,15 @@ Bullet::Bullet(){}
 
 Bullet::Bullet(position pos) {
     this->pos = pos;
-    name = '>';
+    
 }
 
+void Bullet::set_name(char name) {
+    this->name = name;
+}
 WINDOW* Bullet::create_win(){
 	win = newwin(1, 1, pos.y, pos.x);
-    wprintw(win,">");
+    wprintw(win,"%c",name);
 	wrefresh(win);
 	return win;
 }
