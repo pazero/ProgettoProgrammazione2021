@@ -296,5 +296,9 @@ bool Map::there_is_this(char object,int y, int padx, bool dx, bool going_right) 
 }
 
 void Map::print_space(int y_on_pad, int x_on_pad){
-    mvwprintw(mappa, y_on_pad, x_on_pad, " ");
+    mvwaddch(mappa, y_on_pad, x_on_pad, ' ');
+}
+
+void Map::print_player(char player_name, int y, int how_prev){
+    mvwprintw(mappa, y, how_prev, "%c", player_name);
 }

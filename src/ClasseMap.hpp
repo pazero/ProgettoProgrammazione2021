@@ -62,4 +62,5 @@ class Map {
     bool there_is_this(char object, int y, int how_prev, bool dx, bool going_right);
 
     void print_space(int y_on_pad, int x_on_pad);
+    void print_player(char player_name, int y, int how_prev);
 };

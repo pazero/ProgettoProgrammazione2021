@@ -59,13 +59,16 @@ void BigMap::update() {
 void BigMap::go_left(){
     if(not_this('|', false, Mario.getPos(), false)) {
         head->piece->lslide();
+        Mario.show();
         if(head->next!=NULL) {
             head->next->piece->lslide();
+            Mario.show();
         }
         if(head->prev!=NULL) {
             if(head->piece->previous())
                 head->prev->piece->lslide();
         }
+        Mario.show();
         while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && free_down(Mario.getPosy() - (LINES-rect_lines)/2))
             Mario.go_down();
             
@@ -78,14 +81,17 @@ void BigMap::go_right()
     if (not_this('|', true, Mario.getPos(), false))
     {
         head->piece->rslide();
+        Mario.show();
         if (head->next != NULL)
         {
-            if (head->piece->nx())
+            if (head->piece->nx()){
                 head->next->piece->rslide();
+                Mario.show();
+            }
         }
         if (head->prev != NULL)
             head->prev->piece->rslide();
-
+        Mario.show();
         while (Mario.getPosy() < (LINES + rect_lines) / 2 - 3 && free_down(Mario.getPosy() - (LINES - rect_lines) / 2))
         {
             Mario.go_down();
@@ -96,7 +102,7 @@ void BigMap::go_right()
 void BigMap::go_up(){
     int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
     if(head->prev!=NULL) {
-        if(head->prev->piece->how_much()>stacco) {
+        if(head->prev->piece->how_much()>=stacco) {
             if(head->prev->piece->can_go_up(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1)){
                 Mario.go_up();
             }
@@ -119,7 +125,7 @@ void BigMap::go_up(){
 void BigMap::go_down() {
     int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
     if(head->prev!=NULL) {
-        if(head->prev->piece->how_much()>stacco) {
+        if(head->prev->piece->how_much()>=stacco) {
             if(head->prev->piece->can_pass_through(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1)){
                 Mario.go_down();
             }
@@ -151,7 +157,7 @@ void BigMap::get_bonus(){
             int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
             if (head->prev != NULL)
             {
-                if (head->prev->piece->how_much() > stacco)
+                if (head->prev->piece->how_much() >= stacco)
                     head->prev->piece->print_space(y_on_pad, stacco + rect_cols - head->prev->piece->how_much() - 1);
                 else
                 {
@@ -189,6 +195,23 @@ void BigMap::add_bullet(position pos) {
     gun = tmp;
 }
 
+void BigMap::remove_bullet(colpi &prec, colpi &aux){
+    colpi tmp;
+    if(prec == NULL){
+        tmp = aux;
+        aux = aux->next;
+        delete(tmp);
+        tmp = NULL;
+        gun = aux;
+    }
+    else{
+        tmp = aux;
+        aux = aux->next;
+        prec->next = aux;
+        delete (tmp);
+        tmp = NULL;
+    }
+}
 void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
     colpi aux = gun;
     colpi prec = NULL;
@@ -200,21 +223,7 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
             }
             else{
                 //aggiungere verifica di COSA colpisce
-                colpi tmp;
-                if(prec == NULL){
-                    tmp = aux;
-                    aux = aux->next;
-                    delete(tmp);
-                    tmp = NULL;
-                    gun = aux;
-                }
-                else{
-                    tmp = aux;
-                    aux = aux->next;
-                    prec->next = aux;
-                    delete (tmp);
-                    tmp = NULL;
-                }
+                remove_bullet(prec, aux);
             }
         }
         else {
@@ -225,41 +234,13 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
                 }
                 else{
                     //aggiungere verifica di COSA colpisce
-                    colpi tmp;
-                    if(prec == NULL){
-                        tmp = aux;
-                        aux = aux->next;
-                        delete(tmp);
-                        tmp = NULL;
-                        gun = aux;
-                    }
-                    else{
-                        tmp = aux;
-                        aux = aux->next;
-                        prec->next = aux;
-                        delete (tmp);
-                        tmp = NULL;
-                    }
+                    remove_bullet(prec, aux);
                 }
             }
             // caso aux->curr.getPosx()==limit_dx
             else {
                 aux->curr.destroy_win();
-                colpi tmp;
-                if(prec == NULL){
-                    tmp = aux;
-                    aux = aux->next;
-                    delete(tmp);
-                    tmp = NULL;
-                    gun = aux;
-                }
-                else{
-                    tmp = aux;
-                    aux = aux->next;
-                    prec->next = aux;
-                    delete (tmp);
-                    tmp = NULL;
-                }
+                remove_bullet(prec, aux);
             }
         }
         prec = aux;
@@ -297,22 +278,26 @@ bool BigMap::not_this(char object, bool dx, position pos, bool going_right) {
 }
 
 void BigMap::routine_fineciclo(bool right) {
-    //Mario.show();
+    Mario.show();
     reshow_map();
     update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, right);
     Mario.show();
 }
+
 void BigMap::reshow_map(){
     if(head->prev!=NULL && head->prev->piece->how_much() > -1) {
         head->prev->piece->show();
+        Mario.show();
     }
     head->piece->show();
+    Mario.show();
     if(head->next!=NULL && head->next->piece->how_much() > -1) {
         head->next->piece->show();
+        Mario.show();
     }
 }
 
-int BigMap:: n_map() {
+int BigMap::n_map() {
     return nodi;
 }
 

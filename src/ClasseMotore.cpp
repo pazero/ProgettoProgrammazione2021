@@ -5,10 +5,9 @@ Motore::Motore(int rect_lines, int rect_cols) {
     this->rect_cols = rect_cols;
     infinita = BigMap(rect_lines, rect_cols);
     time = 100;
-    cicli = -1;
+    cicli_for_bonus = -1;
     aux_nodi = 0;
     bonus = 0;
-
     go_game();
 }
 
@@ -49,8 +48,6 @@ void Motore::go_game(){
         if(ch==KEY_F(1)) pause = true;
         timeout(time + bonus);
         update_time();
-
-        count_n_cicli();
     }
     endwin();
 }
@@ -62,28 +59,27 @@ void Motore::update_time(){
             time -= 2;
         }
     }
+    count_n_cicli(100);
 }
 
 bool Motore::check_bonus() {
     if(infinita.is_bonus()) {
-        cicli++;
+        cicli_for_bonus++;
         bonus = 100;
         return true;
     }
     return false;
 }
 
-void Motore::count_n_cicli(){
-    if(cicli>-1) {
-        cicli++;
-        if(cicli>100) {
-            cicli = -1;
+void Motore::count_n_cicli(int n){
+    if(cicli_for_bonus>-1) {
+        cicli_for_bonus++;
+        if(cicli_for_bonus>n) {
+            cicli_for_bonus = -1;
             bonus = 0;
         }
     }
 }
-
-//prima casella cade omino :/
 
 //NEMICI:
 //movimento

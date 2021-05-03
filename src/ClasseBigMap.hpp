@@ -25,6 +25,7 @@ class BigMap {
 
         int stacco;
         Eroe Mario{};
+        
 
         int count_bullet;
         
@@ -47,6 +48,7 @@ class BigMap {
     bool not_this(char object, bool dx, position pos, bool going_right);
 
     void add_bullet(position pos);
+    void remove_bullet(colpi &prec, colpi &aux);
     void update_shoot(int stacco,int rect_cols, bool right);
 
     void routine_fineciclo(bool right);

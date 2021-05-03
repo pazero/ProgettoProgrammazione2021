@@ -18,3 +18,7 @@ void Oggetto::show(){
     mvprintw(pos.y, pos.x, "%c",name);
     refresh();
 }
+
+char Oggetto::get_name() {
+    return name;
+}

@@ -10,7 +10,7 @@ class Motore{
     bool pause=false;
     bool right;
     int time;
-    int cicli;
+    int cicli_for_bonus;
     int aux_nodi;
     int bonus;
     
@@ -20,5 +20,5 @@ class Motore{
     void go_game();
     void update_time();
     bool check_bonus();
-    void count_n_cicli();
+    void count_n_cicli(int n);
 };

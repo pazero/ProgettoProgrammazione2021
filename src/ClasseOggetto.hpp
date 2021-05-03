@@ -15,4 +15,5 @@ class Oggetto{
     int getPosy();
     int getPosx();
     void show();
+    char get_name();
 };
