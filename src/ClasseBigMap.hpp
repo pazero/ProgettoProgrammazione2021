@@ -56,5 +56,5 @@ class BigMap {
 
     int n_map();
     bool is_bonus();
-    void delete_bonus();
+    void delete_bonus(int y, int x);
 };
