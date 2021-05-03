@@ -355,8 +355,7 @@ bool BigMap::not_this(char object, bool dx, position pos, bool going_right) {
         if(x_on_pad >= head->piece->how_much())
             return !(head->next->piece->there_is_this(object, y_on_pad, x_on_pad - head->piece->how_much()-1, dx, going_right));
         else
-            //return head->piece->there_is_this(object, y_on_pad,rect_cols - head->piece->how_much() + x_on_pad+1, dx, going_right);
-            return true;
+            return !(head->piece->there_is_this(object, y_on_pad,rect_cols - head->piece->how_much() + x_on_pad-1, dx, going_right));
     }
 }
 
