@@ -31,7 +31,8 @@ void Eroe::damage(int danno)
 
 void Eroe::bonus_life()
 {
-    life += 50;    
+    if(life<=50) life += 50;
+    else life = 100;    
 }
 
 void Eroe::setlife(int n){

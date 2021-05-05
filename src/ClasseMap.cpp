@@ -82,12 +82,6 @@ void Map::spawn_enemy(int n){
 
         cattivo->next = nemici;
         nemici = cattivo;
-        /*
-        if(tmp->next == NULL){
-            tmp->n=0;
-        }
-        else tmp->n =tmp->next->n + 1;
-        */
     }
 }
 
@@ -106,76 +100,76 @@ void Map::spawn_bonus(int n){
 }
 void Map::add_plat(int type, int y, int x) {
     if(type==0) {
-        mvwprintw(mappa,y-12,x, "          ");
-        mvwprintw(mappa,y-10,x, " +++++++++");
-        mvwprintw(mappa,y-8,x,  "++++++    ");
+        //mvwprintw(mappa,y-12,x, "          ");
+        mvwprintw(mappa,y-10,x+1,"+++++++++");
+        mvwprintw(mappa,y-8,x,  "++++++"    );
         mvwprintw(mappa,y-6,x,  "++++++++++");
-        mvwprintw(mappa,y-4,x,  "       +++");
+        mvwprintw(mappa,y-4,x+7,       "+++");
         mvwprintw(mappa,y-2,x,  "++++++++++");
-        mvwprintw(mappa,y,x,    "  ++++++++");
+        mvwprintw(mappa,y,x+2,    "++++++++");
     }
     if(type==1) {
-        mvwprintw(mappa,y-13,x,  "   |     ");
-        mvwprintw(mappa,y-12,x, "++++++++++");
-        mvwprintw(mappa,y-10,x, "     +++++");
-        mvwprintw(mappa,y-8,x,  "++++++    ");
-        mvwprintw(mappa,y-6,x,  "  ++++++++");
-        mvwprintw(mappa,y-4,x,  "++++++++++");
-        mvwprintw(mappa,y-3,x,  "        | ");
-        mvwprintw(mappa,y-2,x,  "  ++++++++");
-        mvwprintw(mappa,y,x,    "++++++++++");
+        mvwprintw(mappa,y-13,x+3,   "|");
+        mvwprintw(mappa,y-12,x,  "++++++++++");
+        mvwprintw(mappa,y-10,x+5,     "+++++");
+        mvwprintw(mappa,y-8,x,   "++++++"    );
+        mvwprintw(mappa,y-6,x+2,   "++++++++");
+        mvwprintw(mappa,y-4,x,   "++++++++++");
+        mvwprintw(mappa,y-3,x+8,         "|" );
+        mvwprintw(mappa,y-2,x+2,   "++++++++");
+        mvwprintw(mappa,y,x,     "++++++++++");
     }
     if(type==2) {
-        mvwprintw(mappa,y-12,x, "          ");
+        //vwprintw(mappa,y-12,x, "KK");
         mvwprintw(mappa,y-10,x, "++++++++++");
-        mvwprintw(mappa,y-8,x,  "+++++++   ");
-        mvwprintw(mappa,y-6,x,  "  ++++++++");
-        mvwprintw(mappa,y-4,x,  " +++++++++");
+        mvwprintw(mappa,y-8,x,  "+++++++"   );
+        mvwprintw(mappa,y-6,x+2,  "++++++++");
+        mvwprintw(mappa,y-4,x+1, "+++++++++");
         mvwprintw(mappa,y-2,x,  "++++++++++");
-        mvwprintw(mappa,y-1,x,  "|         ");
-        mvwprintw(mappa,y,x,    "++++++++  ");  
+        mvwprintw(mappa,y-1,x,  "|"         );
+        mvwprintw(mappa,y,x,    "++++++++"  );  
 
     }
     if(type==3) {
-        mvwprintw(mappa,y-12,x, " +++++++++");
-        mvwprintw(mappa,y-10,x, "          ");
-        mvwprintw(mappa,y-8,x,  "+++++++++ ");
-        mvwprintw(mappa,y-6,x,  "   +++++++");
-        mvwprintw(mappa,y-4,x,  "++++++++++");
-        mvwprintw(mappa,y-2,x,  " +++++++++");
-        mvwprintw(mappa,y,x,    "   +++++++");
-        mvwprintw(mappa,y+1,x,  "       |   ");
+        mvwprintw(mappa,y-12,x+1, "+++++++++");
+        //mvwprintw(mappa,y-10,x, "          ");
+        mvwprintw(mappa,y-8,x,  "+++++++++"  );
+        mvwprintw(mappa,y-6,x+3,    "+++++++");
+        mvwprintw(mappa,y-4,x,   "++++++++++");
+        mvwprintw(mappa,y-2,x+1,  "+++++++++");
+        mvwprintw(mappa,y,x+3,      "+++++++");
+        mvwprintw(mappa,y+1,x+7,       "|"   );
     }
     if(type==4) {
         mvwprintw(mappa,y-12,x, "++++++++++");
-        mvwprintw(mappa,y-10,x, "+++++++   ");
-        mvwprintw(mappa,y-9,x,  "|         ");
+        mvwprintw(mappa,y-10,x, "+++++++"   );
+        mvwprintw(mappa,y-9,x,  "|"         );
         mvwprintw(mappa,y-8,x,  "++++++++++");
-        mvwprintw(mappa,y-6,x,  "          ");
+        //mvwprintw(mappa,y-6,x,"          ");
         mvwprintw(mappa,y-4,x,  "++++++++++");
-        mvwprintw(mappa,y-2,x,  "++++++++  ");
-        mvwprintw(mappa,y,x,    "          ");
+        mvwprintw(mappa,y-2,x,  "++++++++"  );
+        //mvwprintw(mappa,y,x,  "          ");
     }
     if(type==5){
         mvwprintw(mappa,y-12,x, "++++++++++");
         mvwprintw(mappa,y-10,x, "++++++++++");
-        mvwprintw(mappa,y-8,x,  "   +++++++");
+        mvwprintw(mappa,y-8,x+3,    "+++++++");
         mvwprintw(mappa,y-6,x,  "++++++++++");
-        mvwprintw(mappa,y-5,x,  "   |      ");
-        mvwprintw(mappa,y-4,x,  "+++++     ");
+        mvwprintw(mappa,y-5,x+3,   "|"      );
+        mvwprintw(mappa,y-4,x,  "+++++"     );
         mvwprintw(mappa,y-2,x,  "++++++++++");
-        mvwprintw(mappa,y,x,    "    ++++++");
+        mvwprintw(mappa,y,x+4,      "++++++");
     }
     if(type==6){
-        mvwprintw(mappa,y-12,x, "++++++++++");
-        mvwprintw(mappa,y-11,x, "       |  ");
-        mvwprintw(mappa,y-10,x, "++++++++++");
-        mvwprintw(mappa,y-8,x,  "          ");
-        mvwprintw(mappa,y-6,x,  "+++++++   ");
-        mvwprintw(mappa,y-4,x,  "     +++++");
-        mvwprintw(mappa,y-2,x,  "++++++++++");
-        mvwprintw(mappa,y-1,x,  "     |    ");
-        mvwprintw(mappa,y,x,    "+++++++++");
+        mvwprintw(mappa,y-12,x,  "++++++++++");
+        mvwprintw(mappa,y-11,x+7,      "|"   );
+        mvwprintw(mappa,y-10,x,  "++++++++++");
+        //mvwprintw(mappa,y-8,x, "          ");
+        mvwprintw(mappa,y-6,x,   "+++++++"   );
+        mvwprintw(mappa,y-4,x+5,      "+++++");
+        mvwprintw(mappa,y-2,x,   "++++++++++");
+        mvwprintw(mappa,y-1,x+5,     "|"     );
+        mvwprintw(mappa,y,x,      "+++++++++");
     }
 }
 void Map::rand_plat() {
@@ -285,13 +279,13 @@ bool Map::there_is_this(char object,int y, int padx, bool dx, bool going_right) 
         if(dx)
             return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx+1) == object);
         else
-            return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx-1) == object);
+            return (mvwinch(mappa, y, padx-1) == object);
     }
     else {
         if(dx)
             return (mvwinch(mappa, y, padx +1) == object);
         else
-            return (mvwinch(mappa, y, padx -1) == object);
+            return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx -1) == object);
     }
 }
 

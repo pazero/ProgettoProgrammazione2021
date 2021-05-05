@@ -58,7 +58,6 @@ void Motore::go_game(){
         timeout(time + bonus);
         update_time();
     }
-
     death_menu();
     endwin();
 }
@@ -111,11 +110,15 @@ void Motore::death_menu()
     bool fine;
     while(!fine) {
         ch = getch();
-        if(ch == 27) fine = true;
+        //esci con o
+        if(ch == 'o') fine = true;
     }
 }
 
 //NEMICI:
 //movimento
 //spari
-//se colpiti spariscono
+
+//EROE:
+//caduta dx e sx NON su nemico
+//uccisione nemici bugga

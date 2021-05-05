@@ -61,5 +61,6 @@ class BigMap {
 
     int n_map();
     bool is_bonus();
+    void is_enemy();
     void delete_char(int y, int x);
 };
