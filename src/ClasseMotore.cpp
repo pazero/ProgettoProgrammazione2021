@@ -46,8 +46,6 @@ void Motore::go_game(){
     
     while(!pause) {
         mvprintw(10,0,"time: %d  ", time+bonus);
-        mvprintw(11,0,"aux_nodi: %d  ", aux_nodi);
-        mvprintw(12,0,"nodi: %d  ", infinita.n_map());
         refresh();
         ch = getch();
         

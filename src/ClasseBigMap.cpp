@@ -40,7 +40,6 @@ void BigMap::addMap() {
     
     prec = NULL;
     delete(prec);
-    //mvprintw(LINES/2 +1,0,"Aggiunta nodo numero: %d", nodi);
 }
 void BigMap::update() {
     count_bullet++;
@@ -56,7 +55,6 @@ void BigMap::update() {
                 head = head->prev;
             }
         }
-    mvprintw(LINES/2,0, "Current node: %d  ", head->n);
     Mario.show();
 }
 void BigMap::go_left(){
