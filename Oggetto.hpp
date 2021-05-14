@@ -7,7 +7,6 @@ class Oggetto{
     protected:
     position pos;
     char name;
-    int life;
 
     public:
     Oggetto(position pos);
@@ -16,4 +15,5 @@ class Oggetto{
     int getPosy();
     int getPosx();
     void show();
+    char get_name();
 };

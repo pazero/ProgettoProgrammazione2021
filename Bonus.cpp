@@ -9,14 +9,12 @@ Bonus::Bonus(int rect_lines, int rect_cols) {
     name2 = '*';
 }
 
-char Bonus::rand_name_bonus()
-{
+char Bonus::rand_name_bonus() {
     int choice;
-    choice = rand() % 2;
-    if (choice == 0)
-        return name1;
-    else
-        return name2;
+    choice = rand()%10;
+    if(choice == 0) return name2;
+    if(choice>0 && choice<5) return name1;
+    else return ' ';
 }
 
 position Bonus::rand_pos_bonus(){

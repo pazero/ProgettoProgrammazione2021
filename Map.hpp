@@ -55,13 +55,12 @@ protected:
 
 public:
   Map(int rect_lines, int rect_cols, int n, bool first = false);
-  // 2)
   void build();
   void add_plat(int type, int y, int x);
   void rand_plat();
   void spawn_bonus(int n);
   void spawn_enemy(int n);
-  // 1)
+
   void rslide();
   void lslide();
   bool nx();
@@ -69,11 +68,12 @@ public:
 
   void show();
   int how_much();
-  // 3)
+
   bool can_go_up(int y, int how_prev);
   bool can_go_down(int y, int how_prev);
   bool can_pass_through(int y, int how_prev);
   bool there_is_this(char object, int y, int how_prev, bool dx, bool going_right);
 
   void print_space(int y_on_pad, int x_on_pad);
+  void print_player(char player_name, int y, int how_prev);
 };

@@ -1,20 +1,30 @@
 #include "Oggetto.hpp"
 
-Oggetto::Oggetto(position pos) {
+Oggetto::Oggetto(position pos)
+{
     this->pos = pos;
 }
-Oggetto::Oggetto(){}
+Oggetto::Oggetto() {}
 
-position Oggetto::getPos(){
+position Oggetto::getPos()
+{
     return pos;
 }
-int Oggetto::getPosy(){
-    return(pos.y);
+int Oggetto::getPosy()
+{
+    return (pos.y);
 }
-int Oggetto::getPosx(){
-    return(pos.x);
+int Oggetto::getPosx()
+{
+    return (pos.x);
 }
-void Oggetto::show(){
-    mvprintw(pos.y, pos.x, "%c",name);
+void Oggetto::show()
+{
+    mvprintw(pos.y, pos.x, "%c", name);
     refresh();
+}
+
+char Oggetto::get_name()
+{
+    return name;
 }
