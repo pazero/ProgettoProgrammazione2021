@@ -33,6 +33,7 @@ class BigMap {
         colpi gun;
         colpi backgun;
 
+        WINDOW* player_shadow;
     
     public:
     BigMap();
@@ -61,6 +62,9 @@ class BigMap {
 
     int n_map();
     bool is_bonus();
-    void is_enemy();
+    void player_on_enemy();
     void delete_char(int y, int x);
+
+    void print_shadow();
+    void delete_shadow();
 };

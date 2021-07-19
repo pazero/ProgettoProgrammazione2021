@@ -12,6 +12,7 @@ Motore::Motore(int rect_lines, int rect_cols) {
 }
 
 bool Motore::move_all() {
+    
     infinita.update();
     if(ch == KEY_LEFT){
         infinita.go_left();
@@ -45,6 +46,7 @@ bool Motore::move_all() {
 void Motore::go_game(){
     
     while(!pause) {
+        
         mvprintw(10,0,"time: %d  ", time+bonus);
         refresh();
         ch = getch();

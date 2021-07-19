@@ -38,6 +38,7 @@ class Map {
 
     Bonus powerup{};
     lista_nemici nemici;
+    int count;
 
 
     public:
@@ -63,4 +64,6 @@ class Map {
 
     void print_space(int y_on_pad, int x_on_pad);
     void print_player(char player_name, int y, int how_prev);
+    void move_enemies();
+    void remove_enemy(position pos);
 };

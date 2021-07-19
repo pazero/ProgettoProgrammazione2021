@@ -30,6 +30,75 @@ Map::Map(int rect_lines, int rect_cols, int n, bool first) {
 
     powerup = Bonus(rect_lines, rect_cols);
     nemici = NULL;
+    count = 0;
+}
+
+void Map::move_enemies(){
+    lista_nemici aux = nemici;
+    int c;
+    srand(time(0));
+    if(count%2 == 0) {
+        while(aux!=NULL) {
+            //stop: K, bonus, no piattaforma, limiti dx e sx
+            c = rand()%2;
+            //caso c'è prev
+            if(sx>-1){
+                //va sx
+                if(c==0) {
+                    if(aux->bad.getPosx() > 0){
+                        if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , false, false)) {
+                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx()-1 , false, false)) {
+                                print_space(aux->bad.getPosy(), aux->bad.getPosx());
+                                aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()-1});
+                                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
+                            }
+                        }
+                    }
+                }
+                //va dx
+                else {
+                    if(aux->bad.getPosx() < rect_cols){
+                        if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , true, false)) {
+                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx() , true, false)) {
+                                print_space(aux->bad.getPosy(), aux->bad.getPosx());
+                                aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()+1});
+                                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                //va sx
+                if(c==0){
+                    if(aux->bad.getPosx() > 0) {
+                        if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , false, false)) {
+                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx() , false, false)) {
+                                print_space(aux->bad.getPosy(), aux->bad.getPosx());
+                                aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()-1});
+                                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
+                            }
+                        }
+                    }
+                }
+                //va dx
+                else {
+                    if(aux->bad.getPosx() < rect_cols){
+                        if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , true, false)) {
+                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx() , true, false)) {
+                                print_space(aux->bad.getPosy(), aux->bad.getPosx());
+                                aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()+1});
+                                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
+                            }
+                        }
+                    }
+                }
+            }
+            aux = aux->next;
+            count=0;
+        }
+    }
+    count++;
 }
 
 void Map::build(){
@@ -120,7 +189,6 @@ void Map::add_plat(int type, int y, int x) {
         mvwprintw(mappa,y,x,     "++++++++++");
     }
     if(type==2) {
-        //vwprintw(mappa,y-12,x, "KK");
         mvwprintw(mappa,y-10,x, "++++++++++");
         mvwprintw(mappa,y-8,x,  "+++++++"   );
         mvwprintw(mappa,y-6,x+2,  "++++++++");
@@ -272,7 +340,8 @@ bool Map::can_go_down(int y, int how_prev) {
 }
 
 bool Map::can_pass_through(int y, int how_prev) {
-    return (mvwinch(mappa, y+2, how_prev) != '|') && (mvwinch(mappa, y+2, how_prev) != 'K') && ((mvwinch(mappa, y+3, how_prev) == '+') || (mvwinch(mappa, y+3, how_prev) == '=')) ;
+    //return (mvwinch(mappa, y+2, how_prev) != '|') && (mvwinch(mappa, y+2, how_prev) != 'K') && ((mvwinch(mappa, y+3, how_prev) == '+') || (mvwinch(mappa, y+3, how_prev) == '=')) ;
+    return (mvwinch(mappa, y+2, how_prev) != '|') && ((mvwinch(mappa, y+3, how_prev) == '+') || (mvwinch(mappa, y+3, how_prev) == '=')) ;
 }
 bool Map::there_is_this(char object,int y, int padx, bool dx, bool going_right) {
     if(going_right) {
@@ -295,4 +364,30 @@ void Map::print_space(int y_on_pad, int x_on_pad){
 
 void Map::print_player(char player_name, int y, int how_prev){
     mvwprintw(mappa, y, how_prev, "%c", player_name);
+}
+
+void Map::remove_enemy(position pos) {
+    lista_nemici tmp;
+    lista_nemici aux = nemici;
+    lista_nemici prec = NULL;
+    while(aux!=NULL) {
+        if(aux->bad.getPosx()==pos.x && aux->bad.getPosy()==pos.y) {
+            if(prec == NULL){
+                tmp = aux;
+                aux = aux->next;
+                delete(tmp);
+                tmp = NULL;
+                nemici = aux;
+            }
+            else{
+                tmp = aux;
+                aux = aux->next;
+                prec->next = aux;
+                delete (tmp);
+                tmp = NULL;
+            }
+        }
+        prec=aux;
+        if(aux!=NULL) aux=aux->next;
+    }
 }
