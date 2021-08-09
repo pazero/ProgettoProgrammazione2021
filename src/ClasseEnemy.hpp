@@ -4,6 +4,8 @@
 using namespace std;
 
 #include "ClasseBonus.hpp"
+
+//posizione rispetto a PAD
 class Enemy:public Oggetto{
     protected:
     int n;
@@ -14,7 +16,8 @@ class Enemy:public Oggetto{
 
     public:
     Enemy();
-    Enemy(int rect_lines, int rect_cols);
+    Enemy(char name);
+    //Enemy(int rect_lines, int rect_cols);
     bool empty (int y, int x);
     void Move(Enemy *tmp);
     position getPos();
@@ -23,5 +26,4 @@ class Enemy:public Oggetto{
     void routine(int ch,Enemy nemici);
 
     void update_pos(position pos);
-    char get_name();
 };

@@ -3,12 +3,18 @@
 Motore::Motore(int rect_lines, int rect_cols) {
     this->rect_lines = rect_lines;
     this->rect_cols = rect_cols;
+    //wrefresh(mappa);
+    refresh();
+    
     infinita = BigMap(rect_lines, rect_cols);
     time = 100;
     cicli_for_bonus = -1;
     aux_nodi = 0;
     bonus = 0;
+    
     go_game();
+
+    
 }
 
 bool Motore::move_all() {
@@ -34,7 +40,7 @@ bool Motore::move_all() {
         infinita.back_shoot();
     }
     if(infinita.routine_fineciclo(right)){
-        refresh();
+        //refresh();
         check_bonus();
         right = false;
         return true;
@@ -45,12 +51,12 @@ bool Motore::move_all() {
 
 void Motore::go_game(){
     
+    
     while(!pause) {
         
         mvprintw(10,0,"time: %d  ", time+bonus);
         refresh();
         ch = getch();
-        
         if(!move_all()) {
             pause = true;
         }

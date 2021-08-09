@@ -6,6 +6,11 @@
 
 #include "ClasseEnemy.hpp"
 
+struct colpo {
+    Bullet curr{};
+    colpo *next;
+};
+typedef colpo* colpi;
 
 struct nemico {
     Enemy bad;
@@ -66,4 +71,9 @@ class Map {
     void print_player(char player_name, int y, int how_prev);
     void move_enemies();
     void remove_enemy(position pos);
+
+    int get_sx();
+    int get_ex();
+
+    //void shoot_enemies();
 };

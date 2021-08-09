@@ -32,48 +32,31 @@ Map::Map(int rect_lines, int rect_cols, int n, bool first) {
     nemici = NULL;
     count = 0;
 }
+int Map::get_ex(){
+    return ex;
+}
 
+int Map::get_sx(){
+    return sx;
+}
+//quando K è su piattaforma controllare che non cada e stia dentro ai limiti del pad sempre
 void Map::move_enemies(){
     lista_nemici aux = nemici;
     int c;
+    int i = 0;
     srand(time(0));
-    if(count%2 == 0) {
+    if(count%4 == 0) {
         while(aux!=NULL) {
-            //stop: K, bonus, no piattaforma, limiti dx e sx
-            c = rand()%2;
-            //caso c'è prev
-            if(sx>-1){
+            mvwprintw(stdscr, n, COLS/2 + i, "! ");
+            i++;
+            if(aux->bad.get_name() == 'K') {
+                //stop: K, bonus, no piattaforma, limiti dx e sx
+                c = rand()%2;
                 //va sx
                 if(c==0) {
-                    if(aux->bad.getPosx() > 0){
-                        if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , false, false)) {
-                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx()-1 , false, false)) {
-                                print_space(aux->bad.getPosy(), aux->bad.getPosx());
-                                aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()-1});
-                                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
-                            }
-                        }
-                    }
-                }
-                //va dx
-                else {
-                    if(aux->bad.getPosx() < rect_cols){
-                        if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , true, false)) {
-                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx() , true, false)) {
-                                print_space(aux->bad.getPosy(), aux->bad.getPosx());
-                                aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()+1});
-                                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
-                            }
-                        }
-                    }
-                }
-            }
-            else {
-                //va sx
-                if(c==0){
                     if(aux->bad.getPosx() > 0) {
-                        if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , false, false)) {
-                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx() , false, false)) {
+                        if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , false, true)) {
+                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx()-1 , false, true) || there_is_this('=',aux->bad.getPosy()+1, aux->bad.getPosx()-1 , false, true)) {
                                 print_space(aux->bad.getPosy(), aux->bad.getPosx());
                                 aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()-1});
                                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
@@ -85,23 +68,31 @@ void Map::move_enemies(){
                 else {
                     if(aux->bad.getPosx() < rect_cols){
                         if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , true, false)) {
-                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx() , true, false)) {
+                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx() , true, false) || there_is_this('=',aux->bad.getPosy()+1, aux->bad.getPosx() , true, false)) {
                                 print_space(aux->bad.getPosy(), aux->bad.getPosx());
                                 aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()+1});
                                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
                             }
                         }
                     }
-                }
+                }   
             }
             aux = aux->next;
-            count=0;
         }
+        while(aux!=NULL) {
+            i=0;
+            mvwprintw(stdscr, n, COLS/2 + i, "  ");
+            i++;
+            aux = aux->next;
+        }
+        count=0;
     }
     count++;
 }
 
 void Map::build(){
+    
+    mvwprintw(stdscr,0,0, "%d", n);
     for(int i=0; i<rect_cols; i++) {
         mvwaddch(mappa,0,i,'=');
         mvwaddch(mappa,1,i,'=');
@@ -132,26 +123,34 @@ void Map::build(){
         rand_plat();
         spawn_bonus(1);
         if(n<3) spawn_enemy(1);
-        else spawn_enemy(n/3 +1);
+        else spawn_enemy(n);
     }
+    
 }
-void Map::spawn_enemy(int n){
+void Map::spawn_enemy(int m){
     position tmp_pos;
     srand(time(0));
-    for(int i=0;i<n;i++){
+    for(int i=0;i<m;i++){
+        
+        lista_nemici cattivo = new nemico;
+        if(i<(m/3)*2) {
+            cattivo->bad = Enemy('K');
+        }
+        else {
+            cattivo->bad = Enemy('A');
+        }
         tmp_pos.y = rand()%(rect_lines-3);
         tmp_pos.x = rand()%rect_cols;
-        lista_nemici cattivo = new nemico;
-        cattivo->bad.update_pos(tmp_pos);
-
+    
         while(can_go_down(tmp_pos.y, tmp_pos.x) && tmp_pos.y < rect_lines-3) {
                 tmp_pos.y ++;
             }
         mvwprintw(mappa,tmp_pos.y, tmp_pos.x, "%c", cattivo->bad.get_name());
-
+        cattivo->bad.update_pos(tmp_pos);
         cattivo->next = nemici;
         nemici = cattivo;
     }
+
 }
 
 void Map::spawn_bonus(int n){
@@ -355,6 +354,7 @@ bool Map::there_is_this(char object,int y, int padx, bool dx, bool going_right) 
             return (mvwinch(mappa, y, padx +1) == object);
         else
             return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx -1) == object);
+            //return (mvwinch(mappa, y, padx) == object);
     }
 }
 
@@ -371,7 +371,8 @@ void Map::remove_enemy(position pos) {
     lista_nemici aux = nemici;
     lista_nemici prec = NULL;
     while(aux!=NULL) {
-        if(aux->bad.getPosx()==pos.x && aux->bad.getPosy()==pos.y) {
+        //if(aux->bad.getPosx()==pos.x && aux->bad.getPosy()==pos.y) {
+        if(aux->bad.getPosx()==pos.x) {
             if(prec == NULL){
                 tmp = aux;
                 aux = aux->next;

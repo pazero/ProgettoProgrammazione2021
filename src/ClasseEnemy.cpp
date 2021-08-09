@@ -2,25 +2,25 @@
 
 Enemy::Enemy(){
     this->pos = {0,0};
-    name = 'K';
-    //this->n=0;
 }
 
-Enemy::Enemy(int rect_lines, int rect_cols) {
+Enemy::Enemy(char name){
+    this->pos = {0,0};
+    this->name = name;
+}
+
+/*Enemy::Enemy(int rect_lines, int rect_cols, char name) {
     this->rect_lines = rect_lines;
     this->rect_cols = rect_cols;
 
     this->pos = {0,0};
-    name = 'K';
+    this->name = name;
     //this->n=0;
-}
+}*/
 void Enemy::update_pos(position pos) {
     this->pos = pos;
 }
 
-char Enemy::get_name(){
-    return name;
-}
 position Enemy::getPos(){
     return (pos);
 }

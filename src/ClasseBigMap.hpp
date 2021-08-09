@@ -2,11 +2,7 @@
 
 #include <ncurses.h>
 
-struct colpo {
-    Bullet curr{};
-    colpo *next;
-};
-typedef colpo* colpi;
+
 
 struct MapNode {
         Map *piece;
@@ -32,6 +28,9 @@ class BigMap {
         
         colpi gun;
         colpi backgun;
+
+        colpi enemy_gun;
+        colpi enemy_backgun;
 
         WINDOW* player_shadow;
     

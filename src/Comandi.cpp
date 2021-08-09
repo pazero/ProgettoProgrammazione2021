@@ -5,4 +5,5 @@ Comandi::Comandi() {
         noecho();
         keypad(stdscr, TRUE);
         curs_set(FALSE);
+        start_color();
     }

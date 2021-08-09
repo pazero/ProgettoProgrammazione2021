@@ -13,6 +13,8 @@ class Motore{
     int cicli_for_bonus;
     int aux_nodi;
     int bonus;
+
+    int flash;
     
     public:
     Motore(int rect_lines, int rect_cols);
