@@ -276,14 +276,16 @@ void BigMap::update_back_shoot(int limit_sx, int limit_dx, bool going_right){
     while(aux!=NULL) {
         Mario.show();
         if(aux->curr.getPosx()==limit_dx) {
-            if(not_this('|', false, aux->curr.getPos(), going_right)) {
-                if(not_this('K', false, aux->curr.getPos(), going_right))
-                    aux->curr.go_sx();
-                else {
+            if(not_this('|', false, aux->curr.getPos(), going_right) && not_this('K', false, aux->curr.getPos(), going_right)) {
+                if(!not_this('A', false, aux->curr.getPos(), going_right)){
                     if(!going_right)
                         delete_char(aux->curr.getPosy(), aux->curr.getPosx());
                     delete_char(aux->curr.getPosy(), aux->curr.getPosx()-1);
                     remove_bullet(prec,aux, true);
+                }
+                else {
+                    aux->curr.go_sx();
+                    Mario.show();
                 }
             }
             else{
@@ -294,19 +296,22 @@ void BigMap::update_back_shoot(int limit_sx, int limit_dx, bool going_right){
         else {
             if(aux->curr.getPosx()>limit_sx+1) {
                 aux->curr.destroy_win();
-                if(not_this('|', false, aux->curr.getPos(), going_right)) {
-                    if(not_this('K', false, aux->curr.getPos(), going_right))
-                        aux->curr.go_sx();
-                    else {
+                Mario.show();
+                if(not_this('|', false, aux->curr.getPos(), going_right) && not_this('K', false, aux->curr.getPos(), going_right)) {
+                    if(!not_this('A', false, aux->curr.getPos(), going_right)){
                         if(!going_right)
                             delete_char(aux->curr.getPosy(), aux->curr.getPosx());
                         delete_char(aux->curr.getPosy(), aux->curr.getPosx()-1);
                         remove_bullet(prec,aux, true);
                     }
+                    else {
+                        aux->curr.go_sx();
+                    }
                 }
                 else{
                     remove_bullet(prec, aux, true);
                 }
+                Mario.show();
             }
             else {
                 aux->curr.destroy_win();

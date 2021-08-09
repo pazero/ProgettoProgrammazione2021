@@ -47,7 +47,7 @@ void Map::move_enemies(){
     srand(time(0));
     if(count%4 == 0) {
         while(aux!=NULL) {
-            mvwprintw(stdscr, n, COLS/2 + i, "! ");
+            mvwprintw(stdscr, n, COLS/2 + i, "!");
             i++;
             if(aux->bad.get_name() == 'K') {
                 //stop: K, bonus, no piattaforma, limiti dx e sx
@@ -79,9 +79,10 @@ void Map::move_enemies(){
             }
             aux = aux->next;
         }
+        aux = nemici;
+        i=0;
         while(aux!=NULL) {
-            i=0;
-            mvwprintw(stdscr, n, COLS/2 + i, "  ");
+            mvwprintw(stdscr, n, COLS/2 + i, " ");
             i++;
             aux = aux->next;
         }
