@@ -66,8 +66,8 @@ void BigMap::update() {
 }
 void BigMap::go_left(){
     Mario.show();
-    //if(not_this('|', false, Mario.getPos(), false) && not_this('K', false, Mario.getPos(), false)) {
-    if(!not_this(' ', false, Mario.getPos(), false) || !not_this('*', false, Mario.getPos(), false) || !not_this('#', false, Mario.getPos(), false)){
+    if(not_this('|', false, Mario.getPos(), false) && not_this('K', false, Mario.getPos(), false)) {
+    //if(!not_this(' ', false, Mario.getPos(), false) || !not_this('*', false, Mario.getPos(), false) || !not_this('#', false, Mario.getPos(), false)){
         head->piece->lslide();
         Mario.show();
         if(head->next!=NULL) {
@@ -279,6 +279,7 @@ void BigMap::update_back_shoot(int limit_sx, int limit_dx, bool going_right){
         if(aux->curr.getPosx()==limit_dx) {
             if(not_this('|', false, aux->curr.getPos(), going_right) && not_this('K', false, aux->curr.getPos(), going_right)) {
                 if(!not_this('A', false, aux->curr.getPos(), going_right) || !not_this('}', false, aux->curr.getPos(), going_right) || !not_this(']', false, aux->curr.getPos(), going_right) || !not_this('{', false, aux->curr.getPos(), going_right) || !not_this('[', false, aux->curr.getPos(), going_right)){
+                //if(not_this(' ', false, aux->curr.getPos(), going_right) && not_this('#', false, aux->curr.getPos(), going_right) && not_this('*', false, aux->curr.getPos(), going_right)) {
                     if(!going_right)
                         delete_char(aux->curr.getPosy(), aux->curr.getPosx());
                     delete_char(aux->curr.getPosy(), aux->curr.getPosx()-1);
@@ -300,6 +301,7 @@ void BigMap::update_back_shoot(int limit_sx, int limit_dx, bool going_right){
                 Mario.show();
                 if(not_this('|', false, aux->curr.getPos(), going_right) && not_this('K', false, aux->curr.getPos(), going_right)) {
                     if(!not_this('A', false, aux->curr.getPos(), going_right) || !not_this('}', false, aux->curr.getPos(), going_right) || !not_this(']', false, aux->curr.getPos(), going_right) || !not_this('{', false, aux->curr.getPos(), going_right) || !not_this('[', false, aux->curr.getPos(), going_right)){
+                    //if(not_this(' ', false, aux->curr.getPos(), going_right) && not_this('*', false, aux->curr.getPos(), going_right) && not_this('#', false, aux->curr.getPos(), going_right)) {
                         if(!going_right)
                             delete_char(aux->curr.getPosy(), aux->curr.getPosx());
                         delete_char(aux->curr.getPosy(), aux->curr.getPosx()-1);
@@ -333,6 +335,7 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
         if(aux->curr.getPosx()==limit_sx) {
             if(not_this('|', true, aux->curr.getPos(), going_right) && not_this('K', true, aux->curr.getPos(), going_right)) {
                 if(!not_this('A', true, aux->curr.getPos(), going_right) || !not_this('{', true, aux->curr.getPos(), going_right) || !not_this('[', true, aux->curr.getPos(), going_right) || !not_this('}', true, aux->curr.getPos(), going_right) || !not_this(']', true, aux->curr.getPos(), going_right)) {
+                //if(not_this(' ', true, aux->curr.getPos(), going_right) && not_this('#', true, aux->curr.getPos(), going_right) && not_this('*', true, aux->curr.getPos(), going_right)) {
                     if(going_right)
                         delete_char(aux->curr.getPosy(), aux->curr.getPosx());
                     delete_char(aux->curr.getPosy(), aux->curr.getPosx()+1);
@@ -355,6 +358,7 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
                 Mario.show();
                 if(not_this('|', true, aux->curr.getPos(), going_right) && not_this('K', true, aux->curr.getPos(), going_right)) {
                     if(!not_this('A', true, aux->curr.getPos(), going_right) || !not_this('{', true, aux->curr.getPos(), going_right) || !not_this('[', true, aux->curr.getPos(), going_right) || !not_this('}', true, aux->curr.getPos(), going_right) || !not_this(']', true, aux->curr.getPos(), going_right)) {
+                    //if(not_this(' ', true, aux->curr.getPos(), going_right) && not_this('*', true, aux->curr.getPos(), going_right) && not_this('#', true, aux->curr.getPos(), going_right)){
                         if(going_right)
                             delete_char(aux->curr.getPosy(), aux->curr.getPosx());
                         delete_char(aux->curr.getPosy(), aux->curr.getPosx()+1);
@@ -382,6 +386,84 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
     }
 }
 
+int BigMap::n_map() {
+    return nodi;
+}
+
+bool BigMap::is_bonus(){
+    Mario.show();
+    position tmp = {Mario.getPosy(), Mario.getPosx()-1};
+    if(!not_this('#', true, tmp, false)) {
+        delete_char(tmp.y, tmp.x+1);
+        Mario.show();
+        return true;
+    }
+    if(!not_this('*', true, tmp, false)) {
+        delete_char(tmp.y, tmp.x+1);
+        Mario.bonus_life();
+        Mario.show();
+    }
+    return false;
+}
+
+/*void BigMap::player_on_enemy(){
+    Mario.show();
+    position tmp = {Mario.getPosy(), Mario.getPosx()-1};
+    if(!not_this('K', true, tmp, false)) {
+        delete_char(tmp.y, tmp.x+1);
+        tmp.y -= (LINES-rect_lines)/2;
+        tmp.x -= 1+(COLS-rect_cols)/2;
+        if(rect_cols - head->piece->how_much() > stacco) {
+            //trasformare in coordinate per pad
+            tmp.x += head->piece->how_much();
+            head->prev->piece->remove_enemy({tmp.y, tmp.x});
+        }
+        else {
+            //trasformare in coordinate per pad
+            tmp.x -= head->prev->piece->how_much();
+            head->piece->remove_enemy({tmp.y, tmp.x});
+        }
+        Mario.damage(10);
+        Mario.show();
+    } 
+}*/
+
+bool BigMap::routine_fineciclo(bool right) {
+    if(head->prev!=NULL) {
+            head->prev->piece->move_enemies();
+    }
+    head->piece->move_enemies();
+    if(head->next!=NULL) {
+            head->next->piece->move_enemies();
+    }
+    Mario.show();
+    reshow_map();
+    Mario.show();
+    //player_on_enemy();
+    Mario.show();
+    update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, right);
+    Mario.show();
+    update_back_shoot((COLS+rect_cols)/2-1 - rect_cols, Mario.getPosx(), right);
+    Mario.show();
+    //if(!not_this('K', true, {Mario.getPosy(), Mario.getPosx()-1}, false)){
+    //    return false;
+    //}
+    if(!not_this('K', true, Mario.getPos(), false) || !not_this('K', false, Mario.getPos(), false)) {
+        Mario.damage(15);
+        if(Mario.getlife() < 0)
+            Mario.setlife(0);
+    }
+    if(!not_this('A', true, Mario.getPos(), false) || !not_this('A', false, Mario.getPos(), false)) {
+        Mario.damage(30);
+        if(Mario.getlife() < 0)
+            Mario.setlife(0);
+    }
+    mvprintw(14,0,"Life: %d  ", Mario.getlife());
+    if(Mario.getlife() == 0) return false;
+    Mario.show();
+    return true;
+}
+
 bool BigMap::not_this(char object, bool dx, position pos, bool going_right) {
     Mario.show();
     int y_on_pad = pos.y - (LINES-rect_lines)/2;
@@ -395,7 +477,7 @@ bool BigMap::not_this(char object, bool dx, position pos, bool going_right) {
                 return !(head->piece->there_is_this(object, y_on_pad,head->piece->how_much() - rect_cols + x_on_pad+1 ,dx, going_right));
             }
             else {
-                if(x_on_pad >= head->piece->how_much())
+                if(x_on_pad > head->piece->how_much())
                     return !(head->next->piece->there_is_this(object, y_on_pad, x_on_pad - head->piece->how_much()-1, dx, going_right));
                 else
                     return !(head->piece->there_is_this(object, y_on_pad,rect_cols - head->piece->how_much() + x_on_pad-1, dx, going_right));
@@ -423,84 +505,4 @@ void BigMap::reshow_map(){
         head->next->piece->show();
         Mario.show();
     }
-}
-
-int BigMap::n_map() {
-    return nodi;
-}
-
-bool BigMap::is_bonus(){
-    Mario.show();
-    position tmp = {Mario.getPosy(), Mario.getPosx()-1};
-    if(!not_this('#', true, tmp, false)) {
-        delete_char(tmp.y, tmp.x+1);
-        Mario.show();
-        return true;
-    }
-    if(!not_this('*', true, tmp, false)) {
-        delete_char(tmp.y, tmp.x+1);
-        Mario.bonus_life();
-        Mario.show();
-    }
-    return false;
-}
-
-/*void BigMap::player_on_enemy(){
-    
-    Mario.show();
-    position tmp = {Mario.getPosy(), Mario.getPosx()-1};
-    if(!not_this('K', true, tmp, false)) {
-        delete_char(tmp.y, tmp.x+1);
-        tmp.y -= (LINES-rect_lines)/2;
-        tmp.x -= 1+(COLS-rect_cols)/2;
-        if(rect_cols - head->piece->how_much() > stacco) {
-            //trasformare in coordinate per pad
-            tmp.x += head->piece->how_much();
-            head->prev->piece->remove_enemy({tmp.y, tmp.x});
-        }
-        else {
-            //trasformare in coordinate per pad
-            tmp.x -= head->prev->piece->how_much();
-            head->piece->remove_enemy({tmp.y, tmp.x});
-        }
-        Mario.damage(10);
-        Mario.show();
-    }
-    
-}*/
-
-bool BigMap::routine_fineciclo(bool right) {
-    if(head->prev!=NULL) {
-            head->prev->piece->move_enemies();
-    }
-    head->piece->move_enemies();
-    if(head->next!=NULL) {
-            head->next->piece->move_enemies();
-    }
-    Mario.show();
-    reshow_map();
-    Mario.show();
-    //player_on_enemy();
-    Mario.show();
-    update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, right);
-    Mario.show();
-    update_back_shoot((COLS+rect_cols)/2-1 - rect_cols, Mario.getPosx(), right);
-    Mario.show();
-    if(!not_this('K', true, {Mario.getPosy(), Mario.getPosx()-1}, false)){
-        return false;
-    }
-    if(!not_this('K', true, Mario.getPos(), false) || !not_this('K', false, Mario.getPos(), false)) {
-        Mario.damage(15);
-        if(Mario.getlife() < 0)
-            Mario.setlife(0);
-    }
-    if(!not_this('A', true, Mario.getPos(), false) || !not_this('A', false, Mario.getPos(), false)) {
-        Mario.damage(30);
-        if(Mario.getlife() < 0)
-            Mario.setlife(0);
-    }
-    mvprintw(14,0,"Life: %d  ", Mario.getlife());
-    if(Mario.getlife() == 0) return false;
-    Mario.show();
-    return true;
 }

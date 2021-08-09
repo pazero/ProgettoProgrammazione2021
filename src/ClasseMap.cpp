@@ -57,7 +57,7 @@ void Map::move_enemies(){
                 //va sx
                 if(c==0) {
                     if(aux->bad.getPosx() > 0) {
-                        if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , false, true)) {
+                        if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , false, false)) {
                             if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx()-1 , false, true) || there_is_this('=',aux->bad.getPosy()+1, aux->bad.getPosx()-1 , false, true)) {
                                 print_space(aux->bad.getPosy(), aux->bad.getPosx());
                                 aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()-1});
@@ -382,8 +382,8 @@ bool Map::there_is_this(char object,int y, int padx, bool dx, bool going_right) 
         if(dx)
             return (mvwinch(mappa, y, padx +1) == object);
         else
-            return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx -1) == object);
-            //return (mvwinch(mappa, y, padx) == object);
+            //return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx -1) == object);
+            return (mvwinch(mappa, y, padx-1) == object);
     }
 }
 
