@@ -43,8 +43,9 @@ class Map {
 
     Bonus powerup{};
     lista_nemici nemici;
-    int count;
-
+    //aumentato di 1 ad ogni esecuzione, arrivato a 4 si riazzera. Usato per nemici
+    int count_move;
+    int count_A;
 
     public:
     Map(int rect_lines, int rect_cols, int n, bool first = false);
@@ -70,6 +71,7 @@ class Map {
     void print_space(int y_on_pad, int x_on_pad);
     void print_player(char player_name, int y, int how_prev);
     void move_enemies();
+    void enemies_A();
     void remove_enemy(position pos);
 
     int get_sx();

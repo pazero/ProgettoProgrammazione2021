@@ -30,7 +30,8 @@ Map::Map(int rect_lines, int rect_cols, int n, bool first) {
 
     powerup = Bonus(rect_lines, rect_cols);
     nemici = NULL;
-    count = 0;
+    count_move = 0;
+    count_A = 0;
 }
 int Map::get_ex(){
     return ex;
@@ -41,14 +42,15 @@ int Map::get_sx(){
 }
 //quando K è su piattaforma controllare che non cada e stia dentro ai limiti del pad sempre
 void Map::move_enemies(){
+    enemies_A();
     lista_nemici aux = nemici;
     int c;
-    int i = 0;
+    //int i = 0;
     srand(time(0));
-    if(count%4 == 0) {
+    if(count_move%4 == 0) {
         while(aux!=NULL) {
-            mvwprintw(stdscr, n, COLS/2 + i, "!");
-            i++;
+            //mvwprintw(stdscr, n, COLS/2 + i, "!");
+            //i++;
             if(aux->bad.get_name() == 'K') {
                 //stop: K, bonus, no piattaforma, limiti dx e sx
                 c = rand()%2;
@@ -79,16 +81,41 @@ void Map::move_enemies(){
             }
             aux = aux->next;
         }
+        /*
         aux = nemici;
         i=0;
         while(aux!=NULL) {
             mvwprintw(stdscr, n, COLS/2 + i, " ");
             i++;
             aux = aux->next;
-        }
-        count=0;
+        }*/
+        count_move=0;
     }
-    count++;
+    count_move++;
+}
+void Map::enemies_A(){
+    lista_nemici aux = nemici;
+    while(aux!=NULL) {
+        if(aux->bad.get_name() == 'A') {
+            if(count_A == 0) {
+                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()-2, "{");
+                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()-1, "[");
+                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()+1, "]");
+                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()+2, "}");
+            }
+            if(count_A == 100) {
+                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()-2, " ");
+                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()-1, " ");
+                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()+1, " ");
+                mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()+2, " ");
+            }
+        }
+        aux = aux->next;
+    }
+    if(count_A == 200) {
+        count_A = -1;
+    }
+    count_A++;
 }
 
 void Map::build(){
@@ -331,7 +358,8 @@ int Map::how_much() {
 }
 
 bool Map::can_go_up(int y, int how_prev) {
-    return (mvwinch(mappa, y-2, how_prev) != '|') && (mvwinch(mappa, y-2, how_prev) != 'K') && (mvwinch(mappa, y-1, how_prev) == '+');
+    //return (mvwinch(mappa, y-2, how_prev) != '|') && (mvwinch(mappa, y-2, how_prev) != 'K') && (mvwinch(mappa, y-1, how_prev) == '+');
+    return(mvwinch(mappa, y-2, how_prev) == ' ') && (mvwinch(mappa, y-1, how_prev) == '+');
 }
 
 bool Map::can_go_down(int y, int how_prev) {

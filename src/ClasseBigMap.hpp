@@ -1,8 +1,5 @@
 #include "ClasseMap.hpp"
-
 #include <ncurses.h>
-
-
 
 struct MapNode {
         Map *piece;
@@ -61,7 +58,7 @@ class BigMap {
 
     int n_map();
     bool is_bonus();
-    void player_on_enemy();
+    //void player_on_enemy();
     void delete_char(int y, int x);
 
     void print_shadow();
