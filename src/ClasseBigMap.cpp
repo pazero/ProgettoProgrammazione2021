@@ -33,6 +33,7 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
 
 void BigMap::addMap() {
     nodi++;
+    points += nodi*10;
     MapList aux = head;
     MapList prec = NULL;
     while(aux->next!=NULL) {
@@ -487,14 +488,13 @@ void BigMap::free_bullet() {
                     y = rand()%(rect_lines - 4) +2;
                 }
                 add_ghost_bullet(y);
-
-                if(head->piece->get_n()%4 == 0) {
-                    while(y%2 != 0) {
-                        y = rand()%(rect_lines - 4) +2;
-                    }
-                    add_ghost_bullet(y);
+            }
+            if(head->piece->get_n()%4 == 0) {
+                while(y%2 != 0) {
+                    y = rand()%(rect_lines - 4) +2;
                 }
-            } 
+                add_ghost_bullet(y);
+            }
         }
         count_ghostBullet = 0;
     }

@@ -119,7 +119,7 @@ void Motore::death_menu()
     mvprintw((LINES - altezza)/2 - (i-1), (COLS + larghezza)/2 - i, "\\");
     }
     mvwprintw(box_win,1,(larghezza-5)/2, "R.I.P.");
-    mvwprintw(box_win,3,(larghezza-6)/2, "%s", "braghira");
+    mvwprintw(box_win,3,(larghezza-6)/2, "%s", "Erik");
     mvprintw(15, (COLS - 9)/2, "SEI MORTO");
     wrefresh(box_win);
     refresh();
