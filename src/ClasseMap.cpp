@@ -49,8 +49,6 @@ void Map::move_enemies(){
     srand(time(0));
     if(count_move%4 == 0) {
         while(aux!=NULL) {
-            //mvwprintw(stdscr, n, COLS/2 + i, "!");
-            //i++;
             if(aux->bad.get_name() == 'K') {
                 //stop: K, bonus, no piattaforma, limiti dx e sx
                 c = rand()%2;
@@ -81,14 +79,6 @@ void Map::move_enemies(){
             }
             aux = aux->next;
         }
-        /*
-        aux = nemici;
-        i=0;
-        while(aux!=NULL) {
-            mvwprintw(stdscr, n, COLS/2 + i, " ");
-            i++;
-            aux = aux->next;
-        }*/
         count_move=0;
     }
     count_move++;
@@ -119,8 +109,6 @@ void Map::enemies_A(){
 }
 
 void Map::build(){
-    
-    //mvwprintw(stdscr,0,0, "%d", n);
     for(int i=0; i<rect_cols; i++) {
         mvwaddch(mappa,0,i,'=');
         mvwaddch(mappa,1,i,'=');
@@ -145,8 +133,8 @@ void Map::build(){
             mvwaddch(mappa, (rect_lines-length)/2+i, 6, start[i]);
         }
     }
-    mvwaddch(mappa,0,rect_cols-1,'|');
-    mvwaddch(mappa,rect_lines-1,rect_cols-1,'|');
+    //mvwaddch(mappa,0,rect_cols-1,'|');
+    //mvwaddch(mappa,rect_lines-1,rect_cols-1,'|');
     if(!first){
         rand_plat();
         spawn_bonus(1);
@@ -339,6 +327,9 @@ void Map::lslide(){
     }
     prefresh(mappa, pad_y, pad_x, sy, sx, ey, ex);
 }
+int Map::get_n() {
+    return n;
+}
 bool Map::nx() {
     if(ex<finex_rect) 
         return true;
@@ -363,13 +354,18 @@ bool Map::can_go_up(int y, int how_prev) {
 }
 
 bool Map::can_go_down(int y, int how_prev) {
-    if(mvwinch(mappa, y+1,how_prev) == '+') return false;
+    if(mvwinch(mappa, y+1,how_prev) == '+')
+        return false;
     return true;
 }
 
 bool Map::can_pass_through(int y, int how_prev) {
     //return (mvwinch(mappa, y+2, how_prev) != '|') && (mvwinch(mappa, y+2, how_prev) != 'K') && ((mvwinch(mappa, y+3, how_prev) == '+') || (mvwinch(mappa, y+3, how_prev) == '=')) ;
-    return (mvwinch(mappa, y+2, how_prev) != '|') && ((mvwinch(mappa, y+3, how_prev) == '+') || (mvwinch(mappa, y+3, how_prev) == '=')) ;
+    if(mvwinch(mappa, y+2, how_prev) != '|' && mvwinch(mappa, y+3, how_prev) == '+' || mvwinch(mappa, y+3, how_prev) == '=') {
+        if(mvwinch(mappa, y+2, how_prev) == ' ')
+            return true; 
+    }
+    return false;
 }
 bool Map::there_is_this(char object,int y, int padx, bool dx, bool going_right) {
     if(going_right) {
@@ -382,8 +378,8 @@ bool Map::there_is_this(char object,int y, int padx, bool dx, bool going_right) 
         if(dx)
             return (mvwinch(mappa, y, padx +1) == object);
         else
-            //return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx -1) == object);
-            return (mvwinch(mappa, y, padx-1) == object);
+            return (mvwinch(mappa, y, padx) == object) || (mvwinch(mappa, y, padx -1) == object);
+            //return (mvwinch(mappa, y, padx-1) == object);
     }
 }
 
@@ -418,6 +414,7 @@ void Map::remove_enemy(position pos) {
             }
         }
         prec=aux;
-        if(aux!=NULL) aux=aux->next;
+        if(aux!=NULL)
+            aux=aux->next;
     }
 }

@@ -77,5 +77,7 @@ class Map {
     int get_sx();
     int get_ex();
 
+    int get_n();
+
     //void shoot_enemies();
 };

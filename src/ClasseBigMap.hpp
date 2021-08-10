@@ -1,5 +1,6 @@
 #include "ClasseMap.hpp"
 #include <ncurses.h>
+#include <ctime>
 
 struct MapNode {
         Map *piece;
@@ -20,16 +21,21 @@ class BigMap {
         Eroe Mario{};
         
 
-        int count_bullet;
-        int count_backbullet;
+        int count_Bullet;
+        int count_backBullet;
+        int count_ghostBullet;
         
         colpi gun;
-        colpi backgun;
+        colpi backGun;
+        colpi ghostGun;
 
         colpi enemy_gun;
-        colpi enemy_backgun;
+        colpi enemy_backGun;
+        
+        WINDOW *health_win;
 
-        WINDOW* player_shadow;
+        int points;
+
     
     public:
     BigMap();
@@ -49,7 +55,7 @@ class BigMap {
 
     void add_bullet(position pos);
     void add_backbullet(position pos);
-    void remove_bullet(colpi &prec, colpi &aux, bool back);
+    void remove_bullet(colpi &prec, colpi &aux, int type);
     void update_shoot(int stacco,int rect_cols, bool right);
     void update_back_shoot(int limit_sx, int limit_dx, bool going_right);
 
@@ -61,8 +67,8 @@ class BigMap {
     //void player_on_enemy();
     void delete_char(int y, int x);
 
-    void print_shadow();
-    void delete_shadow();
-
     void health_bar();
+    void free_bullet();
+    void ghost_shoot();
+    void add_ghost_bullet(int y);
 };
