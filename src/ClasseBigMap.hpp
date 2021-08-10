@@ -63,4 +63,6 @@ class BigMap {
 
     void print_shadow();
     void delete_shadow();
+
+    void health_bar();
 };

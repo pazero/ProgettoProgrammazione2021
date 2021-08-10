@@ -21,6 +21,7 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
     Mario.show();
     gun = NULL;
     backgun = NULL;
+    health_bar();
 }
 
 void BigMap::print_shadow(){
@@ -66,7 +67,7 @@ void BigMap::update() {
 }
 void BigMap::go_left(){
     Mario.show();
-    if(not_this('|', false, Mario.getPos(), false) && not_this('K', false, Mario.getPos(), false)) {
+    if(not_this('|', false, Mario.getPos(), false) && not_this('K', false, Mario.getPos(), false) && not_this('{', false, Mario.getPos(), false) && not_this('}', false, Mario.getPos(), false) && not_this('[', false, Mario.getPos(), false) && not_this(']', false, Mario.getPos(), false)) {
     //if(!not_this(' ', false, Mario.getPos(), false) || !not_this('*', false, Mario.getPos(), false) || !not_this('#', false, Mario.getPos(), false)){
         head->piece->lslide();
         Mario.show();
@@ -458,8 +459,9 @@ bool BigMap::routine_fineciclo(bool right) {
         if(Mario.getlife() < 0)
             Mario.setlife(0);
     }
-    mvprintw(14,0,"Life: %d  ", Mario.getlife());
+    //mvprintw(14,0,"Life: %d  ", Mario.getlife());
     if(Mario.getlife() == 0) return false;
+    health_bar();
     Mario.show();
     return true;
 }
@@ -491,6 +493,49 @@ bool BigMap::not_this(char object, bool dx, position pos, bool going_right) {
             return !(head->piece->there_is_this(object, y_on_pad,rect_cols - head->piece->how_much() + x_on_pad-1, dx, going_right));
     }
     Mario.show();
+}
+void BigMap::health_bar() {
+    mvprintw((LINES - rect_lines)/2 - 7, (COLS-10)/2, "Life: %d  ", Mario.getlife());
+    int n_vita = Mario.getlife() / 5; // stampa una barra ogni 5 punti vita
+    char barra_salute[n_vita]; 
+    WINDOW *health_win;
+    health_win = newwin(3, 22, (LINES - rect_lines)/2 - 5, (COLS-22)/2); // altezza, larghezza, starty, startx
+    refresh();
+    box(health_win, 0, 0);
+
+    init_pair(1, COLOR_BLUE, COLOR_BLACK);      //Colors are always used in pairs. 
+	init_pair(2, COLOR_GREEN, COLOR_BLACK);     //That means you have to use the function 
+    init_pair(3, COLOR_YELLOW, COLOR_BLACK);    //init_pair() to define the foreground
+    init_pair(4, COLOR_RED, COLOR_BLACK);       //and background for the pair number you give.
+    
+    if (n_vita <= 20 && n_vita > 15 ) {
+        wattron(health_win, COLOR_PAIR(1));
+    }
+    if (n_vita <= 15 && n_vita > 10) {
+        wattron(health_win, COLOR_PAIR(2));
+    }
+    if (n_vita <= 10 && n_vita > 5) {
+        wattron(health_win, COLOR_PAIR(3));
+    }
+    if (n_vita <= 5) {
+        wattron(health_win, COLOR_PAIR(4));
+    }
+    for (int n = 0; n < n_vita; n++)
+    {
+        barra_salute[n] = '|';
+    }
+    for (int n = 0; n < n_vita; n++)
+    {
+        mvwaddch(health_win, 1, n+1, barra_salute[n]);
+    }
+    if (n_vita < 20)
+    {
+        for (int n = 0; n < (20 - n_vita); n++)
+        {
+            mvwprintw(health_win, 1, 20 - n, " ");
+        }
+    }
+    wrefresh(health_win);
 }
 
 void BigMap::reshow_map(){

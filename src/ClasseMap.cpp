@@ -58,7 +58,7 @@ void Map::move_enemies(){
                 if(c==0) {
                     if(aux->bad.getPosx() > 0) {
                         if(there_is_this(' ',aux->bad.getPosy(), aux->bad.getPosx() , false, false)) {
-                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx()-1 , false, true) || there_is_this('=',aux->bad.getPosy()+1, aux->bad.getPosx()-1 , false, true)) {
+                            if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx(), false, true) || there_is_this('=',aux->bad.getPosy()+1, aux->bad.getPosx() , false, true)) {
                                 print_space(aux->bad.getPosy(), aux->bad.getPosx());
                                 aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()-1});
                                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
@@ -97,13 +97,13 @@ void Map::enemies_A(){
     lista_nemici aux = nemici;
     while(aux!=NULL) {
         if(aux->bad.get_name() == 'A') {
-            if(count_A == 0) {
+            if(count_A - aux->bad.get_delay() == 0) {
                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()-2, "{");
                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()-1, "[");
                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()+1, "]");
                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()+2, "}");
             }
-            if(count_A == 100) {
+            if(count_A - aux->bad.get_delay() == 100) {
                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()-2, " ");
                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()-1, " ");
                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx()+1, " ");
@@ -112,7 +112,7 @@ void Map::enemies_A(){
         }
         aux = aux->next;
     }
-    if(count_A == 200) {
+    if(count_A == 300) {
         count_A = -1;
     }
     count_A++;
@@ -120,7 +120,7 @@ void Map::enemies_A(){
 
 void Map::build(){
     
-    mvwprintw(stdscr,0,0, "%d", n);
+    //mvwprintw(stdscr,0,0, "%d", n);
     for(int i=0; i<rect_cols; i++) {
         mvwaddch(mappa,0,i,'=');
         mvwaddch(mappa,1,i,'=');
@@ -168,7 +168,7 @@ void Map::spawn_enemy(int m){
             cattivo->bad = Enemy('A');
         }
         tmp_pos.y = rand()%(rect_lines-3);
-        tmp_pos.x = rand()%rect_cols;
+        tmp_pos.x = rand()%(rect_cols-4)+2;
     
         while(can_go_down(tmp_pos.y, tmp_pos.x) && tmp_pos.y < rect_lines-3) {
                 tmp_pos.y ++;

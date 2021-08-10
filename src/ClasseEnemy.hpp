@@ -1,6 +1,7 @@
 #include <string.h>
 #include <iostream>
 #include <ncurses.h>
+#include <ctime>
 using namespace std;
 
 #include "ClasseBonus.hpp"
@@ -13,6 +14,7 @@ class Enemy:public Oggetto{
 
     int rect_lines;
     int rect_cols;
+    int delay;
 
     public:
     Enemy();
@@ -26,4 +28,5 @@ class Enemy:public Oggetto{
     void routine(int ch,Enemy nemici);
 
     void update_pos(position pos);
+    int get_delay();
 };

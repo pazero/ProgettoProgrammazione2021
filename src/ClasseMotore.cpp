@@ -54,7 +54,7 @@ void Motore::go_game(){
     
     while(!pause) {
         
-        mvprintw(10,0,"time: %d  ", time+bonus);
+        //mvprintw(10,0,"time: %d  ", time+bonus);
         refresh();
         ch = getch();
         if(!move_all()) {
@@ -102,29 +102,31 @@ void Motore::death_menu()
     clear();
     WINDOW *box_win;
 
-    int altezza = 20;
-    int larghezza = 20;
+    int altezza = 10;
+    int larghezza = 19;
     int starty = (LINES - altezza) / 2;
     int startx = (COLS - larghezza) / 2;
     box_win = newwin(altezza,larghezza, starty, startx);
     refresh();
-    box(box_win,0,0);
-    mvwprintw(box_win,1,(larghezza-3)/2, "RIP");
-    mvwprintw(box_win,3,(larghezza-6)/2, "ciccio");
-    mvwprintw(box_win, (altezza-9) / 2, (larghezza-9) / 2, "SEI MORTO");
+    wborder(box_win, '|', '|', ' ', '-', '/', '\\', '+', '+');
+    for (int j = 1; j < 12; j++) {
+        mvprintw((LINES - altezza)/2 - 4, (COLS - larghezza)/2 + 3 + j, "_");
+    }
+    for (int n = 1; n < 4; n++) {
+    mvprintw((LINES - altezza)/2 - n, (COLS - larghezza)/2 + n, "/");
+    }
+    for (int i = 2; i < 5; i++) {
+    mvprintw((LINES - altezza)/2 - (i-1), (COLS + larghezza)/2 - i, "\\");
+    }
+    mvwprintw(box_win,1,(larghezza-5)/2, "R.I.P.");
+    mvwprintw(box_win,3,(larghezza-6)/2, "%s", "braghira");
+    mvprintw(15, (COLS - 9)/2, "SEI MORTO");
     wrefresh(box_win);
+    refresh();
     bool fine;
     while(!fine) {
         ch = getch();
-        //esci con o
-        if(ch == 'o') fine = true;
+        //esci con ESC (27 in ASCII)
+        if(ch == 27) fine = true;
     }
 }
-
-//NEMICI:
-//movimento
-//spari
-
-//EROE:
-//caduta dx e sx NON su nemico
-//uccisione nemici bugga
