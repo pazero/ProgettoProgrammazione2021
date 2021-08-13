@@ -96,7 +96,7 @@ void Motore::check_cicli(){
     cicli_for_bonus++;
     if(cicli_for_bonus>200) {
         attron(COLOR_PAIR(2));
-        mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, "BONUS    NO  ");
+        mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    NO ");
         attroff(COLOR_PAIR(2));
         infinita.set_killer_prize(1);
         bonus_time = 0;
