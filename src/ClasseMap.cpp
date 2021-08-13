@@ -360,7 +360,7 @@ bool Map::can_pass_through(int y, int how_prev, bool up) {
         return (mvwinch(mappa, y-2, how_prev) != '|' && mvwinch(mappa, y-2, how_prev) != 'K' && mvwinch(mappa, y-2, how_prev) != 'A' && mvwinch(mappa, y-1, how_prev) == '+');
     }
     else {
-        if(mvwinch(mappa, y+2, how_prev) != '|' && mvwinch(mappa, y+3, how_prev) == '+' || mvwinch(mappa, y+3, how_prev) == '=') {
+        if(mvwinch(mappa, y+2, how_prev) != '|' && (mvwinch(mappa, y+3, how_prev) == '+' || mvwinch(mappa, y+3, how_prev) == '=')) {
             if(mvwinch(mappa, y+2, how_prev) != 'A' && mvwinch(mappa, y+2, how_prev) != 'K')
                 return true; 
         }
