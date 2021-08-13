@@ -102,7 +102,7 @@ void Motore::count_n_cicli(int n){
         cicli_for_bonus++;
         if(cicli_for_bonus>n) {
             attron(COLOR_PAIR(2));
-            mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, "BONUS    X");
+            mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    X ");
             attroff(COLOR_PAIR(2));
             infinita.set_killer_prize(1);
             cicli_for_bonus = -1;
