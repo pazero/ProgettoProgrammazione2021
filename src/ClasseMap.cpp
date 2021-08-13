@@ -59,7 +59,9 @@ void Map::move_enemies(){
                             if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx(), false, true) || there_is_this('=',aux->bad.getPosy()+1, aux->bad.getPosx() , false, true)) {
                                 print_space(aux->bad.getPosy(), aux->bad.getPosx());
                                 aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()-1});
+                                //wattron(mappa, COLOR_PAIR(4));
                                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
+                                //wattroff(mappa, COLOR_PAIR(4));
                             }
                         }
                     }
@@ -71,7 +73,9 @@ void Map::move_enemies(){
                             if(there_is_this('+',aux->bad.getPosy()+1, aux->bad.getPosx() , true, false) || there_is_this('=',aux->bad.getPosy()+1, aux->bad.getPosx() , true, false)) {
                                 print_space(aux->bad.getPosy(), aux->bad.getPosx());
                                 aux->bad.update_pos({aux->bad.getPosy(),aux->bad.getPosx()+1});
+                                //wattron(mappa, COLOR_PAIR(4));
                                 mvwprintw(mappa,aux->bad.getPosy(), aux->bad.getPosx(), "%c", aux->bad.get_name());
+                                //wattroff(mappa, COLOR_PAIR(4));
                             }
                         }
                     }
@@ -109,6 +113,7 @@ void Map::enemies_A(){
 }
 
 void Map::build(){
+    //wattron(mappa, COLOR_PAIR(6));
     for(int i=0; i<rect_cols; i++) {
         mvwaddch(mappa,0,i,'=');
         mvwaddch(mappa,1,i,'=');
@@ -133,19 +138,16 @@ void Map::build(){
             mvwaddch(mappa, (rect_lines-length)/2+i, 6, start[i]);
         }
     }
-    //mvwaddch(mappa,0,rect_cols-1,'|');
-    //mvwaddch(mappa,rect_lines-1,rect_cols-1,'|');
     if(!first){
         rand_plat();
         spawn_bonus(1);
         if(n<3) spawn_enemy(1);
         else spawn_enemy(n);
-    }
-    
+    }    
 }
 void Map::spawn_enemy(int m){
     position tmp_pos;
-    srand(time(0));
+    //srand(time(0));
     for(int i=0;i<m;i++){
         
         lista_nemici cattivo = new nemico;
@@ -158,10 +160,12 @@ void Map::spawn_enemy(int m){
         tmp_pos.y = rand()%(rect_lines-3);
         tmp_pos.x = rand()%(rect_cols-4)+2;
     
-        while(can_go_down(tmp_pos.y, tmp_pos.x) && tmp_pos.y < rect_lines-3) {
+        while(can_fall(tmp_pos.y, tmp_pos.x) && tmp_pos.y < rect_lines-3) {
                 tmp_pos.y ++;
             }
+        //wattron(mappa, COLOR_PAIR(4));
         mvwprintw(mappa,tmp_pos.y, tmp_pos.x, "%c", cattivo->bad.get_name());
+        //wattroff(mappa, COLOR_PAIR(4));
         cattivo->bad.update_pos(tmp_pos);
         cattivo->next = nemici;
         nemici = cattivo;
@@ -172,17 +176,18 @@ void Map::spawn_enemy(int m){
 void Map::spawn_bonus(int n){
     char name;
     position tmp_pos;
-    srand(time(0));
+    //srand(time(0));
         for(int i=0; i<n; i++) {
             name = powerup.rand_name_bonus();
             tmp_pos = powerup.rand_pos_bonus();
-            while(can_go_down(tmp_pos.y, tmp_pos.x) && tmp_pos.y < rect_lines-3) {
+            while(can_fall(tmp_pos.y, tmp_pos.x) && tmp_pos.y < rect_lines-3) {
                 tmp_pos.y ++;
             }
             mvwprintw(mappa,tmp_pos.y, tmp_pos.x, "%c",name);
         }
 }
 void Map::add_plat(int type, int y, int x) {
+    //wattron(mappa, COLOR_PAIR(4));
     if(type==0) {
         //mvwprintw(mappa,y-12,x, "          ");
         mvwprintw(mappa,y-10,x+1,"+++++++++");
@@ -254,6 +259,7 @@ void Map::add_plat(int type, int y, int x) {
         mvwprintw(mappa,y-1,x+5,     "|"     );
         mvwprintw(mappa,y,x,      "+++++++++");
     }
+    //wattroff(mappa, COLOR_PAIR(4));
 }
 void Map::rand_plat() {
     int c;
@@ -348,25 +354,28 @@ int Map::how_much() {
     return ex - sx;
 }
 
-bool Map::can_go_up(int y, int how_prev) {
-    //return (mvwinch(mappa, y-2, how_prev) != '|') && (mvwinch(mappa, y-2, how_prev) != 'K') && (mvwinch(mappa, y-1, how_prev) == '+');
-    return(mvwinch(mappa, y-2, how_prev) == ' ') && (mvwinch(mappa, y-1, how_prev) == '+');
+
+bool Map::can_pass_through(int y, int how_prev, bool up) {
+    if(up) {
+        return (mvwinch(mappa, y-2, how_prev) != '|' && mvwinch(mappa, y-2, how_prev) != 'K' && mvwinch(mappa, y-2, how_prev) != 'A' && mvwinch(mappa, y-1, how_prev) == '+');
+    }
+    else {
+        if(mvwinch(mappa, y+2, how_prev) != '|' && mvwinch(mappa, y+3, how_prev) == '+' || mvwinch(mappa, y+3, how_prev) == '=') {
+            if(mvwinch(mappa, y+2, how_prev) != 'A' && mvwinch(mappa, y+2, how_prev) != 'K')
+                return true; 
+        }
+    }
+    //return (mvwinch(mappa, y+2, how_prev) != '|') && (mvwinch(mappa, y+2, how_prev) != 'K') && ((mvwinch(mappa, y+3, how_prev) == '+') || (mvwinch(mappa, y+3, how_prev) == '=')) ;
+    
+    return false;
 }
 
-bool Map::can_go_down(int y, int how_prev) {
+bool Map::can_fall(int y, int how_prev) {
     if(mvwinch(mappa, y+1,how_prev) == '+')
         return false;
     return true;
 }
 
-bool Map::can_pass_through(int y, int how_prev) {
-    //return (mvwinch(mappa, y+2, how_prev) != '|') && (mvwinch(mappa, y+2, how_prev) != 'K') && ((mvwinch(mappa, y+3, how_prev) == '+') || (mvwinch(mappa, y+3, how_prev) == '=')) ;
-    if(mvwinch(mappa, y+2, how_prev) != '|' && mvwinch(mappa, y+3, how_prev) == '+' || mvwinch(mappa, y+3, how_prev) == '=') {
-        if(mvwinch(mappa, y+2, how_prev) == ' ')
-            return true; 
-    }
-    return false;
-}
 bool Map::there_is_this(char object,int y, int padx, bool dx, bool going_right) {
     if(going_right) {
         if(dx)

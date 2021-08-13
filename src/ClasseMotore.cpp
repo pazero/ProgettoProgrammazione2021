@@ -10,11 +10,9 @@ Motore::Motore(int rect_lines, int rect_cols) {
     time = 100;
     cicli_for_bonus = -1;
     aux_nodi = 0;
-    bonus = 0;
+    bonus_time = 0;
     
     go_game();
-
-    
 }
 
 bool Motore::move_all() {
@@ -60,8 +58,9 @@ void Motore::go_game(){
         if(!move_all()) {
             pause = true;
         }
-        if(ch==KEY_F(1)) pause = true;
-        timeout(time + bonus);
+        if(ch==KEY_F(1))
+            pause = true;
+        timeout(time + bonus_time);
         update_time();
     }
     death_menu();
@@ -71,28 +70,43 @@ void Motore::go_game(){
 void Motore::update_time(){
     if(aux_nodi<infinita.n_map()) {
         aux_nodi = infinita.n_map();
-        if(infinita.n_map()%10 == 0) {
+        if(infinita.n_map()%5 == 0) {
             time -= 2;
         }
     }
     count_n_cicli(100);
 }
 
-bool Motore::check_bonus() {
-    if(infinita.is_bonus()) {
+void Motore::check_bonus() {
+    char tmp = infinita.is_bonus();
+    if(tmp == '#') {
         cicli_for_bonus++;
-        bonus = 100;
-        return true;
+        bonus_time = 200;
+        attron(COLOR_PAIR(8));
+        mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    # ");
+        attroff(COLOR_PAIR(8));
+        //return true;
     }
-    return false;
+    if(tmp == '&') {
+        cicli_for_bonus++;
+        attron(COLOR_PAIR(8));
+        mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    & ");
+        attroff(COLOR_PAIR(8));
+        //return true;
+    }
+    //return false;
 }
 
 void Motore::count_n_cicli(int n){
     if(cicli_for_bonus>-1) {
         cicli_for_bonus++;
         if(cicli_for_bonus>n) {
+            attron(COLOR_PAIR(2));
+            mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, "BONUS    X");
+            attroff(COLOR_PAIR(2));
+            infinita.set_killer_prize(1);
             cicli_for_bonus = -1;
-            bonus = 0;
+            bonus_time = 0;
         }
     }
 }
@@ -119,9 +133,12 @@ void Motore::death_menu()
     mvprintw((LINES - altezza)/2 - (i-1), (COLS + larghezza)/2 - i, "\\");
     }
     mvwprintw(box_win,1,(larghezza-5)/2, "R.I.P.");
-    mvwprintw(box_win,3,(larghezza-6)/2, "%s", "Erik");
+    mvwprintw(box_win,3,(larghezza-6)/2, "%s", "braghira");
     mvprintw(15, (COLS - 9)/2, "SEI MORTO");
     wrefresh(box_win);
+    refresh();
+    int punteggio = infinita.get_points();
+    mvwprintw(stdscr, 10, (COLS-16)/2, " your score:  %d", punteggio );
     refresh();
     bool fine;
     while(!fine) {

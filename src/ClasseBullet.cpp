@@ -4,7 +4,6 @@ Bullet::Bullet(){}
 
 Bullet::Bullet(position pos) {
     this->pos = pos;
-    
 }
 
 void Bullet::set_name(char name) {
@@ -12,7 +11,16 @@ void Bullet::set_name(char name) {
 }
 WINDOW* Bullet::create_win(){
 	win = newwin(1, 1, pos.y, pos.x);
-    wprintw(win,"%c",name);
+    if(name == 'o') {
+        wattron(win, COLOR_PAIR(6));
+        wprintw(win,"%c",name);
+        wattroff(win, COLOR_PAIR(6));
+    }
+    else {
+        wattron(win, COLOR_PAIR(2));
+        wprintw(win,"%c",name);
+        wattroff(win, COLOR_PAIR(2));
+    }
 	wrefresh(win);
 	return win;
 }

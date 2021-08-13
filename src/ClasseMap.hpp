@@ -64,8 +64,8 @@ class Map {
     int how_much();
     
     bool can_go_up(int y, int how_prev);
-    bool can_go_down(int y, int how_prev);
-    bool can_pass_through(int y, int how_prev);
+    bool can_fall(int y, int how_prev);
+    bool can_pass_through(int y, int how_prev, bool up);
     bool there_is_this(char object, int y, int how_prev, bool dx, bool going_right);
 
     void print_space(int y_on_pad, int x_on_pad);

@@ -7,6 +7,9 @@ class Bonus{
     protected:
     char name1;
     char name2;
+    char name3;
+    char name4;
+    
     int rect_lines;
     int rect_cols;
 

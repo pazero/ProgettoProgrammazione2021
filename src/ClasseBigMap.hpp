@@ -35,8 +35,10 @@ class BigMap {
         WINDOW *health_win;
 
         int points;
+        char active_bonus;
+        int killer_prize;
 
-    
+
     public:
     BigMap();
     BigMap(int rect_lines, int rect_cols);
@@ -63,7 +65,7 @@ class BigMap {
     void reshow_map();
 
     int n_map();
-    bool is_bonus();
+    char is_bonus();
     //void player_on_enemy();
     void delete_char(int y, int x);
 
@@ -71,4 +73,10 @@ class BigMap {
     void free_bullet();
     void ghost_shoot();
     void add_ghost_bullet(int y);
+
+    char get_active_bonus();
+    void set_print_bonus(char actual_bonus);
+
+    int get_points();
+    void set_killer_prize(int n);
 };
