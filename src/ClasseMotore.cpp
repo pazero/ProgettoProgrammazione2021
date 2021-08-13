@@ -3,20 +3,42 @@
 Motore::Motore(int rect_lines, int rect_cols) {
     this->rect_lines = rect_lines;
     this->rect_cols = rect_cols;
-    //wrefresh(mappa);
     refresh();
-    
+
+    dead = false;
+    //pause = false;
     infinita = BigMap(rect_lines, rect_cols);
+
     time = 100;
     cicli_for_bonus = -1;
-    aux_nodi = 0;
+    nodi = 0;
     bonus_time = 0;
     
     go_game();
 }
 
+void Motore::go_game(){
+    while(!dead) {
+        refresh();
+        ch = getch();
+        if(!move_all()) {
+            dead = true;
+        }
+        if(ch==KEY_F(1)) {
+            pause_menu();
+        }
+        timeout(time + bonus_time);
+        update_time();
+        if(cicli_for_bonus>-1) {
+            check_cicli();
+        }
+        
+    }
+    death_menu();
+    endwin();
+}
+
 bool Motore::move_all() {
-    
     infinita.update();
     if(ch == KEY_LEFT){
         infinita.go_left();
@@ -38,7 +60,6 @@ bool Motore::move_all() {
         infinita.back_shoot();
     }
     if(infinita.routine_fineciclo(right)){
-        //refresh();
         check_bonus();
         right = false;
         return true;
@@ -47,34 +68,11 @@ bool Motore::move_all() {
         return false;
 }
 
-void Motore::go_game(){
-    
-    
-    while(!pause) {
-        
-        //mvprintw(10,0,"time: %d  ", time+bonus);
-        refresh();
-        ch = getch();
-        if(!move_all()) {
-            pause = true;
-        }
-        if(ch==KEY_F(1))
-            pause = true;
-        timeout(time + bonus_time);
-        update_time();
-    }
-    death_menu();
-    endwin();
-}
-
 void Motore::update_time(){
-    if(aux_nodi<infinita.n_map()) {
-        aux_nodi = infinita.n_map();
-        if(infinita.n_map()%5 == 0) {
-            time -= 2;
-        }
-    }
-    count_n_cicli(100);
+    nodi = infinita.n_map();
+    if(nodi%5 == 0)
+        time -= 2;
+    //count_n_cicli(100);
 }
 
 void Motore::check_bonus() {
@@ -85,29 +83,24 @@ void Motore::check_bonus() {
         attron(COLOR_PAIR(8));
         mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    # ");
         attroff(COLOR_PAIR(8));
-        //return true;
     }
     if(tmp == '&') {
         cicli_for_bonus++;
         attron(COLOR_PAIR(8));
         mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    & ");
         attroff(COLOR_PAIR(8));
-        //return true;
     }
-    //return false;
 }
 
-void Motore::count_n_cicli(int n){
-    if(cicli_for_bonus>-1) {
-        cicli_for_bonus++;
-        if(cicli_for_bonus>n) {
-            attron(COLOR_PAIR(2));
-            mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, "BONUS    X");
-            attroff(COLOR_PAIR(2));
-            infinita.set_killer_prize(1);
-            cicli_for_bonus = -1;
-            bonus_time = 0;
-        }
+void Motore::check_cicli(){
+    cicli_for_bonus++;
+    if(cicli_for_bonus>200) {
+        attron(COLOR_PAIR(2));
+        mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    NO ");
+        attroff(COLOR_PAIR(2));
+        infinita.set_killer_prize(1);
+        bonus_time = 0;
+        cicli_for_bonus = -1;
     }
 }
 
@@ -146,4 +139,8 @@ void Motore::death_menu()
         //esci con ESC (27 in ASCII)
         if(ch == 27) fine = true;
     }
+}
+
+void Motore::pause_menu(){
+
 }
