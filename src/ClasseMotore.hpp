@@ -7,21 +7,23 @@ class Motore{
     int rect_cols;
     BigMap infinita{};
     int ch;
-    bool pause=false;
+    //bool pause;
+    bool dead;
     bool right;
     int time;
     int cicli_for_bonus;
-    int aux_nodi;
+    int nodi;
     int bonus_time;
 
     int flash;
-    
+
     public:
     Motore(int rect_lines, int rect_cols);
     bool move_all();
     void go_game();
     void update_time();
     void check_bonus();
-    void count_n_cicli(int n);
+    void check_cicli();
     void death_menu();
+    void pause_menu();
 };
