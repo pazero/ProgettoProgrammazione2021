@@ -143,5 +143,14 @@ void Motore::death_menu()
 }
 
 void Motore::pause_menu(){
-
+    clear();
+    bool end_pause = false;
+    mvwprintw(stdscr, LINES/2, (COLS-9)/2, "P A U S A");
+    while(!end_pause){
+        ch = getch();
+        if(ch== KEY_F(1)) {
+            end_pause = true;
+        }
+    }
+    go_game();
 }
