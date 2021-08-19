@@ -124,7 +124,7 @@ void Motore::check_cicli(){
 void Motore::death_menu() {
     clear();
     bool fine = false;;
-    //bool pari = false;
+    ////bool pari = false;
 
     while(!fine) {/*
         print_gameOver();
