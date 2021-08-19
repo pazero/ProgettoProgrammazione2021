@@ -43,10 +43,6 @@ void Motore::go_game(){
         if(ch == KEY_F(1)) {
             pause_menu();
         }
-        if(ch == KEY_F(2)) {
-            death_menu();
-            dead = true;
-        }
         
     }
     death_menu();
@@ -350,25 +346,36 @@ bool Motore::start_menu(){
 }
 
 void Motore::tutorial_page(){
-//K , {[A]} , o , movimenti, spari ,| , # , & , $ , * , F1
-/*
     "Hello, there. Here's how the game works!"
     
-    "Y  this is you"
-    "if you have a platform above you, you can go up with the up arrow, the same down"
-    "you can shoot with D and backshooting with A"
+    "Y  this is you."
 
-    "ENEMIES:"
-    "K  is immortal and it moves above the platform and on the ground"
-    "A  is mortal and it can't move but sometimes it put its armor {[A]} on"
-    "you get points going on in the map and killing A-enemies and their armors"
+    "Use arrows on your keyboard to move rightside and leftside,"
+    "you can go up and down only if there is a platform above or under you"
+    "or you can fall if the platform ends."
+
+    "You can shoot with D and backshooting with A."
+    
+    "|  you can't pass through this walls."
+
+    "Press F1 to pause the game."
+
+    "ENEMIES (DON'T TOUCH THEM OR YOU'LL LOOSE LOTS OF YOUR LIFE!):"
+    "K  is immortal and moves above the platform and on the ground"
+    "A  is mortal and can't move but sometimes it puts its armor {[A]} on"
+    "o  is a dangerous bubble that nothing can stop and deals little damage"
+    
 
     "BONUS:"
-    "*  the rarest bonus that heal lots of your lost life"
-    "#  the time go slower for 20 seconds, so everything moves slowly"
-    "&  you get double points killing anything for 20 seconds"
+    "*  the rarest bonus that heals lots of your lost life"
+    "#  the time goes slower for some time, so everything moves slowly"
+    "&  you get double points killing anything for a range of time"
     "$  you immediately get 1000 extra-points"
-*/
+
+    "You get points exploring the map and killing A-enemies and their armors"
+
+    "If you go back, you'll find everything as you left it"
+
     while(ch!=27) {
         ch = getch();
     }
