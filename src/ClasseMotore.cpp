@@ -351,14 +351,24 @@ bool Motore::start_menu(){
 
 void Motore::tutorial_page(){
 //K , {[A]} , o , movimenti, spari ,| , # , & , $ , * , F1
-/*
+
     "Hello, there. Here's how the game works!"
     
-    "You are Y and you have to get the best score you can"
-    "There are 3 differents types of ENEMIES:"
-    "K is immortal and it moves above the platform and on the ground;"
-    "A is mortal and it can't move but sometimes it put its armor {[A]},"
-    "you can kill it shooting it, but if it'using its armor you have to destroy that first."*/
+    "Y  this is you"
+    "if you have a platform above you, you can go up with the up arrow, the same down"
+    "you can shoot with D and backshooting with A"
+
+    "ENEMIES:"
+    "K  is immortal and it moves above the platform and on the ground"
+    "A  is mortal and it can't move but sometimes it put its armor {[A]} on"
+    "you get points going on in the map and killing A-enemies and their armors"
+
+    "BONUS:"
+    "*  the rarest bonus that heal lots of your lost life"
+    "#  the time go slower for 20 seconds, so everything moves slowly"
+    "&  you get double points killing anything for 20 seconds"
+    "$  you immediately get 1000 extra-points"
+
     while(ch!=27) {
         ch = getch();
     }
