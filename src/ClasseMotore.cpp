@@ -53,6 +53,27 @@ void Motore::go_game(){
     endwin();
 }
 
+void Motore::go_game(){
+    while(!dead) {
+        refresh();
+        ch = getch();
+        if(!move_all()) {
+            dead = true;
+        }
+        if(ch==KEY_F(1)) {
+            pause_menu();
+        }
+        timeout(time + bonus_time);
+        update_time();
+        if(cicli_for_bonus>-1) {
+            check_cicli();
+        }
+        
+    }
+    death_menu();
+    endwin();
+}
+
 bool Motore::move_all() {
     infinita.update();
     if(ch == KEY_LEFT){

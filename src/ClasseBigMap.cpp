@@ -46,10 +46,16 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
     attron(COLOR_PAIR(3));
     mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2, "POINTS    %d", points);
     attroff(COLOR_PAIR(3));
+<<<<<<< HEAD
     //attron(COLOR_PAIR(2));
     //mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, "BONUS    NO  ");
     //attroff(COLOR_PAIR(2));
     warning = 0;
+=======
+    attron(COLOR_PAIR(2));
+    mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, "BONUS    NO  ");
+    attroff(COLOR_PAIR(2));
+>>>>>>> 9d32caf808ab7bb233a7875f7043ddc28450c3c1
 }
 
 bool BigMap::get_warning() {
@@ -535,7 +541,13 @@ void BigMap::ghost_shoot() {
         Mario.show();
         if(aux->curr.getPosx() == Mario.getPosx()+1 && aux->curr.getPosy() == Mario.getPosy()) {
             Mario.damage(5);
+<<<<<<< HEAD
             warning = true;
+=======
+            for(int i=0; i<100; i++) {
+            attron(COLOR_PAIR(4)); mvwprintw(stdscr, LINES/2 +10, COLS/2 -8, "PAY ATTENTION !!!"); attroff(COLOR_PAIR(4));
+            }
+>>>>>>> 9d32caf808ab7bb233a7875f7043ddc28450c3c1
             remove_bullet(prec, aux, 2);
         }
         else {
@@ -677,12 +689,18 @@ bool BigMap::routine_fineciclo(bool right) {
 
     if(!not_this('K', true, Mario.getPos(), false) || !not_this('K', false, Mario.getPos(), false)) {
         Mario.damage(15);
+<<<<<<< HEAD
         warning = true;
+=======
+>>>>>>> 9d32caf808ab7bb233a7875f7043ddc28450c3c1
         attron(COLOR_PAIR(4)); Mario.show(); attroff(COLOR_PAIR(4));
     }
     if(!not_this('A', true, Mario.getPos(), false) || !not_this('A', false, Mario.getPos(), false)) {
         Mario.damage(20);
+<<<<<<< HEAD
         warning = true;
+=======
+>>>>>>> 9d32caf808ab7bb233a7875f7043ddc28450c3c1
         attron(COLOR_PAIR(4)); Mario.show(); attroff(COLOR_PAIR(4));
     }
     if(Mario.getlife() < 0)
