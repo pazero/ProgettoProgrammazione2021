@@ -1,49 +1,40 @@
-#include <string.h>
+#include "ClasseEroe.hpp"
+#include <ctime>
 #include <iostream>
-#include <ncurses.h>
-using namespace std;
+#include <cstdlib>
+Eroe::Eroe():Oggetto(){}
 
-struct position{
-    int x;
-    int y;
-};
+Eroe::Eroe(position pos, int life):Oggetto(pos){
+    this->life = life;
+    this->name = 'Y';
+}
 
-class Eroe {
-    protected:
-    position pos;
-    char name= 'S';
-    int life;
-    
-    public:
-    Eroe(position pos, int life ){
-        this->pos = pos;
-        this->life = life;
-    }
+void Eroe::go_up(){
+    mvprintw(pos.y, pos.x, " ");
+    pos.y -=2;
+    show();
+}
+void Eroe::go_down(){
+    mvprintw(pos.y, pos.x, " ");
+    pos.y +=2;
+    show();
+}
 
-    void Move(int Move, bool is_plat){
-            if(Move == KEY_UP && is_plat){
-                mvprintw(pos.y, pos.x, " ");//cleen old 
-                pos.y -=2;
-                show();
-            }
-            /*
-            if(Move == KEY_DOWN && empty(pos.y+1,pos.x)){
-                mvprintw(pos.y, pos.x, " ");//cleen old
-                pos.y ++;
-            }*/
-    }
+int Eroe::getlife(){
+    return life;
+}
 
-    position getPos(){
-        return(pos);
-    }
+void Eroe::damage(int danno)
+{
+    life -= danno;
+}
 
-    void damage(int danno){
-        this->life  = life - danno;
-    }
-    int getLife(){
-        return(life);
-    }
-    void show(){
-          mvprintw(pos.y, pos.x, "%c",name);
-    }
-};
+void Eroe::bonus_life()
+{
+    if(life<=50) life += 50;
+    else life = 100;    
+}
+
+void Eroe::setlife(int n){
+    life = n;
+}
