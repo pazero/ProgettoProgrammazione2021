@@ -351,14 +351,14 @@ bool Motore::start_menu(){
 
 void Motore::tutorial_page(){
 //K , {[A]} , o , movimenti, spari ,| , # , & , $ , * , F1
-
+/*
     "Hello, there. Here's how the game works!"
     
     "You are Y and you have to get the best score you can"
     "There are 3 differents types of ENEMIES:"
     "K is immortal and it moves above the platform and on the ground;"
     "A is mortal and it can't move but sometimes it put its armor {[A]},"
-    "you can kill it shooting it, but if it'using its armor you have to destroy that first."
+    "you can kill it shooting it, but if it'using its armor you have to destroy that first."*/
     while(ch!=27) {
         ch = getch();
     }
