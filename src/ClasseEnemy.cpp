@@ -16,10 +16,6 @@ void Enemy::update_pos(position pos) {
     this->pos = pos;
 }
 
-position Enemy::getPos(){
-    return (pos);
-}
-
 int Enemy::get_delay() {
     return delay;
 }

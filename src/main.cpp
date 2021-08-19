@@ -9,3 +9,11 @@ int main() {
     Motore(RECT_LINES, RECT_COLS);
     return 0;
 }
+
+/*
+paolo   BigMap
+simo    Map
+andre   bonus, oggetto, eroe, bullet, Enemy, motore
+
+comandi, main
+*/

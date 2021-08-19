@@ -24,6 +24,11 @@ class Motore{
     void update_time();
     void check_bonus();
     void check_cicli();
+
+    void print_gameOver();
     void death_menu();
     void pause_menu();
+    bool start_menu();
+    void credit_page();
+    void tutorial_page();
 };

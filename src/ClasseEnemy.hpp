@@ -19,14 +19,7 @@ class Enemy:public Oggetto{
     public:
     Enemy();
     Enemy(char name);
-    //Enemy(int rect_lines, int rect_cols);
-    bool empty (int y, int x);
-    void Move(Enemy *tmp);
-    position getPos();
-    void reposition(Enemy *tmp);
-    void show(Enemy *tmp);   
-    void routine(int ch,Enemy nemici);
-
+    
     void update_pos(position pos);
     int get_delay();
 };

@@ -52,7 +52,7 @@ class Map {
     void build();
     void add_plat(int type, int y, int x);
     void rand_plat();
-    void spawn_bonus(int n);
+    
     void spawn_enemy(int n);
 
     void rslide();
@@ -78,6 +78,7 @@ class Map {
     int get_ex();
 
     int get_n();
+    void spawn_bonus(int n);
 
     //void shoot_enemies();
 };

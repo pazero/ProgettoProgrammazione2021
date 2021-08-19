@@ -1,7 +1,5 @@
 #include "ClasseBigMap.hpp"
-BigMap::BigMap(){}
-BigMap::BigMap(int rect_lines, int rect_cols) {
-
+BigMap::BigMap(){
     init_pair(1, COLOR_BLUE, COLOR_BLACK);      //Colors are always used in pairs. 
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);     //That means you have to use the function 
     init_pair(3, COLOR_YELLOW, COLOR_BLACK);    //init_pair() to define the foreground
@@ -10,7 +8,9 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
     init_pair(6, COLOR_CYAN, COLOR_BLACK);
     init_pair(7, COLOR_MAGENTA, COLOR_BLACK);
     init_pair(8, COLOR_BLACK, COLOR_GREEN);
-
+    init_pair(9, COLOR_RED, COLOR_YELLOW);
+}
+BigMap::BigMap(int rect_lines, int rect_cols) {
     this->rect_lines = rect_lines;
     this->rect_cols = rect_cols;
     nodi = 1;
@@ -36,7 +36,7 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
 
 
     points = 0;
-   set_killer_prize(1);
+    set_killer_prize(1);
 
     //active_bonus = 'X';
     attron(COLOR_PAIR(7));
@@ -46,11 +46,15 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
     attron(COLOR_PAIR(3));
     mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2, "POINTS    %d", points);
     attroff(COLOR_PAIR(3));
-    attron(COLOR_PAIR(2));
-    mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, "BONUS    NO  ");
-    attroff(COLOR_PAIR(2));
+    //attron(COLOR_PAIR(2));
+    //mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, "BONUS    NO  ");
+    //attroff(COLOR_PAIR(2));
+    warning = 0;
 }
 
+bool BigMap::get_warning() {
+    return warning;
+}
 void BigMap::addMap() {
     nodi++;
     if(nodi>2) {
@@ -531,9 +535,7 @@ void BigMap::ghost_shoot() {
         Mario.show();
         if(aux->curr.getPosx() == Mario.getPosx()+1 && aux->curr.getPosy() == Mario.getPosy()) {
             Mario.damage(5);
-            for(int i=0; i<100; i++) {
-            attron(COLOR_PAIR(4)); mvwprintw(stdscr, LINES/2 +10, COLS/2 -8, "PAY ATTENTION !!!"); attroff(COLOR_PAIR(4));
-            }
+            warning = true;
             remove_bullet(prec, aux, 2);
         }
         else {
@@ -596,6 +598,9 @@ void BigMap::set_print_bonus(char actual_bonus) {
 }
 
 void BigMap::health_bar() {
+    attron(COLOR_PAIR(7));
+    mvprintw((LINES - rect_lines)/2 - 4, (COLS-rect_cols)/2 + 10, "LIFE");
+    attroff(COLOR_PAIR(7));
     int n_vita = Mario.getlife() / 5; // stampa una barra ogni 5 punti vita
     char barra_salute[n_vita]; 
     WINDOW *health_win;
@@ -652,7 +657,6 @@ void BigMap::reshow_map(){
     }
 }
 bool BigMap::routine_fineciclo(bool right) {
-    mvwprintw(stdscr,0,0,"%d", killer_prize);
     srand(time(0));
     if(head->prev!=NULL) {
             head->prev->piece->move_enemies();
@@ -673,10 +677,12 @@ bool BigMap::routine_fineciclo(bool right) {
 
     if(!not_this('K', true, Mario.getPos(), false) || !not_this('K', false, Mario.getPos(), false)) {
         Mario.damage(15);
+        warning = true;
         attron(COLOR_PAIR(4)); Mario.show(); attroff(COLOR_PAIR(4));
     }
     if(!not_this('A', true, Mario.getPos(), false) || !not_this('A', false, Mario.getPos(), false)) {
         Mario.damage(20);
+        warning = true;
         attron(COLOR_PAIR(4)); Mario.show(); attroff(COLOR_PAIR(4));
     }
     if(Mario.getlife() < 0)
@@ -689,6 +695,16 @@ bool BigMap::routine_fineciclo(bool right) {
     mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2, "POINTS    %d", points);
     attroff(COLOR_PAIR(3));
     Mario.show();
+    if(warning) {
+        for(int i=0; i<3000; i++) {
+            attron(COLOR_PAIR(4)); Mario.show(); attroff(COLOR_PAIR(4));
+        }
+        warning = false;
+    }
+    else {
+        mvwprintw(stdscr, LINES/2 +10, COLS/2 -8, "                 ");
+    }
+    
     return true;
 }
 

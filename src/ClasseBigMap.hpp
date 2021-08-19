@@ -37,7 +37,7 @@ class BigMap {
         int points;
         char active_bonus;
         int killer_prize;
-
+        bool warning;
 
     public:
     BigMap();
@@ -66,7 +66,6 @@ class BigMap {
 
     int n_map();
     char is_bonus();
-    //void player_on_enemy();
     void delete_char(int y, int x);
 
     void health_bar();
@@ -79,4 +78,5 @@ class BigMap {
 
     int get_points();
     void set_killer_prize(int n);
+    bool get_warning();
 };

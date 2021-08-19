@@ -143,7 +143,8 @@ void Map::build(){
         spawn_bonus(1);
         if(n<3) spawn_enemy(1);
         else spawn_enemy(n);
-    }    
+    } 
+    mvwprintw(mappa, 0, rect_cols-1, "|");    
 }
 void Map::spawn_enemy(int m){
     position tmp_pos;
@@ -196,6 +197,7 @@ void Map::add_plat(int type, int y, int x) {
         mvwprintw(mappa,y-4,x+7,       "+++");
         mvwprintw(mappa,y-2,x,  "++++++++++");
         mvwprintw(mappa,y,x+2,    "++++++++");
+        mvwprintw(mappa,y+1,x+5,      "|"   );
     }
     if(type==1) {
         mvwprintw(mappa,y-13,x+3,   "|");
@@ -207,6 +209,7 @@ void Map::add_plat(int type, int y, int x) {
         mvwprintw(mappa,y-3,x+8,         "|" );
         mvwprintw(mappa,y-2,x+2,   "++++++++");
         mvwprintw(mappa,y,x,     "++++++++++");
+        mvwprintw(mappa,y+1,x+7,       "|"   );
     }
     if(type==2) {
         mvwprintw(mappa,y-10,x, "++++++++++");
@@ -258,6 +261,7 @@ void Map::add_plat(int type, int y, int x) {
         mvwprintw(mappa,y-2,x,   "++++++++++");
         mvwprintw(mappa,y-1,x+5,     "|"     );
         mvwprintw(mappa,y,x,      "+++++++++");
+        mvwprintw(mappa,y+1,x+1,       "|"   );
     }
     //wattroff(mappa, COLOR_PAIR(4));
 }
