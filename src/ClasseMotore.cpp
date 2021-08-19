@@ -351,7 +351,7 @@ bool Motore::start_menu(){
 
 void Motore::tutorial_page(){
 //K , {[A]} , o , movimenti, spari ,| , # , & , $ , * , F1
-
+/*
     "Hello, there. Here's how the game works!"
     
     "Y  this is you"
@@ -368,7 +368,7 @@ void Motore::tutorial_page(){
     "#  the time go slower for 20 seconds, so everything moves slowly"
     "&  you get double points killing anything for 20 seconds"
     "$  you immediately get 1000 extra-points"
-
+*/
     while(ch!=27) {
         ch = getch();
     }
