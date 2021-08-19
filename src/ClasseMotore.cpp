@@ -53,27 +53,6 @@ void Motore::go_game(){
     endwin();
 }
 
-void Motore::go_game(){
-    while(!dead) {
-        refresh();
-        ch = getch();
-        if(!move_all()) {
-            dead = true;
-        }
-        if(ch==KEY_F(1)) {
-            pause_menu();
-        }
-        timeout(time + bonus_time);
-        update_time();
-        if(cicli_for_bonus>-1) {
-            check_cicli();
-        }
-        
-    }
-    death_menu();
-    endwin();
-}
-
 bool Motore::move_all() {
     infinita.update();
     if(ch == KEY_LEFT){
@@ -145,7 +124,7 @@ void Motore::check_cicli(){
 void Motore::death_menu() {
     clear();
     bool fine = false;;
-    bool pari = false;
+    //bool pari = false;
 
     while(!fine) {/*
         print_gameOver();
@@ -373,7 +352,13 @@ bool Motore::start_menu(){
 void Motore::tutorial_page(){
 //K , {[A]} , o , movimenti, spari ,| , # , & , $ , * , F1
 
-
+    "Hello, there. Here's how the game works!"
+    
+    "You are Y and you have to get the best score you can"
+    "There are 3 differents types of ENEMIES:"
+    "K is immortal and it moves above the platform and on the ground;"
+    "A is mortal and it can't move but sometimes it put its armor {[A]},"
+    "you can kill it shooting it, but if it'using its armor you have to destroy that first."
     while(ch!=27) {
         ch = getch();
     }
