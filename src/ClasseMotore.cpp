@@ -345,7 +345,7 @@ bool Motore::start_menu(){
     return true;
 }
 
-void Motore::tutorial_page(){
+void Motore::tutorial_page(){/*
     "Hello, there. Here's how the game works!"
     
     "Y  this is you."
@@ -375,7 +375,7 @@ void Motore::tutorial_page(){
     "You get points exploring the map and killing A-enemies and their armors"
 
     "If you go back, you'll find everything as you left it"
-
+*/
     while(ch!=27) {
         ch = getch();
     }
