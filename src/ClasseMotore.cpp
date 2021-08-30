@@ -34,16 +34,14 @@ void Motore::go_game(){
             dead = true;
         }
         if(ch==KEY_F(1)) {
-            pause_menu();
+            if(!pause_menu()) {
+                dead = true;
+            };
         }
         update_time();
         if(cicli_for_bonus>-1) {
             check_cicli();
-        }
-        if(ch == KEY_F(1)) {
-            pause_menu();
-        }
-        
+        }        
     }
     death_menu();
     endwin();
@@ -231,7 +229,7 @@ void Motore::print_gameOver() {
         wrefresh(death_win);
         refresh();
 }
-void Motore::pause_menu(){
+bool Motore::pause_menu(){
     clear();
     bool end_pause = false;
     mvwprintw(stdscr, LINES/2, (COLS-9)/2, "P A U S E");
@@ -239,9 +237,15 @@ void Motore::pause_menu(){
         ch = getch();
         if(ch== KEY_F(1)) {
             end_pause = true;
+            return true;
+        }
+        if(ch== 27) {
+            end_pause = true;
+            //clear();
+            //endwin();
+            return false;
         }
     }
-    go_game();
 }
 
 bool Motore::start_menu(){

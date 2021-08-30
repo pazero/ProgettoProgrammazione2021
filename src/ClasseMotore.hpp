@@ -27,7 +27,7 @@ class Motore{
 
     void print_gameOver();
     void death_menu();
-    void pause_menu();
+    bool pause_menu();
     bool start_menu();
     void credit_page();
     void tutorial_page();
