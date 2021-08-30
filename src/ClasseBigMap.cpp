@@ -1,5 +1,6 @@
 #include "ClasseBigMap.hpp"
 BigMap::BigMap(){
+    //inizializzazione delle coppie di colori che si utilizzeranno
     init_pair(1, COLOR_BLUE, COLOR_BLACK);      //Colors are always used in pairs. 
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);     //That means you have to use the function 
     init_pair(3, COLOR_YELLOW, COLOR_BLACK);    //init_pair() to define the foreground
@@ -11,21 +12,25 @@ BigMap::BigMap(){
     init_pair(9, COLOR_RED, COLOR_YELLOW);
 }
 BigMap::BigMap(int rect_lines, int rect_cols) {
+    //dimensione della finestra di gioco
     this->rect_lines = rect_lines;
     this->rect_cols = rect_cols;
+    //numero di mappe, ovvero numero di nodi della lista bidirezionale, che formano la grande mappa infinita
     nodi = 1;
+    //contatori per gestire gli spari
     count_Bullet=3;
     count_backBullet=3;
     count_ghostBullet=3;
+    //posizione fissa del personaggio che ha un certo stacco dal margine sinistro della finestra
     stacco = 30;
-
+    //inizializzazione primo nodo della mappa infinita
     head->piece = new Map(rect_lines, rect_cols, nodi, true);
     head->piece->build();
     head->piece->show();
     head->n = 1;
     head->next = NULL;
     head->prev = NULL;
-    
+    //inizializzazione Eroe
     position MarioPos = {(LINES+rect_lines)/2 -3, (COLS-rect_cols)/2 +stacco};
     int life = 100;
     Mario = Eroe(MarioPos, life);
@@ -34,27 +39,26 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
     backGun = NULL;
     ghostGun = NULL;
 
-
     points = 0;
+    //setta la variabile che serve a gestire il bonus &
     set_killer_prize(1);
 
-    //active_bonus = 'X';
     attron(COLOR_PAIR(7));
     mvprintw((LINES - rect_lines)/2 - 4, (COLS-rect_cols)/2 + 10, "LIFE");
     attroff(COLOR_PAIR(7));
+    //inizializzazione barra della vita
     health_bar();
     attron(COLOR_PAIR(3));
     mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2, "POINTS    %d", points);
     attroff(COLOR_PAIR(3));
-    //attron(COLOR_PAIR(2));
-    //mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, "BONUS    NO  ");
-    //attroff(COLOR_PAIR(2));
-    warning = 0;
+    //variabile per sapere se colorare di rosso l'Eroe dopo che ha subito danno
+    warning = false;
 }
 
 bool BigMap::get_warning() {
     return warning;
 }
+//funzione per aggiungere un nodo alla bilista allungando così la mappa
 void BigMap::addMap() {
     nodi++;
     if(nodi>2) {
@@ -77,14 +81,18 @@ void BigMap::addMap() {
     prec = NULL;
     delete(prec);
 }
+
 void BigMap::update() {
     Mario.show();
+    //contatori per gli spari
     count_Bullet++;
     count_backBullet++;
     count_ghostBullet++;
+    //se il nodo principale (head) non ha un next, lo si aggiunge per assicurarsi che la mappa sia infinita
     if(head->next==NULL) {
         addMap();
     }
+    //si verifica qual è il pezzo di mappa più presente in quel momento nella finestra di gioco e lo si rende head, ovvero quello principale
     if(head->piece->how_much() < head->next->piece->how_much()) {
         head = head->next;
     }
@@ -95,10 +103,11 @@ void BigMap::update() {
         }
     Mario.show();
 }
+//metodo per spostare tutta la mappa a destra in modo da "spostare" il personaggio a sinistra
 void BigMap::go_left(){
     Mario.show();
+    //si verifica che non ci siano sul percorso nemici o oggetti invalicabili
     if(not_this('|', false, Mario.getPos(), false) && not_this('K', false, Mario.getPos(), false) && not_this('{', false, Mario.getPos(), false) && not_this('}', false, Mario.getPos(), false) && not_this('[', false, Mario.getPos(), false) && not_this(']', false, Mario.getPos(), false)) {
-    //if(!not_this(' ', false, Mario.getPos(), false) || !not_this('*', false, Mario.getPos(), false) || !not_this('#', false, Mario.getPos(), false)){
         head->piece->lslide();
         Mario.show();
         if(head->next!=NULL) {
@@ -106,16 +115,18 @@ void BigMap::go_left(){
             Mario.show();
         }
         if(head->prev!=NULL) {
+            //si verifica se il nodo prev è attualmente visibile sullo schermo
             if(head->piece->previous())
                 head->prev->piece->lslide();
             Mario.show();
         }
         Mario.show();
+        //se l'Eroe cade da una piattaforma lo si fa scendere finchè non si incontra una pittaforma o il piano terreno
         while (Mario.getPosy()<(LINES+rect_lines)/2 -3 && free_down(Mario.getPosy() - (LINES-rect_lines)/2))
             Mario.go_down();
         Mario.show();
+        //si aggiorna il movimento degli spari in avanti dell'Eroe (se presenti)
         update_shoot(Mario.getPosx(), rect_cols + (COLS-rect_cols)/2-1, false);
-        //ghost_shoot();
     }
     Mario.show();
 }
@@ -123,12 +134,13 @@ void BigMap::go_left(){
 void BigMap::go_right()
 {
     Mario.show();
+    //si verifica che non ci siano sul percorso nemici o oggetti invalicabili
     if(not_this('|', true, Mario.getPos(), false) && not_this('K', true, Mario.getPos(), false) && not_this('{', true, Mario.getPos(), false) && not_this('}', true, Mario.getPos(), false) && not_this('[', true, Mario.getPos(), false) && not_this(']', true, Mario.getPos(), false)) {
     //if(!not_this(' ', true, Mario.getPos(), false) || !not_this('*', true, Mario.getPos(), false) || !not_this('#', true, Mario.getPos(), false)){
         head->piece->rslide();
         Mario.show();
-        if (head->next != NULL)
-        {
+        if (head->next != NULL) {
+            //si verifica se il nodo next è attualmente visibile sullo schermo
             if (head->piece->nx()){
                 head->next->piece->rslide();
                 Mario.show();
@@ -137,19 +149,22 @@ void BigMap::go_right()
         if (head->prev != NULL)
             head->prev->piece->rslide();
         Mario.show();
-        while (Mario.getPosy() < (LINES + rect_lines) / 2 - 3 && free_down(Mario.getPosy() - (LINES - rect_lines) / 2))
-        {
+        //se l'Eroe cade da una piattaforma lo si fa scendere finchè non si incontra una pittaforma o il piano terreno
+        while (Mario.getPosy() < (LINES + rect_lines) / 2 - 3 && free_down(Mario.getPosy() - (LINES - rect_lines) / 2)) {
             Mario.go_down();
         }
         Mario.show();
+        //si aggiorna il movimento degli spari indietro dell'Eroe (se presenti)
         update_back_shoot((COLS+rect_cols)/2-1 - rect_cols, Mario.getPosx(), right);
+        //si aggiorna il movimento dei nemici o
         ghost_shoot();
     }
     Mario.show();
 }
-
+//si sposta su di uno spazio l'Eroe
 void BigMap::go_up(){
     int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
+    //si capisce in che pezzo di mappa è l'Eroe (se prev, head o next)
     if(head->prev!=NULL) {
         if(head->prev->piece->how_much()>=stacco) {
             if(head->prev->piece->can_pass_through(y_on_pad,stacco + rect_cols - head->prev->piece->how_much()-1, true)){
@@ -170,7 +185,7 @@ void BigMap::go_up(){
         }
     }
 }
-
+//si sposta giù di uno spazio l'Eroe
 void BigMap::go_down() {
     int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
     if(head->prev!=NULL) {
