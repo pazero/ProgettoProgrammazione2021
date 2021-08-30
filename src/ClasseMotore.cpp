@@ -256,8 +256,8 @@ bool Motore::start_menu(){
     p_list head = NULL;
     //inizializza la lista
     p_list tmp = new node;
-    tmp->y = 7;
-    tmp->x = 1;
+    tmp->y = LINES/2 +3;
+    tmp->x = COLS/2 - 4;
     strcpy(tmp->voce_menu, "EXIT");
     tmp->next = head;
     tmp->prev = NULL;
@@ -265,8 +265,8 @@ bool Motore::start_menu(){
 
     tmp = new node;
     head->prev = tmp;
-    tmp->y = 5;
-    tmp->x = 1;
+    tmp->y = LINES/2 +1;
+    tmp->x = COLS/2 - 4;
     strcpy(tmp->voce_menu, "CREDITS");
     tmp->next = head;
     tmp->prev = NULL;
@@ -274,8 +274,8 @@ bool Motore::start_menu(){
 
     tmp = new node;
     head->prev = tmp;
-    tmp->y = 3;
-    tmp->x = 1;
+    tmp->y = LINES/2 -1;
+    tmp->x = COLS/2 - 4;
     strcpy(tmp->voce_menu, "TUTORIAL");
     tmp->next = head;
     tmp->prev = NULL;
@@ -283,8 +283,8 @@ bool Motore::start_menu(){
 
     tmp = new node;
     head->prev = tmp;
-    tmp->y = 1;
-    tmp->x = 1;
+    tmp->y = LINES/2 -3;
+    tmp->x = COLS/2 - 4;
     strcpy(tmp->voce_menu, "START");
     tmp->next = head;
     tmp->prev = NULL;
