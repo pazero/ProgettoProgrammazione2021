@@ -69,7 +69,7 @@ class BigMap {
 
     void health_bar();
     void free_bullet();
-    void ghost_shoot();
+    void update_ghost_shoot();
     void add_ghost_bullet(int y);
 
     char get_active_bonus();
