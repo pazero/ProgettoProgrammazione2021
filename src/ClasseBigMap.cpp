@@ -392,7 +392,7 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
                 Mario.show();
                 //verifica che non ci siano | oppure K sul percorso
                 if(not_this('|', true, aux->curr.getPos(), going_right) && not_this('K', true, aux->curr.getPos(), going_right)) {
-                    //verifica se c'è un nemico A sul percorso, in quanto questo va eliminato 
+                    //verifica se c'è un nemico A sul percorso, in quanto questo va eliminato
                     if(!not_this('A', true, aux->curr.getPos(), going_right)){
                         if(going_right)
                             delete_char(aux->curr.getPosy(), aux->curr.getPosx());
