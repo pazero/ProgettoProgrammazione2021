@@ -195,7 +195,7 @@ void Motore::death_menu() {
             pari = true;
         }*/
         print_gameOver();
-        
+        mvprintw(0,0, "Press ESC to exit");
         ch = getch();
         //esci con ESC (27 in ASCII)
         if(ch == 27) {
@@ -241,11 +241,10 @@ bool Motore::pause_menu(){
         }
         if(ch== 27) {
             end_pause = true;
-            //clear();
-            //endwin();
             return false;
         }
     }
+    return false; 
 }
 
 bool Motore::start_menu(){
@@ -349,37 +348,47 @@ bool Motore::start_menu(){
     return true;
 }
 
-void Motore::tutorial_page(){/*
-    "Hello, there. Here's how the game works!"
+void Motore::tutorial_page(){
+    clear();
+    int larghezza = 72;
+    int altezza = 32;
+    int starty = (LINES-altezza)/2;
+    int startx = (COLS-larghezza)/2;
+    WINDOW* tutorial_win = newwin(altezza,larghezza,starty,startx);
+    refresh();
+    mvwprintw(tutorial_win,0,0,"Hello, there. Here's how the game works!");
     
-    "Y  this is you."
+    mvwprintw(tutorial_win,2,0,"Y  this is you.");
 
-    "Use arrows on your keyboard to move rightside and leftside,"
-    "you can go up and down only if there is a platform above or under you"
-    "or you can fall if the platform ends."
+    mvwprintw(tutorial_win,4,0,"Use arrows on your keyboard to move rightside and leftside,");
+    mvwprintw(tutorial_win,5,0,"you can go up and down only if there is a platform above or under you");
+    mvwprintw(tutorial_win,6,0,"or you can fall if the platform ends.");
 
-    "You can shoot with D and backshooting with A."
+    mvwprintw(tutorial_win,8,0,"You can shoot with D and backshooting with A.");
     
-    "|  you can't pass through this walls."
+    mvwprintw(tutorial_win,10,0,"|  you can't pass through this walls.");
 
-    "Press F1 to pause the game."
+    mvwprintw(tutorial_win,13,0,"LIST OF ENEMIES (DON'T TOUCH THEM OR YOU'LL LOOSE LOTS OF YOUR LIFE!):");
 
-    "ENEMIES (DON'T TOUCH THEM OR YOU'LL LOOSE LOTS OF YOUR LIFE!):"
-    "K  is immortal and moves above the platform and on the ground"
-    "A  is mortal and can't move but sometimes it puts its armor {[A]} on"
-    "o  is a dangerous bubble that nothing can stop and deals little damage"
+    mvwprintw(tutorial_win,15,0,"K  is immortal and moves above the platform and on the ground");
+    mvwprintw(tutorial_win,16,0,"A  is mortal and can't move but sometimes it puts its armor {[A]} on");
+    mvwprintw(tutorial_win,17,0,"o  is a dangerous bubble that nothing can stop and deals little damage");
     
 
-    "BONUS:"
-    "*  the rarest bonus that heals lots of your lost life"
-    "#  the time goes slower for some time, so everything moves slowly"
-    "&  you get double points killing anything for a range of time"
-    "$  you immediately get 1000 extra-points"
+    mvwprintw(tutorial_win,20,0,"LIST OF BONUS:");
 
-    "You get points exploring the map and killing A-enemies and their armors"
+    mvwprintw(tutorial_win,22,0,"*  the rarest bonus that heals lots of your lost life");
+    mvwprintw(tutorial_win,23,0,"#  the time goes slower for some time, so everything moves slowly");
+    mvwprintw(tutorial_win,24,0,"&  you get double points killing anything for a range of time");
+    mvwprintw(tutorial_win,25,0,"$  you immediately get 1000 extra-points");
 
-    "If you go back, you'll find everything as you left it"
-*/
+    mvwprintw(tutorial_win,27,0,"You get points exploring the map and killing A-enemies and their armors.");
+
+    mvwprintw(tutorial_win,29,0,"If you go back, you'll find everything as you left it.");
+
+    mvwprintw(tutorial_win,31,0,"Press F1 to pause the game.");
+    wrefresh(tutorial_win);
+    mvprintw(0,0, "Press ESC to exit");
     while(ch!=27) {
         ch = getch();
     }
@@ -401,6 +410,7 @@ void Motore::credit_page(){
     mvwprintw(credit_win,8,1,"ANDREA VENTUROLI");
     mvwprintw(credit_win,9,1,"PAOLO CERONI");
     wrefresh(credit_win);
+    mvprintw(0,0, "Press ESC to exit");
     
     //esci con ESC (27 in ASCII)
     while(ch!=27) {
