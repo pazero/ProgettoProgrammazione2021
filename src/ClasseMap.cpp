@@ -40,13 +40,6 @@ Map::Map(int rect_lines, int rect_cols, int n, bool first) {
     //contatore funzionale al nemico A
     count_A = 0;
 }
-int Map::get_ex(){
-    return ex;
-}
-
-int Map::get_sx(){
-    return sx;
-}
 //metodo che gestisce il movimento dei nemici
 void Map::move_enemies(){
     enemies_A();
@@ -375,7 +368,7 @@ bool Map::can_fall(int y, int x) {
         return false;
     return true;
 }
-//metodo che ritorna se in una data posizione c'è un certo oggetto
+//metodo che ritorna true se in una data posizione c'è un certo oggetto
 bool Map::there_is_this(char object,int pady, int padx, bool dx, bool going_right) {
     if(going_right) {
         if(dx)
