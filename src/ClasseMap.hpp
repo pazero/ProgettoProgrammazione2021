@@ -43,7 +43,7 @@ class Map {
 
     Bonus powerup{};
     lista_nemici nemici;
-    //aumentato di 1 ad ogni esecuzione, arrivato a 4 si riazzera. Usato per nemici
+    //usato per nemici
     int count_move;
     int count_A;
 
@@ -63,13 +63,12 @@ class Map {
     void show();
     int how_much();
     
-    bool can_go_up(int y, int how_prev);
-    bool can_fall(int y, int how_prev);
-    bool can_pass_through(int y, int how_prev, bool up);
-    bool there_is_this(char object, int y, int how_prev, bool dx, bool going_right);
+    bool can_fall(int y, int x);
+    bool can_pass_through(int y, int x, bool up);
+    bool there_is_this(char object, int pady, int padx, bool dx, bool going_right);
 
     void print_space(int y_on_pad, int x_on_pad);
-    void print_player(char player_name, int y, int how_prev);
+    void print_player(char player_name, int y, int stacco);
     void move_enemies();
     void enemies_A();
     void remove_enemy(position pos);
@@ -78,7 +77,5 @@ class Map {
     int get_ex();
 
     int get_n();
-    void spawn_bonus(int n);
-
-    //void shoot_enemies();
+    void spawn_bonus();
 };

@@ -9,6 +9,7 @@ Enemy::Enemy(char name){
     this->pos = {0,0};
     this->name = name;
     if(name == 'A') {
+        //il delay cambia per ogni nemico A in modo che usino le corazze in momenti tutti diversi l'uno dall'altro
         delay = rand()%100;
     }
 }
