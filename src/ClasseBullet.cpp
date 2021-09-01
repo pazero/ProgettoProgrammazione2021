@@ -9,6 +9,7 @@ Bullet::Bullet(position pos) {
 void Bullet::set_name(char name) {
     this->name = name;
 }
+//crea una finestra proiettile e la colora se è un nemico di tipo o
 WINDOW* Bullet::create_win(){
 	win = newwin(1, 1, pos.y, pos.x);
     if(name == 'o') {
@@ -24,7 +25,7 @@ WINDOW* Bullet::create_win(){
 	wrefresh(win);
 	return win;
 }
-
+//svuota la finestra per poi distruggerla
 void Bullet::destroy_win(){
 	wborder(win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
 	wrefresh(win);
