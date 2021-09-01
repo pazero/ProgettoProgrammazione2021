@@ -10,7 +10,7 @@ Bonus::Bonus(int rect_lines, int rect_cols) {
     name3 = '$';
     name4 = '&';
 }
-
+//ritorna un nome random fra # * $ &
 char Bonus::rand_name_bonus() {
     int choice;
     choice = rand()%17;
@@ -20,7 +20,7 @@ char Bonus::rand_name_bonus() {
     if(choice >= 8 && choice<11) return name4;
     else return ' ';
 }
-
+//prende una posizione random all'interno della finestra di gioco 
 position Bonus::rand_pos_bonus(){
     position rand_pos;
     rand_pos.y = rand()%(rect_lines-3);
