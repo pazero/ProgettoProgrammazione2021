@@ -6,6 +6,7 @@ Enemy::Enemy(){
 }
 
 Enemy::Enemy(char name){
+    //inizializzo la posizione e il tipo
     this->pos = {0,0};
     this->name = name;
     if(name == 'A') {
