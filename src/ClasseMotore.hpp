@@ -3,32 +3,29 @@
 
 class Motore{
     protected:
-    int rect_lines;
-    int rect_cols;
-    BigMap infinita{};
-    int ch;
-    //bool pause;
-    bool dead;
-    bool right;
-    int time;
-    int cicli_for_bonus;
-    int nodi;
-    int bonus_time;
-
-    int flash;
+    int rect_lines; //altezza finestra di gioco
+    int rect_cols; //larghezza finestra di gioco
+    BigMap infinita{}; //dichiarazione della mappa infinita
+    int ch; //variabile usata insieme al metodo getch() che memorizza il tasto premuto dall'user
+    bool dead; //booleano per la morte dell'eroe
+    bool right; //variabile necessaria ad alcuni metodi in BigMap che indica se l'Eroe si sta muovendo verso destra
+    int time; //tempo in ms tra un ciclo e l'altro
+    int cicli_for_bonus; //numero di cicli in cui è attivo un bonus
+    int nodi; //numero nodi della bilista infinita
+    int bonus_time; //variabile che viene sommata a "time" in modo da aumentare il tempo tra un ciclo e l'altro, usata per un bonus
 
     public:
     Motore(int rect_lines, int rect_cols);
-    bool move_all();
-    void go_game();
-    void update_time();
-    void check_bonus();
-    void check_cicli();
+    bool move_all();    //metodo che si occupa di far muovere l'Eroe e restituire false solo se l'Eroe è morto
+    void go_game();     //metodo che avvia il gioco
+    void update_time(); //metodo per aumentare la velocità del gioco con l'avanzare dell'Eroe nel gioco
+    void check_bonus(); //metodo che controlla i bonus attivi
+    void check_cicli(); //metodo necessario ai bonus "#" e "&", che fa durare i loro effetti per una certo numero di cicli
 
-    void print_gameOver();
-    void death_menu();
-    bool pause_menu();
-    bool start_menu();
-    void credit_page();
-    void tutorial_page();
+    void print_gameOver();  //stampa la finestra gameover
+    void death_menu();      //menu morte
+    bool pause_menu();      //menu pausa
+    bool start_menu();      //menu iniziale
+    void credit_page();     //menu crediti
+    void tutorial_page();   //menu tutorial
 };
