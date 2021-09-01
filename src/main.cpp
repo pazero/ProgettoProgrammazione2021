@@ -1,19 +1,13 @@
 #include "ClasseMotore.hpp"
 #include "Comandi.hpp"
 using namespace std;
-
-#define RECT_LINES 19
-#define RECT_COLS 100
 int main() {
+    //classe che esegue comandi necessari all'avvio delle modalità per far funzionare il gioco 
     Comandi();
-    Motore(RECT_LINES, RECT_COLS);
+    //dichiaro le variabile per l'altezza e la larghezza della finestra di gioco
+    int rect_lines = 19;
+    int rect_cols = 100;
+    //classe che avvia il funzionamento del gioco
+    Motore(rect_lines, rect_cols);
     return 0;
 }
-
-/*
-paolo   BigMap
-simo    Map
-andre   bonus, oggetto, eroe, bullet, Enemy, motore
-
-comandi, main
-*/
