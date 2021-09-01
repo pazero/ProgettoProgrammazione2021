@@ -14,6 +14,7 @@ int Oggetto::getPosy(){
 int Oggetto::getPosx(){
     return(pos.x);
 }
+//stampo l'oggetto sullo stdscr (schermo intero)
 void Oggetto::show(){
     mvprintw(pos.y, pos.x, "%c",name);
     refresh();
