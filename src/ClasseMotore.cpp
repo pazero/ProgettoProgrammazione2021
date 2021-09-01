@@ -1,52 +1,59 @@
 #include "ClasseMotore.hpp"
 
 Motore::Motore(int rect_lines, int rect_cols) {
-    infinita = BigMap();
-
-    if(start_menu()) {
-        clear();
+    infinita = BigMap(); //inizializzo infinita con il costruttore per inzializzare le color pairs
+    //faccio partire il menu iniziale, se parte il gioco inizializzo alcuni campi
+    if(start_menu()) {        
+        clear(); //pulisco lo schermo
         this->rect_lines = rect_lines;
         this->rect_cols = rect_cols;
         refresh();
 
-        dead = false;
-        infinita = BigMap(rect_lines, rect_cols);
+        dead = false; //se dead è true il gioco va in gameover
+        infinita = BigMap(rect_lines, rect_cols); //inizializzo la mappa infinita richiamando il secondo costruttore di BigMap 
 
-        time = 100;
-        cicli_for_bonus = -1;
-        nodi = 0;
-        bonus_time = 0;
+        time = 100; //ogni 100 ms il gioco si aggiorna automaticamente
+        cicli_for_bonus = -1; //quando non ci sono bonus attivi deve essere -1
+        nodi = 0; //numero di pezzi di mappa esplorati, ovvero numero di nodi della bilista infinita
+        bonus_time = 0; //se non c'è il bonus "#" attivo, resta 0
         
-        go_game();
+        go_game(); //faccio partire il gioco
     }
     else {
         clear();
         endwin();
     }
 }
-
+//gestisce l'intero gioco e controlla se l'eroe è morto
 void Motore::go_game(){
     while(!dead) {
+        //la funzione timeout prende come argomento un intero che rappresenta il tempo in ms
+        //che passa tra un ciclo e l'altro, senza che lo user prema tasti. Quindi maggiore è questo parametro,
+        //maggiore è il tempo tra un ciclo e l'altro
         timeout(time + bonus_time);
         refresh();
         ch = getch();
+        //controllo dell'eroe(vita e movimento)
         if(!move_all()) {
             dead = true;
         }
+        //si preme F1 per mettere in pausa
         if(ch==KEY_F(1)) {
             if(!pause_menu()) {
                 dead = true;
             };
         }
-        update_time();
+        update_time(); //aggiorno il tempo che passa tra un ciclo e l'altro
+        //se ci sono bonus attivi richiamo il metodo che gestisce la loro durata
         if(cicli_for_bonus>-1) {
             check_cicli();
-        }        
+        }
     }
+    //se dead = true chiudo il ciclo e la finestra
     death_menu();
     endwin();
 }
-
+//gestisce il movimento dell'eroe in base all'input dell'user
 bool Motore::move_all() {
     infinita.update();
     if(ch == KEY_LEFT){
@@ -62,12 +69,14 @@ bool Motore::move_all() {
     if(ch == KEY_DOWN) {
         infinita.go_down();
     }
-    if(ch == 'd') {
+    if(ch == 'd') { //sparo a destra con "d"
         infinita.shoot();
     }
-    if(ch == 'a') {
+    if(ch == 'a') { //sparo a sinistra con "a"
         infinita.back_shoot();
     }
+    //eseguo la routine di fine ciclo passando "right"
+    //questa variabile serve ai metodi di BigMap che controllano le collisioni
     if(infinita.routine_fineciclo(right)){
         check_bonus();
         right = false;
@@ -76,7 +85,8 @@ bool Motore::move_all() {
     else
         return false;
 }
-
+//diminuisce la variabile "time" mano a mano che avanzo nel gioco, in modo
+//da aumentare la velocità e, di conseguenza, la difficoltà del gioco
 void Motore::update_time(){
     if(infinita.n_map() > nodi) {
         nodi = infinita.n_map();
@@ -84,12 +94,12 @@ void Motore::update_time(){
         time -= 2;
     }
 }
-
+//controlla se ci sono bonus attivi e aggiorna "cicli_for_bonus"
 void Motore::check_bonus() {
     char tmp = infinita.is_bonus();
     if(tmp == '#') {
         cicli_for_bonus++;
-        bonus_time = 200;
+        bonus_time = 200; //il tempo bonus è 200ms, da sommare a "time"
         attron(COLOR_PAIR(8));
         mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    # ");
         attroff(COLOR_PAIR(8));
@@ -101,99 +111,23 @@ void Motore::check_bonus() {
         attroff(COLOR_PAIR(8));
     }
 }
-
+//disattiva i bonus se sono attivi da più di 200 cicli
 void Motore::check_cicli(){
     cicli_for_bonus++;
     if(cicli_for_bonus>200) {
-        //attron(COLOR_PAIR(2));
-        //mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    NO ");
         mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, "             ");
-        //attroff(COLOR_PAIR(2));
         infinita.set_killer_prize(1);
         bonus_time = 0;
+        //se il bonus si disattiva, torna al valore di default -1
         cicli_for_bonus = -1;
     }
 }
-
+//menu del gameover
 void Motore::death_menu() {
     clear();
     bool fine = false;;
-    ////bool pari = false;
 
-    while(!fine) {/*
-        print_gameOver();
-        timeout(90);
-        
-        if(pari) {
-            for(int i=0;i<LINES; i++) {
-                attron(A_BOLD);
-                if(i%4 == 0) {
-                    attron(COLOR_PAIR(2));
-                    for(int j=0; j<COLS; j++) {
-                        if(j%2 == 0) {
-                            mvprintw(i,j, ">");
-                        }
-                        else {
-                            mvprintw(i,j, " ");
-                        }
-                    }
-                    print_gameOver();
-                }
-                else {
-                    if(i%2 == 0) {
-                        attron(COLOR_PAIR(6));
-                        for(int j=0; j<COLS; j++) {
-                            if(j%2 != 0) {
-                                mvprintw(i,j, "<");
-                            }
-                            else {
-                                mvprintw(i,j, " ");
-                            }
-                        }
-                    }
-                    print_gameOver();
-                }
-            }
-            refresh();
-            pari = false;
-        }
-        else {
-            print_gameOver();
-            for(int i=0;i<LINES; i++) {
-                attron(A_BOLD);
-                if(i%4 == 0) {
-                    attron(COLOR_PAIR(2));
-                    for(int j=0; j<COLS; j++) {
-                        if(j%2 != 0) {
-                            mvprintw(i,j, ">");
-                        }
-                        else {
-                            mvprintw(i,j, " ");
-                        }
-                    }
-                    print_gameOver();
-                }
-                else {
-                    if(i%2 == 0) {
-                        attron(COLOR_PAIR(6));
-                        for(int j=0; j<COLS; j++) {
-                            if(j%2 == 0) {
-                                mvprintw(i,j, "<");
-                            }
-                            else {
-                                mvprintw(i,j, " ");
-                            }
-                        }
-                    }
-                    print_gameOver();
-                }
-                print_gameOver();
-                attroff(COLOR_PAIR(2));
-                attroff(COLOR_PAIR(6));
-            }
-            refresh();
-            pari = true;
-        }*/
+    while(!fine) {
         print_gameOver();
         mvprintw(0,0, "Press ESC to exit");
         ch = getch();
@@ -203,6 +137,7 @@ void Motore::death_menu() {
         }
     }
 }
+//crea una finestra e stampa il gameover
 void Motore::print_gameOver() {
     attroff(A_BOLD);
     WINDOW* death_win;
@@ -213,7 +148,6 @@ void Motore::print_gameOver() {
 
         death_win = newwin(lines_win, cols_win, starty, startx);
         refresh();
-        //wprintw(death_win, "CIAO");
         wattron(death_win,COLOR_PAIR(3));
         mvwprintw(death_win,2,2, " $$$$$$\\   $$$$$$\\  $$$$$$\\$$$$\\   $$$$$$\\         $$$$$$\\ $$\\    $$\\  $$$$$$\\   $$$$$$\\");
         mvwprintw(death_win,3,2, "$$  __$$\\  \\____$$\\ $$  _$$  _$$\\ $$  __$$\\       $$  __$$\\\\$$\\  $$  |$$  __$$\\ $$  __$$\\");
@@ -229,16 +163,19 @@ void Motore::print_gameOver() {
         wrefresh(death_win);
         refresh();
 }
+//menu della pausa
 bool Motore::pause_menu(){
     clear();
     bool end_pause = false;
     mvwprintw(stdscr, LINES/2, (COLS-9)/2, "P A U S E");
     while(!end_pause){
         ch = getch();
+        //con F1 riprendo il gioco
         if(ch== KEY_F(1)) {
             end_pause = true;
             return true;
         }
+        //con ESC esco dal gioco
         if(ch== 27) {
             end_pause = true;
             return false;
@@ -246,7 +183,7 @@ bool Motore::pause_menu(){
     }
     return false; 
 }
-
+//menu iniziale
 bool Motore::start_menu(){
     struct node {
         char voce_menu[20];
@@ -257,7 +194,7 @@ bool Motore::start_menu(){
     };
     typedef node* p_list;
     p_list head = NULL;
-    //inizializza la lista
+    //inizializzo i 4 nodi della lista
     p_list tmp = new node;
     tmp->y = LINES/2 +3;
     tmp->x = COLS/2 - 4;
@@ -292,18 +229,19 @@ bool Motore::start_menu(){
     tmp->next = head;
     tmp->prev = NULL;
     head = tmp;
-
+    //inizializzo la coda della lista
     p_list tail = head;
     while(tail->next != NULL) {
       tail = tail->next;
     }
+    //creo una lista circolare
     tail->next = head;
     head->prev = tail;
     
     p_list aux = head;
-    int choice = 1;
+    int choice = 1; //numero voce del menu
     bool finish_menu = false;
-
+    //apro la finestra e la chiudo se "finish_menu == true"
     while(!finish_menu) {        
       for(int i=1; i<=4; i++) {
         if(i==choice) {
@@ -314,7 +252,7 @@ bool Motore::start_menu(){
         attroff(COLOR_PAIR(9));
       }
       ch = getch();
-      //aggiorniamo scelta con frecce su e giu
+      //aggiorniamo la scelta dell'user con frecce su e giù
       if(ch==KEY_UP) {
         choice--;
         if(choice==0) {
@@ -327,7 +265,7 @@ bool Motore::start_menu(){
           choice = 1;
         }
       }
-      //ENTER
+      //si sceglie una voce del menu premendo invio (10 in ASCII)
       if(ch==10) {
         if(choice==1) {
             clear();
@@ -347,7 +285,7 @@ bool Motore::start_menu(){
     }
     return true;
 }
-
+//pagina del tutorial
 void Motore::tutorial_page(){
     clear();
     int larghezza = 72;
@@ -394,6 +332,7 @@ void Motore::tutorial_page(){
     }
     clear();
 }
+//pagina dei crediti
 void Motore::credit_page(){
     clear();
     int larghezza = 33;
