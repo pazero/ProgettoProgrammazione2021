@@ -8,8 +8,8 @@ class Bullet:public Oggetto{
     Bullet();
     Bullet(position pos);
     void set_name(char name);
-    WINDOW* create_win();
-    void destroy_win();
-    void go_dx();
-    void go_sx();
+    WINDOW* create_win(); //crea una finestra per un proiettile
+    void destroy_win(); //distrugge la finestra di un proiettile
+    void go_dx(); //sposta a destra una finestra
+    void go_sx(); //sposta a sinistra una finestra
 };
