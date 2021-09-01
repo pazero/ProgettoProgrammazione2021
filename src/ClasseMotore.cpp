@@ -100,15 +100,15 @@ void Motore::check_bonus() {
     if(tmp == '#') {
         cicli_for_bonus++;
         bonus_time = 200; //il tempo bonus è 200ms, da sommare a "time"
-        attron(COLOR_PAIR(8));
+        attron(COLOR_PAIR(7));
         mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    # ");
-        attroff(COLOR_PAIR(8));
+        attroff(COLOR_PAIR(7));
     }
     if(tmp == '&') {
         cicli_for_bonus++;
-        attron(COLOR_PAIR(8));
+        attron(COLOR_PAIR(7));
         mvwprintw(stdscr, (LINES - rect_lines)/2 - 4, COLS/2 +25, " BONUS    & ");
-        attroff(COLOR_PAIR(8));
+        attroff(COLOR_PAIR(7));
     }
 }
 //disattiva i bonus se sono attivi da più di 200 cicli
@@ -167,12 +167,16 @@ void Motore::print_gameOver() {
 bool Motore::pause_menu(){
     clear();
     bool end_pause = false;
+    attron(COLOR_PAIR(2));
     mvwprintw(stdscr, LINES/2, (COLS-9)/2, "P A U S E");
+    attroff(COLOR_PAIR(2));
+    mvprintw(0,0, "Press ESC to exit");
     while(!end_pause){
         ch = getch();
         //con F1 riprendo il gioco
         if(ch== KEY_F(1)) {
             end_pause = true;
+            clear();
             return true;
         }
         //con ESC esco dal gioco
@@ -245,11 +249,11 @@ bool Motore::start_menu(){
     while(!finish_menu) {        
       for(int i=1; i<=4; i++) {
         if(i==choice) {
-          attron(COLOR_PAIR(9));
+          attron(COLOR_PAIR(8));
         }
         mvprintw(aux->y, aux->x, "%s", aux->voce_menu);
         aux = aux->next;
-        attroff(COLOR_PAIR(9));
+        attroff(COLOR_PAIR(8));
       }
       ch = getch();
       //aggiorniamo la scelta dell'user con frecce su e giù
@@ -289,7 +293,7 @@ bool Motore::start_menu(){
 void Motore::tutorial_page(){
     clear();
     int larghezza = 72;
-    int altezza = 32;
+    int altezza = 33;
     int starty = (LINES-altezza)/2;
     int startx = (COLS-larghezza)/2;
     WINDOW* tutorial_win = newwin(altezza,larghezza,starty,startx);
@@ -322,9 +326,10 @@ void Motore::tutorial_page(){
 
     mvwprintw(tutorial_win,27,0,"You get points exploring the map and killing A-enemies and their armors.");
 
-    mvwprintw(tutorial_win,29,0,"If you go back, you'll find everything as you left it.");
+    mvwprintw(tutorial_win,29,0,"If you go back, you'll find everything as you left it");
+    mvwprintw(tutorial_win,30,0,"and remember that if you move, everything moves faster, so be careful.");
 
-    mvwprintw(tutorial_win,31,0,"Press F1 to pause the game.");
+    mvwprintw(tutorial_win,32,0,"Press F1 to pause the game.");
     wrefresh(tutorial_win);
     mvprintw(0,0, "Press ESC to exit");
     while(ch!=27) {

@@ -13,9 +13,9 @@ void Bullet::set_name(char name) {
 WINDOW* Bullet::create_win(){
 	win = newwin(1, 1, pos.y, pos.x);
     if(name == 'o') {
-        wattron(win, COLOR_PAIR(6));
+        wattron(win, COLOR_PAIR(5));
         wprintw(win,"%c",name);
-        wattroff(win, COLOR_PAIR(6));
+        wattroff(win, COLOR_PAIR(5));
     }
     else {
         wattron(win, COLOR_PAIR(2));

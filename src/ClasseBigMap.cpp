@@ -1,15 +1,15 @@
 #include "ClasseBigMap.hpp"
 BigMap::BigMap(){
     //inizializzazione delle coppie di colori che si utilizzeranno
-    init_pair(1, COLOR_BLUE, COLOR_BLACK);      //Colors are always used in pairs. 
-	init_pair(2, COLOR_GREEN, COLOR_BLACK);     //That means you have to use the function 
-    init_pair(3, COLOR_YELLOW, COLOR_BLACK);    //init_pair() to define the foreground
+    init_pair(1, COLOR_BLUE, COLOR_BLACK);
+	init_pair(2, COLOR_GREEN, COLOR_BLACK);
+    init_pair(3, COLOR_YELLOW, COLOR_BLACK);
     init_pair(4, COLOR_RED, COLOR_BLACK);
-    init_pair(5, COLOR_WHITE, COLOR_YELLOW);
-    init_pair(6, COLOR_CYAN, COLOR_BLACK);
-    init_pair(7, COLOR_MAGENTA, COLOR_BLACK);
-    init_pair(8, COLOR_BLACK, COLOR_GREEN);
-    init_pair(9, COLOR_RED, COLOR_YELLOW);
+    
+    init_pair(5, COLOR_CYAN, COLOR_BLACK);
+    init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(7, COLOR_BLACK, COLOR_GREEN);
+    init_pair(8, COLOR_RED, COLOR_YELLOW);
 }
 BigMap::BigMap(int rect_lines, int rect_cols) {
     //dimensione della finestra di gioco
@@ -43,9 +43,9 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
     //setta la variabile che serve a gestire il bonus &
     set_killer_prize(1);
 
-    attron(COLOR_PAIR(7));
+    attron(COLOR_PAIR(6));
     mvprintw((LINES - rect_lines)/2 - 4, (COLS-rect_cols)/2 + 10, "LIFE");
-    attroff(COLOR_PAIR(7));
+    attroff(COLOR_PAIR(6));
     //inizializzazione barra della vita
     health_bar();
     attron(COLOR_PAIR(3));
@@ -639,9 +639,9 @@ char BigMap::is_bonus(){
 
 //metodo per gestire la barra della vita
 void BigMap::health_bar() {
-    attron(COLOR_PAIR(7));
+    attron(COLOR_PAIR(6));
     mvprintw((LINES - rect_lines)/2 - 4, (COLS-rect_cols)/2 + 10, "LIFE");
-    attroff(COLOR_PAIR(7));
+    attroff(COLOR_PAIR(6));
     //stampa una barra ogni 5 punti vita
     int n_vita = Mario.getlife() / 5;
     char barra_salute[n_vita];
