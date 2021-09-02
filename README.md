@@ -10,5 +10,4 @@ Cosa eseguono i comandi del Makefile:
   make clean  per rimuovere i file oggetto
   make debug  per fare il debug
   
-  
 Per lanciare il gioco, entrare nella directory del gioco, eseguire prima il comando make poi make love.
