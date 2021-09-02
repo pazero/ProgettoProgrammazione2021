@@ -3,7 +3,7 @@
 Libreria scelta tra quelle proposte dai docenti:
   ncurses.h
   
-Cosa eseguono i comandi del Makefile:
+Cosa eseguono i comandi del Makefile: \n
   make        per compilare
   make love   per eseguire
   make clean  per rimuovere i file oggetto
