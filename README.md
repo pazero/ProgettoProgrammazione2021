@@ -1,20 +1,17 @@
-# Progetto Programmazione a.a. 2020/2021
+## Progetto Programmazione a.a. 2020/2021
 
 Libreria scelta tra quelle proposte dai docenti:
-  ncurses.h
+ 
+ <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ncurses.h</b>
   
 Cosa eseguono i comandi del Makefile:
 
-  make        per compilare
+- `make`       per compilare
 
-  make love   per eseguire
+- `make love`   per eseguire
   
-  make clean  per rimuovere i file oggetto
+- `make clean`  per rimuovere i file oggetto
   
-  make debug  per fare il debug
+- `make debug`  per fare il debug
 
-
-Per lanciare il gioco, entrare nella directory del gioco, eseguire prima il comando make poi make love.
-
-  
-  
+Per lanciare il gioco, entrare nella directory del gioco, eseguire prima il comando `make` poi `make love`
