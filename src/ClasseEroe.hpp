@@ -1,4 +1,3 @@
-#include <ncurses.h>
 #include "ClasseOggetto.hpp"
 class Eroe:public Oggetto {
     protected:

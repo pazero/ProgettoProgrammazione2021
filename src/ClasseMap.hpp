@@ -1,9 +1,3 @@
-#include <cstring>
-#include <ncurses.h>
-#include <ctime>
-#include <iostream>
-#include <cstdlib>
-
 #include "ClasseEnemy.hpp"
 
 struct colpo {

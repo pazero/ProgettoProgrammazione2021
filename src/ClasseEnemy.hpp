@@ -1,9 +1,3 @@
-#include <string.h>
-#include <iostream>
-#include <ncurses.h>
-#include <ctime>
-using namespace std;
-
 #include "ClasseBonus.hpp"
 
 //posizione assegnata rispetto al pad e non allo stdscr

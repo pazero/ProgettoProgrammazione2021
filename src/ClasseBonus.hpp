@@ -1,6 +1,3 @@
-#include <ctime>
-#include <iostream>
-
 #include "ClasseBullet.hpp"
 class Bonus{
     protected:

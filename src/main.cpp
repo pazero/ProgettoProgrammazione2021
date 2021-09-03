@@ -1,6 +1,6 @@
 #include "ClasseMotore.hpp"
 #include "Comandi.hpp"
-using namespace std;
+
 int main() {
     //classe che esegue comandi necessari all'avvio delle modalità per far funzionare il gioco 
     Comandi();

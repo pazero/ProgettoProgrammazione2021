@@ -1,7 +1,5 @@
 #include "ClasseEroe.hpp"
-#include <ctime>
-#include <iostream>
-#include <cstdlib>
+
 Eroe::Eroe():Oggetto(){}
 
 Eroe::Eroe(position pos, int life):Oggetto(pos){

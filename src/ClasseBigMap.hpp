@@ -1,6 +1,6 @@
 #include "ClasseMap.hpp"
-#include <ncurses.h>
-#include <ctime>
+//#include <ncurses.h>
+//#include <ctime>
 struct MapNode {
         Map *piece;
         int n;
@@ -11,7 +11,7 @@ typedef MapNode* MapList;
 
 class BigMap {
     protected:
-        MapList head = new MapNode;
+        MapList curr = new MapNode;
         int rect_lines; //altezza finestra di gioco
         int rect_cols; //larghezza finestra di gioco
         int nodi; //numeri nodi della bilista
