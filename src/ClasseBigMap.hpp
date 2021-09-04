@@ -1,6 +1,4 @@
 #include "ClasseMap.hpp"
-//#include <ncurses.h>
-//#include <ctime>
 struct MapNode {
         Map *piece;
         int n;

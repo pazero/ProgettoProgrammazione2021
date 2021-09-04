@@ -1,8 +1,7 @@
+#include <ncurses.h>
 #include <string.h>
 #include <iostream>
-#include <ncurses.h>
 #include <ctime>
-#include <cstdlib>
 using namespace std;
 
 //struttura per le coordinate delle entità

@@ -30,7 +30,7 @@ void Motore::go_game(){
         //la funzione timeout prende come argomento un intero che rappresenta il tempo in ms
         //che passa tra un ciclo e l'altro, senza che lo user prema tasti. Quindi maggiore è questo parametro,
         //maggiore è il tempo tra un ciclo e l'altro
-        timeout(time + bonus_time);
+        
         refresh();
         ch = getch();
         //controllo dell'eroe(vita e movimento)
@@ -48,6 +48,7 @@ void Motore::go_game(){
         if(cicli_for_bonus>-1) {
             check_cicli();
         }
+        timeout(time + bonus_time);
     }
     //se dead = true chiudo il ciclo e la finestra
     death_menu();
