@@ -25,7 +25,7 @@ Motore::Motore(int rect_lines, int rect_cols) {
     }
 }
 //gestisce l'intero gioco e controlla se l'eroe è morto
-void Motore::go_game(){
+void Motore::go_game() {
     while(!dead) {
         //la funzione timeout prende come argomento un intero che rappresenta il tempo in ms
         //che passa tra un ciclo e l'altro, senza che lo user prema tasti. Quindi maggiore è questo parametro,
@@ -88,7 +88,7 @@ bool Motore::move_all() {
 }
 //diminuisce la variabile "time" mano a mano che avanzo nel gioco, in modo
 //da aumentare la velocità e, di conseguenza, la difficoltà del gioco
-void Motore::update_time(){
+void Motore::update_time() {
     if(infinita.n_map() > nodi) {
         nodi = infinita.n_map();
         if(nodi%5 == 0)
@@ -123,73 +123,9 @@ void Motore::check_cicli(){
         cicli_for_bonus = -1;
     }
 }
-//menu del gameover
-void Motore::death_menu() {
-    clear();
-    bool fine = false;;
 
-    while(!fine) {
-        print_gameOver();
-        mvprintw(0,0, "Press ESC to exit");
-        ch = getch();
-        //esci con ESC (27 in ASCII)
-        if(ch == 27) {
-            fine = true;
-        }
-    }
-}
-//crea una finestra e stampa il gameover
-void Motore::print_gameOver() {
-    attroff(A_BOLD);
-    WINDOW* death_win;
-        int lines_win = 9+4;
-        int cols_win = 90+4;
-        int starty = (LINES - lines_win)/2;
-        int startx = (COLS - cols_win)/2;
-
-        death_win = newwin(lines_win, cols_win, starty, startx);
-        refresh();
-        wattron(death_win,COLOR_PAIR(3));
-        mvwprintw(death_win,2,2, " $$$$$$\\   $$$$$$\\  $$$$$$\\$$$$\\   $$$$$$\\         $$$$$$\\ $$\\    $$\\  $$$$$$\\   $$$$$$\\");
-        mvwprintw(death_win,3,2, "$$  __$$\\  \\____$$\\ $$  _$$  _$$\\ $$  __$$\\       $$  __$$\\\\$$\\  $$  |$$  __$$\\ $$  __$$\\");
-        mvwprintw(death_win,4,2, "$$ /  $$ | $$$$$$$ |$$ / $$ / $$ |$$$$$$$$ |      $$ /  $$ |\\$$\\$$  / $$$$$$$$ |$$ |  \\__|");
-        mvwprintw(death_win,5,2, "$$ |  $$ |$$  __$$ |$$ | $$ | $$ |$$   ____|      $$ |  $$ | \\$$$  /  $$   ____|$$ |");
-        mvwprintw(death_win,6,2, "\\$$$$$$$ |\\$$$$$$$ |$$ | $$ | $$ |\\$$$$$$$\\       \\$$$$$$  |  \\$  /   \\$$$$$$$\\ $$ |");
-        mvwprintw(death_win,7,2, " \\____$$ | \\_______|\\__| \\__| \\__| \\_______|       \\______/    \\_/     \\_______|\\__|");
-        mvwprintw(death_win,8,2, "$$\\   $$ |");
-        mvwprintw(death_win,9,2, "\\$$$$$$  | ");
-        mvwprintw(death_win,10,2, " \\______/                                       YOU TOTALIZED %d POINTS", infinita.get_points());
-        wattroff(death_win, COLOR_PAIR(3));
-
-        wrefresh(death_win);
-        refresh();
-}
-//menu della pausa
-bool Motore::pause_menu(){
-    clear();
-    bool end_pause = false;
-    attron(COLOR_PAIR(2));
-    mvwprintw(stdscr, LINES/2, (COLS-9)/2, "P A U S E");
-    attroff(COLOR_PAIR(2));
-    mvprintw(0,0, "Press ESC to exit");
-    while(!end_pause){
-        ch = getch();
-        //con F1 riprendo il gioco
-        if(ch== KEY_F(1)) {
-            end_pause = true;
-            clear();
-            return true;
-        }
-        //con ESC esco dal gioco
-        if(ch== 27) {
-            end_pause = true;
-            return false;
-        }
-    }
-    return false; 
-}
 //menu iniziale
-bool Motore::start_menu(){
+bool Motore::start_menu() {
     struct node {
         char voce_menu[20];
         int y;
@@ -290,8 +226,49 @@ bool Motore::start_menu(){
     }
     return true;
 }
+//menu del gameover
+void Motore::death_menu() {
+    clear();
+    bool fine = false;;
+
+    while(!fine) {
+        print_gameOver();
+        mvprintw(0,0, "Press ESC to exit");
+        ch = getch();
+        //esci con ESC (27 in ASCII)
+        if(ch == 27) {
+            fine = true;
+        }
+    }
+}
+
+//menu della pausa
+bool Motore::pause_menu() {
+    clear();
+    bool end_pause = false;
+    attron(COLOR_PAIR(2));
+    mvwprintw(stdscr, LINES/2, (COLS-9)/2, "P A U S E");
+    attroff(COLOR_PAIR(2));
+    mvprintw(0,0, "Press ESC to exit");
+    while(!end_pause){
+        ch = getch();
+        //con F1 riprendo il gioco
+        if(ch== KEY_F(1)) {
+            end_pause = true;
+            clear();
+            return true;
+        }
+        //con ESC esco dal gioco
+        if(ch== 27) {
+            end_pause = true;
+            return false;
+        }
+    }
+    return false; 
+}
+
 //pagina del tutorial
-void Motore::tutorial_page(){
+void Motore::tutorial_page() {
     clear();
     int larghezza = 72;
     int altezza = 33;
@@ -339,7 +316,7 @@ void Motore::tutorial_page(){
     clear();
 }
 //pagina dei crediti
-void Motore::credit_page(){
+void Motore::credit_page() {
     clear();
     int larghezza = 33;
     int altezza = 11;
@@ -362,4 +339,31 @@ void Motore::credit_page(){
         ch = getch();
     }
     clear();
+}
+
+//crea una finestra e stampa il gameover
+void Motore::print_gameOver() {
+    attroff(A_BOLD);
+    WINDOW* death_win;
+        int lines_win = 9+4;
+        int cols_win = 90+4;
+        int starty = (LINES - lines_win)/2;
+        int startx = (COLS - cols_win)/2;
+
+        death_win = newwin(lines_win, cols_win, starty, startx);
+        refresh();
+        wattron(death_win,COLOR_PAIR(3));
+        mvwprintw(death_win,2,2, " $$$$$$\\   $$$$$$\\  $$$$$$\\$$$$\\   $$$$$$\\         $$$$$$\\ $$\\    $$\\  $$$$$$\\   $$$$$$\\");
+        mvwprintw(death_win,3,2, "$$  __$$\\  \\____$$\\ $$  _$$  _$$\\ $$  __$$\\       $$  __$$\\\\$$\\  $$  |$$  __$$\\ $$  __$$\\");
+        mvwprintw(death_win,4,2, "$$ /  $$ | $$$$$$$ |$$ / $$ / $$ |$$$$$$$$ |      $$ /  $$ |\\$$\\$$  / $$$$$$$$ |$$ |  \\__|");
+        mvwprintw(death_win,5,2, "$$ |  $$ |$$  __$$ |$$ | $$ | $$ |$$   ____|      $$ |  $$ | \\$$$  /  $$   ____|$$ |");
+        mvwprintw(death_win,6,2, "\\$$$$$$$ |\\$$$$$$$ |$$ | $$ | $$ |\\$$$$$$$\\       \\$$$$$$  |  \\$  /   \\$$$$$$$\\ $$ |");
+        mvwprintw(death_win,7,2, " \\____$$ | \\_______|\\__| \\__| \\__| \\_______|       \\______/    \\_/     \\_______|\\__|");
+        mvwprintw(death_win,8,2, "$$\\   $$ |");
+        mvwprintw(death_win,9,2, "\\$$$$$$  | ");
+        mvwprintw(death_win,10,2, " \\______/                                       YOU TOTALIZED %d POINTS", infinita.get_points());
+        wattroff(death_win, COLOR_PAIR(3));
+
+        wrefresh(death_win);
+        refresh();
 }

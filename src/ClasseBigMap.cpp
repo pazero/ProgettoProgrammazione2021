@@ -1,5 +1,5 @@
 #include "ClasseBigMap.hpp"
-BigMap::BigMap(){
+BigMap::BigMap() {
     //inizializzazione delle coppie di colori che si utilizzeranno
     init_pair(1, COLOR_BLUE, COLOR_BLACK);
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);
@@ -55,9 +55,6 @@ BigMap::BigMap(int rect_lines, int rect_cols) {
     warning = false;
 }
 
-bool BigMap::get_warning() {
-    return warning;
-}
 //funzione per aggiungere un nodo alla bilista allungando così la mappa
 void BigMap::addMap() {
     nodi++;
@@ -103,8 +100,14 @@ void BigMap::update() {
         }
     Mario.show();
 }
+
+//ritorna il numero di che ha la bilista
+int BigMap::n_map() {
+    return nodi;
+}
+
 //metodo per spostare tutta la mappa a destra in modo da "spostare" il personaggio a sinistra
-void BigMap::go_left(){
+void BigMap::go_left() {
     Mario.show();
     //verifica che non ci siano sul percorso nemici o oggetti invalicabili
     if(not_this('|', false, Mario.getPos(), false) && not_this('K', false, Mario.getPos(), false) && not_this('{', false, Mario.getPos(), false) && not_this('}', false, Mario.getPos(), false) && not_this('[', false, Mario.getPos(), false) && not_this(']', false, Mario.getPos(), false)) {
@@ -131,8 +134,7 @@ void BigMap::go_left(){
     Mario.show();
 }
 
-void BigMap::go_right()
-{
+void BigMap::go_right() {
     Mario.show();
     //verifica che non ci siano sul percorso nemici o oggetti invalicabili
     if(not_this('|', true, Mario.getPos(), false) && not_this('K', true, Mario.getPos(), false) && not_this('{', true, Mario.getPos(), false) && not_this('}', true, Mario.getPos(), false) && not_this('[', true, Mario.getPos(), false) && not_this(']', true, Mario.getPos(), false)) {
@@ -162,7 +164,7 @@ void BigMap::go_right()
     Mario.show();
 }
 //si sposta su di uno spazio l'Eroe
-void BigMap::go_up(){
+void BigMap::go_up() {
     //si trova la coordinata rispetto alla finestra di gioco (anzichè rispetto a tutto lo schermo)
     int y_on_pad = Mario.getPosy() - (LINES-rect_lines)/2;
     //si capisce in che pezzo di mappa è l'Eroe (se prev, curr o next)
@@ -211,16 +213,18 @@ void BigMap::go_down() {
         }
     }
 }
+
 //metodo per sparare un colpo > in avanti
-void BigMap::shoot(){
+void BigMap::shoot() {
     //si spara solo ogni 3 cicli, ovvero quando count_Bullet arriva a 3 per evitare intoppi
     if(count_Bullet/3 > 0) {
         add_bullet(Mario.getPos());
         count_Bullet=0;
     }
 }
+
 //metodo per sparare un colpo < indietro
-void BigMap::back_shoot(){
+void BigMap::back_shoot() {
     //si spara solo ogni 3 cicli, ovvero quando count_backBullet arriva a 3 per evitare intoppi
     if(count_backBullet/3 > 0) {
         add_backbullet(Mario.getPos());
@@ -228,69 +232,6 @@ void BigMap::back_shoot(){
     }
 }
 
-//metodo per cancellare un carattere dalla mappa
-void BigMap::delete_char(int y, int x){
-    Mario.show();
-    //si trovano le coordinate rispetto alla finestra di gioco (anzichè rispetto a tutto lo schermo)
-    int y_on_pad = y - (LINES-rect_lines)/2;
-    int x_on_pad = x - (COLS-rect_cols)/2;
-    //si capisce in che pezzo di mappa è l'Eroe (se prev, curr o next)
-    if(curr->prev!=NULL) {
-        if(curr->prev->piece->how_much() >= x_on_pad) {
-            curr->prev->piece->print_space(y_on_pad, x_on_pad + rect_cols - curr->prev->piece->how_much() - 1);
-            Mario.show();
-            curr->prev->piece->remove_enemy({y_on_pad, x_on_pad + rect_cols - curr->prev->piece->how_much() - 1});
-        }
-        else{
-            if (curr->prev->piece->how_much()>-1) {
-                curr->piece->print_space(y_on_pad, curr->piece->how_much() - rect_cols + x_on_pad + 1);
-                curr->piece->remove_enemy({y_on_pad, curr->piece->how_much() - rect_cols + x_on_pad + 1});
-                Mario.show();
-            }
-            else {
-                if(x_on_pad >= curr->piece->how_much()) {
-                    curr->next->piece->print_space(y_on_pad, x_on_pad - curr->piece->how_much()-1);
-                    curr->next->piece->remove_enemy({y_on_pad, x_on_pad - curr->piece->how_much()-1});
-                }
-                else{
-                    curr->piece->print_space(y_on_pad, rect_cols - curr->piece->how_much() + x_on_pad - 1);
-                    curr->piece->remove_enemy({y_on_pad, rect_cols - curr->piece->how_much() + x_on_pad - 1});
-                }
-                Mario.show();
-            }
-        }
-        Mario.show();
-    }
-    else {
-        if(x_on_pad >= curr->piece->how_much()) {
-            curr->next->piece->print_space(y_on_pad, x_on_pad - curr->piece->how_much()-1);
-            curr->next->piece->remove_enemy({y_on_pad, x_on_pad - curr->piece->how_much()-1});
-        }
-        else{
-            curr->piece->print_space(y_on_pad,rect_cols - curr->piece->how_much() + x_on_pad-1);
-            curr->piece->remove_enemy({y_on_pad,rect_cols - curr->piece->how_much() + x_on_pad-1});
-        }
-        Mario.show();
-    }
-}
-//metodo che verifica se la posizione al di sotto dell'Eroe è libera
-bool BigMap::free_down(int y_on_pad) {
-    Mario.show();
-    if(curr->prev!=NULL) {
-        if(curr->prev->piece->how_much()>=stacco)
-            return curr->prev->piece->can_fall(y_on_pad,stacco + rect_cols - curr->prev->piece->how_much()-1);
-        else {
-            if (curr->prev->piece->how_much()>-1) {
-                return curr->piece->can_fall(y_on_pad,curr->piece->how_much() - rect_cols + stacco+1);
-            }
-            else {
-                return curr->piece->can_fall(y_on_pad,rect_cols - curr->piece->how_much() + stacco-1);
-            }
-        }
-    }
-    Mario.show();
-    return false;
-}
 //si aggiunge un nodo alla lista gun che tiene conto degli spari in avanti
 void BigMap::add_bullet(position pos) {
     Mario.show();
@@ -300,6 +241,7 @@ void BigMap::add_bullet(position pos) {
     tmp->next = gun;
     gun = tmp;
 }
+
 //si aggiunge un nodo alla lista backGun che tiene conto degli spari indietro
 void BigMap::add_backbullet(position pos) {
     Mario.show();
@@ -309,17 +251,9 @@ void BigMap::add_backbullet(position pos) {
     tmp->next = backGun;
     backGun = tmp;
 }
-//si aggiunge un nodo alla lista ghostGun che tiene conto degli spari nemici che arrivano da destra
-void BigMap::add_ghost_bullet(int y) {
-    Mario.show();
-    colpi tmp = new colpo;
-    tmp->curr = Bullet({y + (LINES - rect_lines)/2,rect_cols + (COLS - rect_cols)/2});
-    tmp->curr.set_name('o');
-    tmp->next = ghostGun;
-    ghostGun = tmp;
-}
+
 //si rimuove da una determinata lista di spari un nodo, in quanto quello sparo deve scomparire
-void BigMap::remove_bullet(colpi &prec, colpi &aux, int type){
+void BigMap::remove_bullet(colpi &prec, colpi &aux, int type) {
     Mario.show();
     colpi tmp;
     if(prec == NULL){
@@ -342,8 +276,9 @@ void BigMap::remove_bullet(colpi &prec, colpi &aux, int type){
         tmp = NULL;
     }
 }
+
 //metodo per aggiornare il movimento degli spari in avanti
-void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
+void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right) {
     colpi aux = gun;
     colpi prec = NULL;
     //si scorre tutta lista gun
@@ -438,7 +373,7 @@ void BigMap::update_shoot(int limit_sx, int limit_dx, bool going_right){
 }
 //metodo per aggiornare il movimento degli spari indietro
 //funzionamento identico al metodo update_shoot ma per sparare indietro (ovvero a sinistra)
-void BigMap::update_back_shoot(int limit_sx, int limit_dx, bool going_right){
+void BigMap::update_back_shoot(int limit_sx, int limit_dx, bool going_right) {
     colpi aux = backGun;
     colpi prec = NULL;
     while(aux!=NULL) {
@@ -513,6 +448,17 @@ void BigMap::update_back_shoot(int limit_sx, int limit_dx, bool going_right){
             aux = aux->next;
     }
 }
+
+//si aggiunge un nodo alla lista ghostGun che tiene conto degli spari nemici che arrivano da destra
+void BigMap::add_ghost_bullet(int y) {
+    Mario.show();
+    colpi tmp = new colpo;
+    tmp->curr = Bullet({y + (LINES - rect_lines)/2,rect_cols + (COLS - rect_cols)/2});
+    tmp->curr.set_name('o');
+    tmp->next = ghostGun;
+    ghostGun = tmp;
+}
+
 //metodo che genera i nemici o incrementando la difficoltà in base all'avanzamento dell'Eroe
 void BigMap::free_bullet() {
     int y=1;
@@ -599,100 +545,57 @@ void BigMap::update_ghost_shoot() {
             aux = aux->next;
     }
 }
-//ritorna il numero di che ha la bilista
-int BigMap::n_map() {
-    return nodi;
-}
-//verifica se l'Eroe ha preso un bonus e, nel caso, ritorna quale bonus ha preso
-char BigMap::is_bonus(){
-    Mario.show();
-    position tmp = {Mario.getPosy(), Mario.getPosx()-1};
-    if(!not_this('&', true, tmp, false)) {
-        delete_char(tmp.y, tmp.x+1);
-        //se si uccide un nemico si prende il doppio dei punti
-        set_killer_prize(2);
-        Mario.show();
-        return '&';
-    }
-    if(!not_this('#', true, tmp, false)) {
-        delete_char(tmp.y, tmp.x+1);
-        Mario.show();
-        return '#';
-    }
-    if(!not_this('*', true, tmp, false)) {
-        delete_char(tmp.y, tmp.x+1);
-        //si aumenta la vita dell'Eroe
-        Mario.bonus_life();
-        Mario.show();
-        return '*';
-    }
-    
-    if(!not_this('$', true, tmp, false)) {
-        delete_char(tmp.y, tmp.x+1);
-        //si vincono 1000 punti extra
-        points = points +  1000;
-        Mario.show();
-        return '$';
-    }
-    return 'X';
-}
 
-//metodo per gestire la barra della vita
-void BigMap::health_bar() {
-    attron(COLOR_PAIR(6));
-    mvprintw((LINES - rect_lines)/2 - 4, (COLS-rect_cols)/2 + 10, "LIFE");
-    attroff(COLOR_PAIR(6));
-    //stampa una barra ogni 5 punti vita
-    int n_vita = Mario.getlife() / 5;
-    char barra_salute[n_vita];
-    WINDOW *health_win;
-    health_win = newwin(3, 22, (LINES - rect_lines)/2 - 5, (COLS-rect_cols)/2 +17);
-    refresh();
-    box(health_win, 0, 0);
-    
-    if (n_vita <= 20 && n_vita > 15 ) {
-        wattron(health_win, COLOR_PAIR(1));
-    }
-    if (n_vita <= 15 && n_vita > 10) {
-        wattron(health_win, COLOR_PAIR(2));
-    }
-    if (n_vita <= 10 && n_vita > 5) {
-        wattron(health_win, COLOR_PAIR(3));
-    }
-    if (n_vita <= 5) {
-        wattron(health_win, COLOR_PAIR(4));
-    }
-    for (int n=0; n < n_vita; n++)
-    {
-        barra_salute[n] = '|';
-    }
-    for (int n=0; n < n_vita; n++)
-    {
-        mvwaddch(health_win, 1, n+1, barra_salute[n]);
-    }
-    if (n_vita < 20)
-    {
-        for (int n=0; n < (20 - n_vita); n++)
-        {
-            mvwprintw(health_win, 1, 20 - n, " ");
+//metodo che verifica se la posizione al di sotto dell'Eroe è libera
+bool BigMap::free_down(int y_on_pad) {
+    Mario.show();
+    if(curr->prev!=NULL) {
+        if(curr->prev->piece->how_much()>=stacco)
+            return curr->prev->piece->can_fall(y_on_pad,stacco + rect_cols - curr->prev->piece->how_much()-1);
+        else {
+            if (curr->prev->piece->how_much()>-1) {
+                return curr->piece->can_fall(y_on_pad,curr->piece->how_much() - rect_cols + stacco+1);
+            }
+            else {
+                return curr->piece->can_fall(y_on_pad,rect_cols - curr->piece->how_much() + stacco-1);
+            }
         }
     }
-    wrefresh(health_win);
-}
-//si ristampano a schermo tutti i pezzi di mappa visibili in quel momento. Serve a evitare bug per via di sovrapposizioni o altro
-void BigMap::reshow_map(){
     Mario.show();
-    if(curr->prev!=NULL && curr->prev->piece->how_much() > -1) {
-        curr->prev->piece->show();
-        Mario.show();
-    }
-    curr->piece->show();
-    Mario.show();
-    if(curr->next!=NULL && curr->next->piece->how_much() > -1) {
-        curr->next->piece->show();
-        Mario.show();
-    }
+    return false;
 }
+
+//metodo che verifica se un certo carattere è presente a destra o sinistra di una certa posizione
+bool BigMap::not_this(char object, bool dx, position pos, bool going_right) {
+    Mario.show();
+    //si trovano le coordinate rispetto alla finestra di gioco (anzichè rispetto a tutto lo schermo)
+    int y_on_pad = pos.y - (LINES-rect_lines)/2;
+    int x_on_pad = pos.x - (COLS-rect_cols)/2;
+    //si capisce in che pezzo di mappa ci si trova (se prev, curr o next)
+    if(curr->prev!=NULL) {
+        if(curr->prev->piece->how_much() > x_on_pad)
+            return !(curr->prev->piece->there_is_this(object, y_on_pad,x_on_pad + rect_cols - curr->prev->piece->how_much()-1, dx, going_right));
+        else{
+            if (curr->prev->piece->how_much()>-1) {
+                return !(curr->piece->there_is_this(object, y_on_pad,curr->piece->how_much() - rect_cols + x_on_pad+1 ,dx, going_right));
+            }
+            else {
+                if(x_on_pad > curr->piece->how_much())
+                    return !(curr->next->piece->there_is_this(object, y_on_pad, x_on_pad - curr->piece->how_much()-1, dx, going_right));
+                else
+                    return !(curr->piece->there_is_this(object, y_on_pad,rect_cols - curr->piece->how_much() + x_on_pad-1, dx, going_right));
+            }
+        }
+    }
+    else {
+        if(x_on_pad >= curr->piece->how_much())
+            return !(curr->next->piece->there_is_this(object, y_on_pad, x_on_pad - curr->piece->how_much()-1, dx, going_right));
+        else
+            return !(curr->piece->there_is_this(object, y_on_pad,rect_cols - curr->piece->how_much() + x_on_pad-1, dx, going_right));
+    }
+    Mario.show();
+}
+
 //metodo che esegue una routine che va eseguita ogni volta che si finiscie di eseguire un ciclo
 bool BigMap::routine_fineciclo(bool right) {
     srand(time(0));
@@ -750,36 +653,145 @@ bool BigMap::routine_fineciclo(bool right) {
     //se il giocatore non è morto, il metodo ritorna true
     return true;
 }
-//metodo che verifica se un certo carattere è presente a destra o sinistra di una certa posizione
-bool BigMap::not_this(char object, bool dx, position pos, bool going_right) {
+
+//si ristampano a schermo tutti i pezzi di mappa visibili in quel momento. Serve a evitare bug per via di sovrapposizioni o altro
+void BigMap::reshow_map() {
+    Mario.show();
+    if(curr->prev!=NULL && curr->prev->piece->how_much() > -1) {
+        curr->prev->piece->show();
+        Mario.show();
+    }
+    curr->piece->show();
+    Mario.show();
+    if(curr->next!=NULL && curr->next->piece->how_much() > -1) {
+        curr->next->piece->show();
+        Mario.show();
+    }
+}
+
+//verifica se l'Eroe ha preso un bonus e, nel caso, ritorna quale bonus ha preso
+char BigMap::is_bonus() {
+    Mario.show();
+    position tmp = {Mario.getPosy(), Mario.getPosx()-1};
+    if(!not_this('&', true, tmp, false)) {
+        delete_char(tmp.y, tmp.x+1);
+        //se si uccide un nemico si prende il doppio dei punti
+        set_killer_prize(2);
+        Mario.show();
+        return '&';
+    }
+    if(!not_this('#', true, tmp, false)) {
+        delete_char(tmp.y, tmp.x+1);
+        Mario.show();
+        return '#';
+    }
+    if(!not_this('*', true, tmp, false)) {
+        delete_char(tmp.y, tmp.x+1);
+        //si aumenta la vita dell'Eroe
+        Mario.bonus_life();
+        Mario.show();
+        return '*';
+    }
+    
+    if(!not_this('$', true, tmp, false)) {
+        delete_char(tmp.y, tmp.x+1);
+        //si vincono 1000 punti extra
+        points = points +  1000;
+        Mario.show();
+        return '$';
+    }
+    return 'X';
+}
+
+//metodo per cancellare un carattere dalla mappa
+void BigMap::delete_char(int y, int x) {
     Mario.show();
     //si trovano le coordinate rispetto alla finestra di gioco (anzichè rispetto a tutto lo schermo)
-    int y_on_pad = pos.y - (LINES-rect_lines)/2;
-    int x_on_pad = pos.x - (COLS-rect_cols)/2;
-    //si capisce in che pezzo di mappa ci si trova (se prev, curr o next)
+    int y_on_pad = y - (LINES-rect_lines)/2;
+    int x_on_pad = x - (COLS-rect_cols)/2;
+    //si capisce in che pezzo di mappa è l'Eroe (se prev, curr o next)
     if(curr->prev!=NULL) {
-        if(curr->prev->piece->how_much() > x_on_pad)
-            return !(curr->prev->piece->there_is_this(object, y_on_pad,x_on_pad + rect_cols - curr->prev->piece->how_much()-1, dx, going_right));
+        if(curr->prev->piece->how_much() >= x_on_pad) {
+            curr->prev->piece->print_space(y_on_pad, x_on_pad + rect_cols - curr->prev->piece->how_much() - 1);
+            Mario.show();
+            curr->prev->piece->remove_enemy({y_on_pad, x_on_pad + rect_cols - curr->prev->piece->how_much() - 1});
+        }
         else{
             if (curr->prev->piece->how_much()>-1) {
-                return !(curr->piece->there_is_this(object, y_on_pad,curr->piece->how_much() - rect_cols + x_on_pad+1 ,dx, going_right));
+                curr->piece->print_space(y_on_pad, curr->piece->how_much() - rect_cols + x_on_pad + 1);
+                curr->piece->remove_enemy({y_on_pad, curr->piece->how_much() - rect_cols + x_on_pad + 1});
+                Mario.show();
             }
             else {
-                if(x_on_pad > curr->piece->how_much())
-                    return !(curr->next->piece->there_is_this(object, y_on_pad, x_on_pad - curr->piece->how_much()-1, dx, going_right));
-                else
-                    return !(curr->piece->there_is_this(object, y_on_pad,rect_cols - curr->piece->how_much() + x_on_pad-1, dx, going_right));
+                if(x_on_pad >= curr->piece->how_much()) {
+                    curr->next->piece->print_space(y_on_pad, x_on_pad - curr->piece->how_much()-1);
+                    curr->next->piece->remove_enemy({y_on_pad, x_on_pad - curr->piece->how_much()-1});
+                }
+                else{
+                    curr->piece->print_space(y_on_pad, rect_cols - curr->piece->how_much() + x_on_pad - 1);
+                    curr->piece->remove_enemy({y_on_pad, rect_cols - curr->piece->how_much() + x_on_pad - 1});
+                }
+                Mario.show();
             }
         }
+        Mario.show();
     }
     else {
-        if(x_on_pad >= curr->piece->how_much())
-            return !(curr->next->piece->there_is_this(object, y_on_pad, x_on_pad - curr->piece->how_much()-1, dx, going_right));
-        else
-            return !(curr->piece->there_is_this(object, y_on_pad,rect_cols - curr->piece->how_much() + x_on_pad-1, dx, going_right));
+        if(x_on_pad >= curr->piece->how_much()) {
+            curr->next->piece->print_space(y_on_pad, x_on_pad - curr->piece->how_much()-1);
+            curr->next->piece->remove_enemy({y_on_pad, x_on_pad - curr->piece->how_much()-1});
+        }
+        else{
+            curr->piece->print_space(y_on_pad,rect_cols - curr->piece->how_much() + x_on_pad-1);
+            curr->piece->remove_enemy({y_on_pad,rect_cols - curr->piece->how_much() + x_on_pad-1});
+        }
+        Mario.show();
     }
-    Mario.show();
 }
+
+//metodo per gestire la barra della vita
+void BigMap::health_bar() {
+    attron(COLOR_PAIR(6));
+    mvprintw((LINES - rect_lines)/2 - 4, (COLS-rect_cols)/2 + 10, "LIFE");
+    attroff(COLOR_PAIR(6));
+    //stampa una barra ogni 5 punti vita
+    int n_vita = Mario.getlife() / 5;
+    char barra_salute[n_vita];
+    WINDOW *health_win;
+    health_win = newwin(3, 22, (LINES - rect_lines)/2 - 5, (COLS-rect_cols)/2 +17);
+    refresh();
+    box(health_win, 0, 0);
+    
+    if (n_vita <= 20 && n_vita > 15 ) {
+        wattron(health_win, COLOR_PAIR(1));
+    }
+    if (n_vita <= 15 && n_vita > 10) {
+        wattron(health_win, COLOR_PAIR(2));
+    }
+    if (n_vita <= 10 && n_vita > 5) {
+        wattron(health_win, COLOR_PAIR(3));
+    }
+    if (n_vita <= 5) {
+        wattron(health_win, COLOR_PAIR(4));
+    }
+    for (int n=0; n < n_vita; n++)
+    {
+        barra_salute[n] = '|';
+    }
+    for (int n=0; n < n_vita; n++)
+    {
+        mvwaddch(health_win, 1, n+1, barra_salute[n]);
+    }
+    if (n_vita < 20)
+    {
+        for (int n=0; n < (20 - n_vita); n++)
+        {
+            mvwprintw(health_win, 1, 20 - n, " ");
+        }
+    }
+    wrefresh(health_win);
+}
+
 //ritorna i punti ottenuti durante il gioco
 int BigMap::get_points() {
     return points;
@@ -787,4 +799,8 @@ int BigMap::get_points() {
 //setta la variabile killer_prize (a 1 oppure a 2) che indica per quanto moltiplicare i punti ottenuti dall'uccisione dei nemici
 void BigMap::set_killer_prize(int n) {
     killer_prize = n;
+}
+
+bool BigMap::get_warning() {
+    return warning;
 }

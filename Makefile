@@ -3,8 +3,8 @@ CFLAGS = -c -Wall
 SRC_DIR = ./src
 BIN := main.o ClasseMap.o ClasseOggetto.o ClasseEroe.o ClasseBigMap.o Comandi.o ClasseBullet.o ClasseMotore.o ClasseBonus.o ClasseEnemy.o
 
-main: $(BIN)
-	$(CC) -o main $(BIN)
+ProgettoProgrammazione2021: $(BIN)
+	$(CC) -o ProgettoProgrammazione2021 $(BIN)
 
 main.o: $(SRC_DIR)/main.cpp $(SRC_DIR)/*.hpp
 	$(CC) $(CFLAGS) $(SRC_DIR)/main.cpp
@@ -36,10 +36,10 @@ ClasseBonus.o: $(SRC_DIR)/ClasseBonus.?pp
 ClasseEnemy.o: $(SRC_DIR)/ClasseEnemy.?pp
 	$(CC) $(CFLAGS) $(SRC_DIR)/ClasseEnemy.cpp
 love:
-	./main
+	./ProgettoProgrammazione2021
 
 clean:
 	rm -rf ./*.o
 
 debug:
-	gdb ./main
+	gdb ./ProgettoProgrammazione2021

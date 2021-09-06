@@ -1,6 +1,6 @@
 #include "ClasseBonus.hpp"
 
-Bonus::Bonus(){}
+Bonus::Bonus() {}
 
 Bonus::Bonus(int rect_lines, int rect_cols) {
     this->rect_lines = rect_lines;
@@ -21,7 +21,7 @@ char Bonus::rand_name_bonus() {
     else return ' ';
 }
 //prende una posizione random all'interno della finestra di gioco 
-position Bonus::rand_pos_bonus(){
+position Bonus::rand_pos_bonus() {
     position rand_pos;
     rand_pos.y = rand()%(rect_lines-3);
     rand_pos.x = rand()%(rect_cols);

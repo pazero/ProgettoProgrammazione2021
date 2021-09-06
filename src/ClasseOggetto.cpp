@@ -3,19 +3,20 @@
 Oggetto::Oggetto(position pos) {
     this->pos = pos;
 }
-Oggetto::Oggetto(){}
 
-position Oggetto::getPos(){
+Oggetto::Oggetto() {}
+
+position Oggetto::getPos() {
     return pos;
 }
-int Oggetto::getPosy(){
+int Oggetto::getPosy() {
     return(pos.y);
 }
-int Oggetto::getPosx(){
+int Oggetto::getPosx() {
     return(pos.x);
 }
 //stampo l'oggetto sullo stdscr (schermo intero)
-void Oggetto::show(){
+void Oggetto::show() {
     mvprintw(pos.y, pos.x, "%c",name);
     refresh();
 }

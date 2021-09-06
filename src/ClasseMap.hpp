@@ -13,7 +13,7 @@ struct nemico {
 
 typedef nemico* lista_nemici;
 
-class Map {
+class Map{
     protected:
     WINDOW *mappa;
     bool first; //indica se il pezzo di mappa è il primo nella lista
@@ -45,27 +45,26 @@ class Map {
     void build(); //metodo che gestisce l'inserimento delle piattaforme nella mappa
     void add_plat(int type, int y, int x); //metodo che aggiunge una piattaforma alla mappa
     void rand_plat(); //metodo che sceglie randomicamente una disposizione per un set di piattaforme
-    
-    void spawn_enemy(int n); //metodo per aggiungere nemici alla mappa
 
-    void rslide(); //metodo che fa scorrere la mappa a sinistra dando così il senso di movimento a destra dell'Eroe
-    void lslide(); //metodo che fa scorrere la mappa a destra dando così il senso di movimento a sinistra dell'Eroe
-    bool nx(); //metodo che restituisce true se è visibile a schermo il pezzo di mappa successivo a questo
-    bool previous(); //metodo che restituisce true se è visibile a schermo il pezzo di mappa precedente a questo
-    
-    void show(); //metodo che stampa la mappa a schermo
-    int how_much(); //metodo che ritorna il numero di colonne della mappa visibili a schermo
-    
+    void spawn_bonus(); //metodo che gestise la disposizione dei bonus
+    void spawn_enemy(int n); //metodo per aggiungere nemici alla mappa
+    void move_enemies(); //metodo che gestisce il movimento dei nemici K
+    void enemies_A(); //metodo che gestisce le azioni dei nemici A
+    void remove_enemy(position pos); //metodo che rimuove un nemico dall'apposita lista
+
     bool can_fall(int y, int x); //metodo che ritorna true se un oggetto può cadere o meno dalla posizione in cui è
     bool can_pass_through(int y, int x, bool up); //metodo che ritorna true se un oggetto può salire o scendere da una piattaforma
     bool there_is_this(char object, int pady, int padx, bool dx, bool going_right); //metodo che ritorna true se in una data posizione c'è un certo oggetto
 
     void print_space(int y_on_pad, int x_on_pad); //metodo che stampa uno spazio in una data posizione
     void print_player(char player_name, int y, int stacco); //metodo che stampa l'Eroe nella sua posizione
-    void move_enemies(); //metodo che gestisce il movimento dei nemici K
-    void enemies_A(); //metodo che gestisce le azioni dei nemici A
-    void remove_enemy(position pos); //metodo che rimuove un nemico dall'apposita lista
 
-    int get_n(); //metodo che ritorna il numero di questo pezzo di mappa
-    void spawn_bonus(); //metodo che gestise la disposizione dei bonus
+    void rslide(); //metodo che fa scorrere la mappa a sinistra dando così il senso di movimento a destra dell'Eroe
+    void lslide(); //metodo che fa scorrere la mappa a destra dando così il senso di movimento a sinistra dell'Eroe
+    bool nx(); //metodo che restituisce true se è visibile a schermo il pezzo di mappa successivo a questo
+    bool previous(); //metodo che restituisce true se è visibile a schermo il pezzo di mappa precedente a questo
+    
+    int get_n(); //metodo che ritorna il numero della mappa
+    int how_much(); //metodo che ritorna il numero di colonne della mappa visibili a schermo
+    void show(); //metodo che stampa la mappa a schermo
 };

@@ -1,6 +1,6 @@
 #include "ClasseBullet.hpp"
 
-Bullet::Bullet(){}
+Bullet::Bullet() {}
 
 Bullet::Bullet(position pos) {
     this->pos = pos;
@@ -9,8 +9,9 @@ Bullet::Bullet(position pos) {
 void Bullet::set_name(char name) {
     this->name = name;
 }
+
 //crea una finestra proiettile e la colora se è un nemico di tipo o
-WINDOW* Bullet::create_win(){
+WINDOW* Bullet::create_win() {
 	win = newwin(1, 1, pos.y, pos.x);
     if(name == 'o') {
         wattron(win, COLOR_PAIR(5));
@@ -26,7 +27,7 @@ WINDOW* Bullet::create_win(){
 	return win;
 }
 //svuota la finestra per poi distruggerla
-void Bullet::destroy_win(){
+void Bullet::destroy_win() {
 	wborder(win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
 	wrefresh(win);
 	delwin(win);

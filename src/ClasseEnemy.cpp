@@ -1,11 +1,11 @@
 #include "ClasseEnemy.hpp"
 
-Enemy::Enemy(){
+Enemy::Enemy() {
     this->pos = {0,0};
     delay = 0;
 }
 
-Enemy::Enemy(char name){
+Enemy::Enemy(char name) {
     //inizializzo la posizione e il tipo
     this->pos = {0,0};
     this->name = name;

@@ -1,5 +1,5 @@
 #include "ClasseOggetto.hpp"
-class Eroe:public Oggetto {
+class Eroe:public Oggetto{
     protected:
     int life;   //vita dell'eroe
     

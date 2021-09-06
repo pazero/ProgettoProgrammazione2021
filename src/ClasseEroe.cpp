@@ -22,13 +22,11 @@ int Eroe::getlife(){
     return life;
 }
 
-void Eroe::damage(int danno)
-{
+void Eroe::damage(int danno){
     life -= danno;
 }
 //se la vita è sotto ai 50 punti, allora fa una somma, altrimenta la setta a 100
-void Eroe::bonus_life()
-{
+void Eroe::bonus_life(){
     //il bonus "*" dona 50 punti vita
     if(life<=50) life += 50;
     else life = 100;
