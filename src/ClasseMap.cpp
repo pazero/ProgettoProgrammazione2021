@@ -28,7 +28,7 @@ Map::Map(int rect_lines, int rect_cols, int n, bool first) {
     this->rect_cols = rect_cols;
     //si comincia a guardare il pad dalla prima colonna a sinistra
     this->pad_x = 0;
-
+    //creo il pad 
     mappa = newpad(rect_lines, rect_cols);
     refresh();
     //variabile per gestire i tipi di bonus
